@@ -1,4 +1,4 @@
-package org.group7.client.server.ocsf;
+package org.group7.server.ocsf;
 
 public class SubscribedClient {
     private ConnectionToClient client;

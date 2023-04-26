@@ -1,4 +1,4 @@
-package org.group7.client.server;
+package org.group7.server;
 
 import static org.junit.Assert.assertTrue;
 

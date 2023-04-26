@@ -31,6 +31,16 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.29</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.4.12.Final</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -40,7 +50,7 @@
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.6.0</version>
           <configuration>
-            <mainClass>org.group7.client.server.LaunchServer</mainClass>
+            <mainClass>org.group7.server.LaunchServer</mainClass>
           </configuration>
         </plugin>
       </plugins>

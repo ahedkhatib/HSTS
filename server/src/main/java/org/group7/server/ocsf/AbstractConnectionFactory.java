@@ -2,7 +2,7 @@
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com
 
-package org.group7.client.server.ocsf;
+package org.group7.server.ocsf;
 
 import java.io.IOException;
 import java.net.Socket;

@@ -19,15 +19,15 @@
         <maven.assemblyPlugin.version>3.3.0</maven.assemblyPlugin.version>
         <javafx.version>17</javafx.version>
     </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.group7.HSTS</groupId>
-                <artifactId>entities</artifactId>
-                <version>1</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>org.group7.HSTS</groupId>-->
+<!--                <artifactId>entities</artifactId>-->
+<!--                <version>1</version>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
     <build>
         <plugins>
             <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->

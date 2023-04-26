@@ -1,7 +1,7 @@
-package org.group7.client.server;
+package org.group7.server;
 
-import org.group7.client.server.ocsf.AbstractServer;
-import org.group7.client.server.ocsf.ConnectionToClient;
+import org.group7.server.ocsf.AbstractServer;
+import org.group7.server.ocsf.ConnectionToClient;
 
 public class Server extends AbstractServer {
 
