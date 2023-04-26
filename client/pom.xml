@@ -6,7 +6,6 @@
         <artifactId>HSTS</artifactId>
         <version>1</version>
     </parent>
-    <groupId>org.group7</groupId>
     <artifactId>client</artifactId>
     <version>1</version>
     <dependencies>
