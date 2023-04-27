@@ -28,6 +28,7 @@ public class GenerateData {
 //        configuration.addAnnotatedClass(Subject.class);
         configuration.addAnnotatedClass(Course.class);
         configuration.addAnnotatedClass(Exam.class);
+        configuration.addAnnotatedClass(Grade.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                 configuration.getProperties()).build();
@@ -60,6 +61,7 @@ public class GenerateData {
             session.beginTransaction();
 
             generate();
+            session.getTransaction().commit();
 
         } catch (Exception exception) {
             if (session != null) {
