@@ -14,6 +14,8 @@ public class User {
 
     private String lastName;
 
+    private boolean isConnected;
+
     public User() {
         this.username = "";
         this.password = "";
@@ -26,6 +28,7 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isConnected = false;
     }
 
     // Getters
@@ -45,6 +48,10 @@ public class User {
         return lastName;
     }
 
+    public boolean getIsConnected() {
+        return isConnected;
+    }
+
     // Setters
     public void setUsername(String username) {
         this.username = username;
@@ -60,5 +67,9 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setIsConnected(boolean connect) {
+        this.isConnected = connect;
     }
 }

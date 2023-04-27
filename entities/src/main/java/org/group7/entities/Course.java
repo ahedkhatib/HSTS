@@ -10,11 +10,15 @@ public class Course {
     @Id
     private int courseId;
 
-    private String coursName;
+    private String courseName;
 
     @ManyToMany
     private List<Student> studentList;
 
     @ManyToMany
     private List<Teacher> teacherList;
+
+//    @ManyToOne
+//    private Subject subject;
+
 }

@@ -13,7 +13,6 @@
     <version>1</version>
   </parent>
 
-
   <name>server</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
@@ -40,6 +39,11 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
       <version>5.4.12.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.group7</groupId>
+      <artifactId>entities</artifactId>
+      <version>1</version>
     </dependency>
   </dependencies>
 

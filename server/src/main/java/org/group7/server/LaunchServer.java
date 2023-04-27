@@ -6,6 +6,9 @@ public class LaunchServer {
     private static Server server;
 
     public static void main(String[] args) throws IOException {
+
+        GenerateData.main(args);
+
         server = new Server(3000);
         System.out.println("server is listening");
         server.listen();
