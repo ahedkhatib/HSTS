@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.Transaction;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -22,11 +23,11 @@ public class GenerateData {
 
         // Add classes
         configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Course.class);
         configuration.addAnnotatedClass(Teacher.class);
         configuration.addAnnotatedClass(Student.class);
-//        configuration.addAnnotatedClass(Question.class);
-//        configuration.addAnnotatedClass(Subject.class);
-        configuration.addAnnotatedClass(Course.class);
+        configuration.addAnnotatedClass(Question.class);
+        configuration.addAnnotatedClass(Subject.class);
         configuration.addAnnotatedClass(Exam.class);
         configuration.addAnnotatedClass(Grade.class);
 
@@ -52,6 +53,30 @@ public class GenerateData {
         session.save(alaa);
         session.save(ahed);
         session.flush();
+    }
+
+    public static void clearTables() {
+        SessionFactory sessionFactory = getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+
+            String[] tableNames = {"Users", "Course", "Teacher", "Student", "Question", "Subject", "Exam", "Grade"};
+            for (String tableName : tableNames) {
+                session.createQuery("delete from " + tableName).executeUpdate();
+            }
+
+            session.flush();
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
     public static void main(String[] args) {
