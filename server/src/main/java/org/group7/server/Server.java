@@ -13,4 +13,10 @@ public class Server extends AbstractServer {
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         System.out.print("Hello World!");
     }
+
+    @Override
+    protected void serverClosed() {
+        GenerateData.clearTables();
+        super.serverClosed();
+    }
 }
