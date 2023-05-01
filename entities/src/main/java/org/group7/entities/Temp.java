@@ -1,11 +1,12 @@
 package org.group7.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "temps")
-public class Temp {
+public class Temp implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

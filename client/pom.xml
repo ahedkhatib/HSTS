@@ -29,6 +29,11 @@
             <artifactId>eventbus</artifactId>
             <version>3.2.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.group7</groupId>
+            <artifactId>entities</artifactId>
+            <version>1</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
