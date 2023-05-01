@@ -41,7 +41,7 @@ public class GenerateData {
         return configuration.buildSessionFactory(serviceRegistry);
     }
 
-    private static <T> List<T> getAll(Class<T> _class) throws Exception {
+    public static <T> List<T> getAll(Class<T> _class) {
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(_class);
         query.from(_class);
@@ -224,6 +224,7 @@ public class GenerateData {
             session.beginTransaction();
 
             generate();
+            print();
             session.getTransaction().commit();
 
         } catch (Exception exception) {
