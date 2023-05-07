@@ -16,6 +16,8 @@ public class TempGrade implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Temp temp;
 
+    public TempGrade() {
+    }
 
     public TempGrade(int grade){
         this.grade = grade;

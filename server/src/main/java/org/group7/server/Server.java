@@ -10,7 +10,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.Transaction;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,21 +25,9 @@ public class Server extends AbstractServer {
 
     public Server(int port) {
         super(port);
-        try {
-            SessionFactory sessionFactory = getSessionFactory();
-            session = sessionFactory.openSession();
-            session.beginTransaction();
-
-            generate();
-            session.getTransaction().commit();
-
-        } catch (Exception exception) {
-            if (session != null) {
-                session.getTransaction().rollback();
-            }
-            System.err.println("An error occured, changes have been rolled back.");
-            exception.printStackTrace();
-        }
+        SessionFactory sessionFactory = getSessionFactory();
+        session = sessionFactory.openSession();
+        generate();
     }
 
 
@@ -71,6 +58,7 @@ public class Server extends AbstractServer {
         CriteriaQuery<T> query = builder.createQuery(_class);
         query.from(_class);
         List<T> data = session.createQuery(query).getResultList();
+
         return data;
     }
 
@@ -80,24 +68,57 @@ public class Server extends AbstractServer {
         String req = message.getMessage();
 
         try {
+            switch (req) {
+                case "#GetStudents" -> {
+                    List<Temp> students = getAll(Temp.class);
+                    client.sendToClient(new Message(students, "#GotStudents"));
+                }
+                case "#SetGrades" -> {
+                }
+                case "#GetGrades" -> {
+                    client.sendToClient(new Message(message.getObject(), "#GotGrades"));
+                }
+                case "#UpdateGrade" -> {
 
-            if (req.equals("Get Students")) {
-                List<Temp> students = getAll(Temp.class);
-                client.sendToClient(new Message(students, "Got Student List"));
+                    Object[] obj = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        TempGrade grade = (TempGrade) obj[0];
+                        int newValue = (Integer) obj[1];
+
+                        grade.setGrade(newValue);
+
+                        session.merge(grade);
+
+                        session.flush();
+
+                        session.getTransaction().commit();
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                    client.sendToClient(new Message(obj[2], "#GradeUpdated"));
+                }
+
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
     protected void serverClosed() {
         super.serverClosed();
         stopListening();
-        clearTables();
+        session.close();
     }
 
     public static void generate() {
+        session.beginTransaction();
 
 //        Student alaa = new Student("alaakhamis", "alaa123", "Alaa", "Khamis");
 //        Student ahed = new Student("ahedkhatib", "ahed321", "Ahed", "Khatib");
@@ -219,6 +240,9 @@ public class Server extends AbstractServer {
         student1.setGrades(grades0);
         session.save(student1);
         session.flush();
+
+        session.getTransaction().commit();
+
     }
 
     public static void clearTables() {
@@ -248,15 +272,15 @@ public class Server extends AbstractServer {
     public static void print() throws Exception {
         List<Temp> temps = getAll(Temp.class);
 
-        for(Temp temp : temps){
-            System.out.print("Name: " + temp.getFirstName() +" "+ temp.getLastName() +"\n");
+        for (Temp temp : temps) {
+            System.out.print("Name: " + temp.getFirstName() + " " + temp.getLastName() + "\n");
             System.out.print("Grades: \n");
 
             List<TempGrade> grades = temp.getGrades();
 
             int i = 1;
-            for(TempGrade grade : grades){
-                System.out.print(i  + " - "+ grade.getGrade());
+            for (TempGrade grade : grades) {
+                System.out.print(i + " - " + grade.getGrade());
                 System.out.print("\n");
                 i++;
             }
