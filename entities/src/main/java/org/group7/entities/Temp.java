@@ -19,6 +19,9 @@ public class Temp implements Serializable {
     @OneToMany(mappedBy = "temp", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TempGrade> grades;
 
+    public Temp() {
+    }
+
     public Temp(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;

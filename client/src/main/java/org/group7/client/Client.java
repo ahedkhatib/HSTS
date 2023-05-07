@@ -2,6 +2,8 @@ package org.group7.client;
 
 
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import org.greenrobot.eventbus.EventBus;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
@@ -13,11 +15,14 @@ public class Client extends AbstractClient {
 
     private static Client client = null;
 
+    public static Message clientMessage = null;
+
     public ShowStudentsController showStudentsController;
+
+    public ChangeGradeController changeGradeController;
 
     private Client(String host, int port) {
         super(host, port);
-        showStudentsController = new ShowStudentsController();
     }
 
     @Override
@@ -26,11 +31,25 @@ public class Client extends AbstractClient {
         String post = message.getMessage();
 
         switch (post) {
-            case "Got Student List":
+            case "#GotStudents" -> {
                 Platform.runLater(() -> {
-                    showStudentsController.setStudents((List<Temp>) message.getObject());
+                    clientMessage = message;
+                    showStudentsController.setStudents();
                 });
-                break;
+
+            }
+            case "#GotGrades" -> {
+                Platform.runLater(() -> {
+                    changeGradeController.setStudentName();
+                    changeGradeController.setGrades();
+                });
+            }
+            case "#GradeUpdated" -> {
+                Platform.runLater(() -> {
+                    clientMessage = message;
+                    changeGradeController.setGrades();
+                });
+            }
         }
 
     }

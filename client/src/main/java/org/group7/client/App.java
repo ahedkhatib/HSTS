@@ -18,55 +18,51 @@ public class App extends Application {
 
     private static Scene scene;
 
-    private static Stage stage;
+    private static Stage appStage;
 
     private static Client client;
 
     @Override
-    public void start(Stage tStage) throws IOException {
-        EventBus.getDefault().register(this);
+    public void start(Stage stage) throws IOException {
         client = Client.getClient();
         client.openConnection();
         scene = new Scene(loadFXML("showStudents"));
-        stage = tStage;
         stage.setScene(scene);
-        stage.show();
-    }
-
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+        stage.setTitle("Students");
+        stage.setResizable(false);
+        appStage = stage;
+        appStage.show();
     }
 
     public static void setWindowTitle(String title) {
-        stage.setTitle(title);
+        appStage.setTitle(title);
     }
 
     public static void setContent(String pageName) throws IOException {
-        Parent root = loadFXML(pageName + ".fxml");
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        Parent root = loadFXML(pageName);
+        scene.setRoot(root);
+        appStage.setScene(scene);
+        appStage.show();
     }
 
     public static void switchScreen(String screenName) {
         switch (screenName) {
             case "changeGrade" -> Platform.runLater(() -> {
                 setWindowTitle("Change Grade");
-                try {
-                    setContent("changeGrade");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             });
             case "showStudents" -> Platform.runLater(() -> {
                 setWindowTitle("Students");
-                try {
-                    setContent("showStudents");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             });
         }
+
+        Platform.runLater(() -> {
+            try {
+                setContent(screenName);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
@@ -76,15 +72,8 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
-        EventBus.getDefault().unregister(this);
         super.stop();
     }
-
-
-    @Subscribe
-    public void onMessageEvent(MessageEvent message) {
-    }
-
 
     public static void main(String[] args) {
         launch();
