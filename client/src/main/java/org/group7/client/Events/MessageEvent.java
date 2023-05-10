@@ -1,4 +1,4 @@
-package org.group7.client;
+package org.group7.client.Events;
 
 import org.group7.entities.Message;
 

@@ -1,60 +1,54 @@
-package org.group7.client;
+package org.group7.client.Boundary;
 
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
-import org.group7.entities.Message;
-import org.group7.entities.Temp;
-import org.group7.entities.TempGrade;
-
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.group7.client.App;
+import org.group7.client.Client;
+import org.group7.client.Control.ChangeGradeController;
+import org.group7.client.Events.ResultListEvent;
+import org.group7.client.Events.StudentResultEvent;
+import org.group7.entities.Message;
+import org.group7.entities.Result;
+import org.group7.entities.Student;
 
 import java.io.IOException;
 import java.util.List;
 
-import static org.group7.client.Client.clientMessage;
+public class ChangeGradeBoundary {
 
-public class ChangeGradeController {
-
-    @FXML
-    private ListView<TempGrade> gradesList;
+    private ChangeGradeController controller;
 
     @FXML
-    private Text studentName;
+    public ListView<Result> gradesList;
 
     @FXML
-    private Button returnBtn;
+    public Text studentName;
 
     @FXML
-    public void returnToStudents(){
+    public Button returnBtn;
+
+    @FXML
+    public void returnToStudents() {
+        controller.unregisterController();
         App.switchScreen("showStudents");
     }
 
-    public void setStudentName(){
-        Temp student = (Temp) clientMessage.getObject();
-
-        studentName.setText(student.getFirstName() + " " + student.getLastName());
-        studentName.setFont(Font.font("Arial", 16));
-    }
-
-    public void setGrades(){
-
-        Temp student = (Temp) clientMessage.getObject();
-
-        gradesList.setItems(FXCollections.observableList(student.getGrades()));
-    }
-
     @FXML
-    public void initialize(){
+    public void initialize() {
 
-        Client.getClient().changeGradeController = this;
+        controller = new ChangeGradeController();
+        controller.setBoundary(this);
 
         gradesList.setCellFactory(param -> new ListCell<>() {
             private final TextField textField = new TextField();
@@ -65,15 +59,9 @@ public class ChangeGradeController {
                     int newValue = Integer.parseInt(textField.getText());
                     if (newValue != getItem().getGrade()) {
 
-                        Object[] obj = {getItem(), newValue, getItem().getTemp()};
+                        Object[] obj = {getItem(), newValue, getItem().getStudent()};
 
-                        try {
-                            Message message = new Message(obj, "#UpdateGrade");
-                            Client.getClient().sendToServer(message);
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
+                        controller.changeGrade(obj);
                     }
                 });
 
@@ -83,7 +71,7 @@ public class ChangeGradeController {
             }
 
             @Override
-            protected void updateItem(TempGrade item, boolean empty) {
+            protected void updateItem(Result item, boolean empty) {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
@@ -107,14 +95,5 @@ public class ChangeGradeController {
                 }
             }
         });
-
-
-        try {
-            Message message = new Message(clientMessage.getObject(), "#GetGrades");
-            Client.getClient().sendToServer(message);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 }

@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "temp_grade")
-public class TempGrade implements Serializable {
+@Table(name = "results")
+public class Result implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,17 +14,17 @@ public class TempGrade implements Serializable {
     private int grade;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Temp temp;
+    private Student student;
 
-    public TempGrade() {
+    public Result() {
     }
 
-    public TempGrade(int grade){
+    public Result(int grade){
         this.grade = grade;
     }
-    public TempGrade(int grade, Temp temp){
+    public Result(int grade, Student student){
         this.grade = grade;
-        this.temp = temp;
+        this.student = student;
     }
 
     public int getId() {
@@ -43,11 +43,11 @@ public class TempGrade implements Serializable {
         this.grade = grade;
     }
 
-    public Temp getTemp() {
-        return temp;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setTemp(Temp temp) {
-        this.temp = temp;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 }

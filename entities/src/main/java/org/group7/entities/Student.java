@@ -1,72 +1,70 @@
 package org.group7.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "students")
-public class Student extends User {
+public class Student implements Serializable {
 
-    @ManyToMany(mappedBy = "students")
-    private List<Course> courseList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String firstName;
+
+    private String lastName;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Grade> grades;
-
-    @ManyToMany(cascade = { CascadeType.ALL})
-    @JoinTable(
-        name = "student_exam",
-        joinColumns = { @JoinColumn(name = "student_id")},
-        inverseJoinColumns = { @JoinColumn(name = "exam_id")}
-    )
-    private List<Exam> exams;
+    private List<Result> grades;
 
     public Student() {
-        this.courseList = new ArrayList<>();
+    }
+
+    public Student(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.grades = new ArrayList<>();
     }
 
-    public Student(String username, String password, String firstName, String lastName) {
-        super(username, password, firstName, lastName);
-        this.courseList = new ArrayList<>();
-        this.grades = new ArrayList<>();
+    public int getId() {
+        return id;
     }
 
-    public List<Course> getCourseList() {
-        return courseList;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setCourseList(List<Course> courseList) {
-        this.courseList = courseList;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public List<Grade> getGrades() {
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public List<Result> getGrades() {
         return grades;
     }
 
-    public void setGrades(List<Grade> grades) {
+    public void setGrades(List<Result> grades) {
         this.grades = grades;
+        for (Result grade : grades) {
+            grade.setStudent(this);
+        }
     }
 
-    public List<Exam> getExams() {
-        return exams;
-    }
-
-    public void setExams(List<Exam> exams) {
-        this.exams = exams;
-    }
-
-    public void addGrade(Grade grade){
+    public void addGrad(Result grade) {
         this.grades.add(grade);
-    }
-
-    public void addCourse(Course course){
-        this.courseList.add(course);
-        course.getStudents().add(this);
-    }
-
-    public void addExam(Exam exam){
-        this.exams.add(exam);
-        exam.getStudentList().add(this);
+        grade.setStudent(this);
     }
 }
