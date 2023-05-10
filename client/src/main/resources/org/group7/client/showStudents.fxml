@@ -5,6 +5,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="571.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.group7.client.ShowStudentsController">
+            fx:controller="org.group7.client.Boundary.ShowStudentsBoundary">
     <ListView fx:id="studentList" disable="false" layoutX="142.0" layoutY="86.0" prefHeight="400.0" prefWidth="550.0"/>
 </AnchorPane>

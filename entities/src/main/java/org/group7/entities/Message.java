@@ -10,7 +10,6 @@ public class Message implements Serializable {
     Object object;
     String message;
 
-
     public Message(Object object, String message){
         this.object = object;
         this.message = message;

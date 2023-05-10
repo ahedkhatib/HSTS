@@ -2,22 +2,18 @@ package org.group7.client;
 
 
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import org.greenrobot.eventbus.EventBus;
+import org.group7.client.Control.ChangeGradeController;
+import org.group7.client.Events.ResultListEvent;
+import org.group7.client.Events.StudentListEvent;
+import org.group7.client.Events.StudentResultEvent;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
-
-import java.io.IOException;
-import java.util.*;
 
 public class Client extends AbstractClient {
 
     private static Client client = null;
 
-    public static Message clientMessage = null;
-
-    public ShowStudentsController showStudentsController;
 
     public ChangeGradeController changeGradeController;
 
@@ -32,26 +28,24 @@ public class Client extends AbstractClient {
 
         switch (post) {
             case "#GotStudents" -> {
+                StudentListEvent studentEvent = new StudentListEvent(message);
                 Platform.runLater(() -> {
-                    clientMessage = message;
-                    showStudentsController.setStudents();
+                    EventBus.getDefault().post(studentEvent);
                 });
-
             }
             case "#GotGrades" -> {
+                StudentResultEvent studentResultEvent = new StudentResultEvent(message);
                 Platform.runLater(() -> {
-                    changeGradeController.setStudentName();
-                    changeGradeController.setGrades();
+                    EventBus.getDefault().post(studentResultEvent);
                 });
             }
             case "#GradeUpdated" -> {
+                ResultListEvent resultListEvent = new ResultListEvent(message);
                 Platform.runLater(() -> {
-                    clientMessage = message;
-                    changeGradeController.setGrades();
+                    EventBus.getDefault().post(resultListEvent);
                 });
             }
         }
-
     }
 
     public static Client getClient() {

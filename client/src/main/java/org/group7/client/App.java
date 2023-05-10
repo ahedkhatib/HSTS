@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import jdk.jfr.Event;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.entities.Message;
@@ -62,7 +63,6 @@ public class App extends Application {
                 e.printStackTrace();
             }
         });
-
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
