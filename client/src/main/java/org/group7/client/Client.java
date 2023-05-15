@@ -28,20 +28,20 @@ public class Client extends AbstractClient {
 
         switch (post) {
             case "#GotStudents" -> {
-                StudentListEvent studentEvent = new StudentListEvent(message);
                 Platform.runLater(() -> {
+                    StudentListEvent studentEvent = new StudentListEvent(message);
                     EventBus.getDefault().post(studentEvent);
                 });
             }
             case "#GotGrades" -> {
-                StudentResultEvent studentResultEvent = new StudentResultEvent(message);
                 Platform.runLater(() -> {
+                    StudentResultEvent studentResultEvent = new StudentResultEvent(message);
                     EventBus.getDefault().post(studentResultEvent);
                 });
             }
             case "#GradeUpdated" -> {
-                ResultListEvent resultListEvent = new ResultListEvent(message);
                 Platform.runLater(() -> {
+                    ResultListEvent resultListEvent = new ResultListEvent(message);
                     EventBus.getDefault().post(resultListEvent);
                 });
             }
