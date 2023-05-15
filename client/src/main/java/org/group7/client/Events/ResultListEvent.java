@@ -1,7 +1,6 @@
 package org.group7.client.Events;
 
-import org.group7.entities.Message;
-import org.group7.entities.Result;
+import org.group7.entities.*;
 
 import java.util.List;
 
@@ -14,7 +13,8 @@ public class ResultListEvent {
     }
 
     public ResultListEvent(Message message){
-        this.results = (List<Result>) message.getObject();
+        Student student = (Student) message.getObject();
+        this.results = student.getGrades();
     }
 
 }
