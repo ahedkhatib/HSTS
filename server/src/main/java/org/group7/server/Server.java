@@ -74,7 +74,7 @@ public class Server extends AbstractServer {
                         session.beginTransaction();
 
                         Result grade = (Result) obj[0];
-                        int newValue = (Integer) obj[1];
+                        int newValue = Integer.parseInt((String) obj[1]);
 
                         grade.setGrade(newValue);
 

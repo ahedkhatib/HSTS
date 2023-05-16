@@ -24,6 +24,7 @@ import org.group7.entities.Student;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class ChangeGradeBoundary {
 
@@ -56,8 +57,8 @@ public class ChangeGradeBoundary {
 
             {
                 button.setOnAction(event -> {
-                    int newValue = Integer.parseInt(textField.getText());
-                    if (newValue != getItem().getGrade()) {
+                    String newValue = textField.getText();
+                    if (!Objects.equals(newValue, Integer.toString((getItem().getGrade())))) {
 
                         Object[] obj = {getItem(), newValue, getItem().getStudent()};
 
@@ -66,7 +67,15 @@ public class ChangeGradeBoundary {
                 });
 
                 textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    button.setDisable(newValue.trim().isEmpty() || Integer.parseInt(newValue) == getItem().getGrade());
+
+                    try {
+                        int grade = Integer.parseInt(newValue);
+                        button.setDisable(newValue.trim().isEmpty() || Integer.parseInt(newValue) == getItem().getGrade());
+
+                    } catch (NumberFormatException e) {
+                        button.setDisable(false);
+                    }
+
                 });
             }
 
