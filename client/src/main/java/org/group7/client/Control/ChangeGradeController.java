@@ -1,9 +1,8 @@
 package org.group7.client.Control;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -20,7 +19,6 @@ import org.group7.entities.Student;
 import org.group7.entities.Result;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 
 import java.util.List;
@@ -57,14 +55,44 @@ public class ChangeGradeController {
         EventBus.getDefault().unregister(this);
     }
 
-    public void changeGrade(Object obj){
+
+    public void invalidInputWarning(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                String.format(error)
+        );
+        alert.setTitle("Error!");
+        alert.setHeaderText("Error");
+        alert.show();
+
+    }
+
+    public void changeGrade(Object obj) {
+
+        Object[] object = (Object[]) obj;
+
+        String newGrade = (String) object[1];
+
         try {
-            Message message = new Message(obj, "#UpdateGrade");
-            Client.getClient().sendToServer(message);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            int grade = Integer.parseInt(newGrade);
+
+            if (grade >= 0 && grade <= 100) {
+
+                try {
+                    Message message = new Message(obj, "#UpdateGrade");
+                    Client.getClient().sendToServer(message);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            } else {
+                invalidInputWarning("Invalid grade. Grade should be between 0 and 100.");
+            }
+        } catch (NumberFormatException e) {
+            invalidInputWarning("Invalid grade format. Grade should be an integer.");
         }
+
+
     }
 
     public ChangeGradeController() {
