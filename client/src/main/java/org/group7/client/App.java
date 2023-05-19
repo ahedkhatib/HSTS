@@ -27,9 +27,9 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         client = Client.getClient();
         client.openConnection();
-        scene = new Scene(loadFXML("showStudents"));
+        scene = new Scene(loadFXML("login"));
         stage.setScene(scene);
-        stage.setTitle("Students");
+        stage.setTitle("HSTS");
         stage.setResizable(false);
         appStage = stage;
         appStage.show();
@@ -48,6 +48,9 @@ public class App extends Application {
 
     public static void switchScreen(String screenName) {
         switch (screenName) {
+            case "login" -> Platform.runLater(() -> {
+                setWindowTitle("Log In");
+            });
             case "changeGrade" -> Platform.runLater(() -> {
                 setWindowTitle("Change Grade");
             });
