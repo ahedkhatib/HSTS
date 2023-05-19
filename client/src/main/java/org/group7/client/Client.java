@@ -14,6 +14,7 @@ public class Client extends AbstractClient {
 
     private static Client client = null;
 
+    private static User user = null;
 
     public ChangeGradeController changeGradeController;
 

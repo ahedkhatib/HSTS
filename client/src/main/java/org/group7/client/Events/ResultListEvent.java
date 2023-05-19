@@ -14,7 +14,7 @@ public class ResultListEvent {
 
     public ResultListEvent(Message message){
         Student student = (Student) message.getObject();
-        this.results = student.getGrades();
+        this.results = student.getResultList();
     }
 
 }

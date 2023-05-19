@@ -1,0 +1,66 @@
+package org.group7.entities;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.*;
+
+@Entity
+@Table(name = "extra_time")
+public class ExtraTime implements Serializable{
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "request_id")
+    private int requestId;
+
+    @Column(name = "status")
+    private boolean status;
+
+    @Column(name = "exam_id")
+    private int examId;
+
+    @Column(name = "teacher_message")
+    private String teacherMessage;
+
+    public ExtraTime() {
+
+    }
+
+    public ExtraTime(int examId, String teacherMessage) {
+        this.status = false;
+        this.examId = examId;
+        this.teacherMessage = teacherMessage;
+    }
+
+    public int getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public int getExamId() {
+        return examId;
+    }
+
+    public void setExamId(int examId) {
+        this.examId = examId;
+    }
+
+    public String getTeacherMessage() {
+        return teacherMessage;
+    }
+
+    public void setTeacherMessage(String teacherMessage) {
+        this.teacherMessage = teacherMessage;
+    }
+}

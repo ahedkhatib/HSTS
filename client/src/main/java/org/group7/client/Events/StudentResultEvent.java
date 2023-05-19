@@ -24,7 +24,7 @@ public class StudentResultEvent {
         Student student = (Student) message.getObject();
 
         this.student = student;
-        this.results = student.getGrades();
+        this.results = student.getResultList();
     }
 
 }
