@@ -1,1 +1,53 @@
 
+/* Add to all AnchorPanes */
+.root {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-pref-width: 800;
+    -fx-pref-height: 600;
+}
+
+/* Login TextField */
+.login-text {
+    -fx-font-size: 20;
+    -fx-background-radius: 30;
+}
+
+/* Login button */
+.login-button {
+    -fx-background-color: 491c79c;
+    -fx-text-fill: white; /* Set the text color */
+    -fx-font-size: 25px; /* Set the font size */
+    -fx-background-color: #91c79c;
+    -fx-padding: 10px 20px 10px 20px;
+}
+
+.login-button:hover {
+    -fx-background-color: 07d9a4;
+    -fx-cursor: hand;
+}
+
+/* Menu Button */
+.menu-button {
+    -fx-font-size: 20;
+    -fx-pref-height: 80;
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: black;
+}
+
+.menu-button:hover {
+    -fx-background-color: EEF1FF;
+    -fx-cursor: hand;
+}
+
+/* Menu Logout Button */
+.menu-logout-button {
+    -fx-font-size: 28;
+    -fx-text-fill: white;
+    -fx-background-color: F67280;
+}
+
+.menu-logout-button:hover {
+    -fx-background-color: C06C84;
+    -fx-cursor: hand;
+}

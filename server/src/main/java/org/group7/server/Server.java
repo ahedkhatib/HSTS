@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Server extends AbstractServer {
@@ -25,7 +26,7 @@ public class Server extends AbstractServer {
         super(port);
         SessionFactory sessionFactory = getSessionFactory();
         session = sessionFactory.openSession();
-        //generate();
+        generate();
     }
 
 
@@ -90,11 +91,67 @@ public class Server extends AbstractServer {
                         session.flush();
 
                         session.getTransaction().commit();
-                    } catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     client.sendToClient(new Message(obj[2], "#GradeUpdated"));
+                }
+
+                case "#Logout" -> {
+
+                    String id = ((User) message.getObject()).getUsername();
+
+                    try {
+                        session.beginTransaction();
+
+                        User user = session.find(User.class, id);
+
+                        user.setConnected(false);
+                        session.save(user);
+                        session.flush();
+
+                        client.sendToClient(new Message(user, "#Logout"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                case "#Login" -> {
+
+                    Object[] obj = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        User user = session.find(User.class, obj[0]);
+
+                        String pass = obj[1].toString();
+
+                        if (user == null || !Objects.equals(user.getPassword(), pass)) {
+                            client.sendToClient(new Message(null, "#Login_Fail"));
+
+                        } else {
+
+                            if (user.isConnected()) {
+                                client.sendToClient(new Message(user, "#Login_Connected"));
+                            } else {
+                                user.setConnected(true);
+                                session.save(user);
+                                session.flush();
+
+                                client.sendToClient(new Message(user, "#Login_Success"));
+                            }
+                        }
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
             }
@@ -114,5 +171,18 @@ public class Server extends AbstractServer {
 
     public static void generate() {
 
+        session.beginTransaction();
+
+        Principal principal = new Principal("admin", "admin", "Dr. Ahed", "Khatib");
+        session.save(principal);
+        session.flush();
+
+        Student alaa = new Student("alaakhamis", "123", "Alaa", "Khamis");
+        Student ahed = new Student("ahedkhatib", "321", "Ahed", "Khatib");
+        session.save(alaa);
+        session.save(ahed);
+        session.flush();
+
+        session.getTransaction().commit();
     }
 }

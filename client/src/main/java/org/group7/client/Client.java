@@ -1,12 +1,8 @@
 package org.group7.client;
 
-
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
-import org.group7.client.Control.ChangeGradeController;
-import org.group7.client.Events.ResultListEvent;
-import org.group7.client.Events.StudentListEvent;
-import org.group7.client.Events.StudentResultEvent;
+import org.group7.client.Events.LoginEvent;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
 
@@ -16,10 +12,12 @@ public class Client extends AbstractClient {
 
     private static User user = null;
 
-    public ChangeGradeController changeGradeController;
-
     private Client(String host, int port) {
         super(host, port);
+    }
+
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -27,25 +25,18 @@ public class Client extends AbstractClient {
         Message message = (Message) msg;
         String post = message.getMessage();
 
-        switch (post) {
-            case "#GotStudents" -> {
-                Platform.runLater(() -> {
-                    StudentListEvent studentEvent = new StudentListEvent(message);
-                    EventBus.getDefault().post(studentEvent);
-                });
+        if (post.startsWith("#Login_")) {
+            LoginEvent event = new LoginEvent(new Message(message.getObject(), post.substring(7)));
+
+            if (event.isSuccess()) {
+                user = (User) message.getObject();
             }
-            case "#GotGrades" -> {
-                Platform.runLater(() -> {
-                    StudentResultEvent studentResultEvent = new StudentResultEvent(message);
-                    EventBus.getDefault().post(studentResultEvent);
-                });
-            }
-            case "#GradeUpdated" -> {
-                Platform.runLater(() -> {
-                    ResultListEvent resultListEvent = new ResultListEvent(message);
-                    EventBus.getDefault().post(resultListEvent);
-                });
-            }
+
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        } else if (post.startsWith("#Logout")) {
+            user = null;
         }
     }
 
