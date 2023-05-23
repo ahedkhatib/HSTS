@@ -43,19 +43,17 @@ public class App extends Application {
         Parent root = loadFXML(pageName);
         scene.setRoot(root);
         appStage.setScene(scene);
+        appStage.sizeToScene();
         appStage.show();
     }
 
     public static void switchScreen(String screenName) {
         switch (screenName) {
+            case "homepage" -> Platform.runLater(() -> {
+                setWindowTitle("Homepage");
+            });
             case "login" -> Platform.runLater(() -> {
-                setWindowTitle("Log In");
-            });
-            case "changeGrade" -> Platform.runLater(() -> {
-                setWindowTitle("Change Grade");
-            });
-            case "showStudents" -> Platform.runLater(() -> {
-                setWindowTitle("Students");
+                setWindowTitle("Login");
             });
         }
 
@@ -75,6 +73,7 @@ public class App extends Application {
 
     @Override
     public void stop() throws Exception {
+        client.closeConnection();
         super.stop();
     }
 

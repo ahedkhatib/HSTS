@@ -1,0 +1,206 @@
+package org.group7.client.Boundary;
+
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Duration;
+import org.group7.client.App;
+import org.group7.client.Client;
+import org.group7.client.Control.HomepageController;
+import org.group7.entities.User;
+
+import java.io.IOException;
+
+public class HomepageBoundary {
+
+    private HomepageController controller;
+
+    @FXML
+    private BorderPane borderPane;
+
+    @FXML
+    private Text titleText;
+
+    @FXML
+    private AnchorPane mainPage;
+
+    @FXML
+    private Pane transparentPane;
+
+    @FXML
+    private Rectangle maskRectangle;
+
+    @FXML
+    private Button logoutBtn;
+
+    @FXML
+    private Button menuBtn;
+
+    @FXML
+    private Button newExamBtn;
+
+    @FXML
+    private Button newQuestionBtn;
+
+    @FXML
+    private Button prinCourseReportsBtn;
+
+    @FXML
+    private Button prinExamReportsBtn;
+
+    @FXML
+    private Button prinStudentReportsBtn;
+
+    @FXML
+    private Button prinTeacherReportsBtn;
+
+    @FXML
+    private Button principalReqBtn;
+
+    @FXML
+    private AnchorPane sidePanel;
+
+    @FXML
+    private Button startExamBtn;
+
+    @FXML
+    private Button studentReportsBtn;
+
+    @FXML
+    private Button teacherReportsBtn;
+
+    @FXML
+    private StackPane buttonContainer;
+
+    @FXML
+    private VBox studentButtons;
+
+    @FXML
+    private VBox teacherButtons;
+
+    @FXML
+    private VBox prinButtons;
+
+    @FXML
+    public void goToPage(ActionEvent event) throws IOException {
+        toggleMenu(event);
+        loadPage("welcome");
+    }
+
+    @FXML
+    void logout(ActionEvent event) {
+        controller.logout();
+        App.switchScreen("login");
+    }
+
+    @FXML
+    void toggleMenu(ActionEvent event) {
+
+        if (!sidePanel.isDisable()) {
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.1));
+            slide.setNode(sidePanel);
+
+            slide.setToX(-220.0);
+            slide.play();
+
+            sidePanel.setDisable(true);
+
+            transparentPane.setDisable(false);
+            transparentPane.setVisible(false);
+            maskRectangle.setVisible(false);
+            maskRectangle.setDisable(false);
+
+            slide.setOnFinished((ActionEvent e)-> {
+                sidePanel.setVisible(false);
+                borderPane.setLeft(null);
+            });
+
+        } else {
+            TranslateTransition slide = new TranslateTransition();
+            slide.setDuration(Duration.seconds(0.1));
+            slide.setNode(sidePanel);
+
+            slide.setToX(0.0);
+
+            slide.play();
+
+            borderPane.setLeft(sidePanel);
+            sidePanel.setVisible(true);
+            sidePanel.setDisable(false);
+
+            transparentPane.setDisable(true);
+            transparentPane.setVisible(true);
+            maskRectangle.setVisible(true);
+            maskRectangle.setDisable(true);
+        }
+    }
+
+    public void loadPage(String path) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(path + ".fxml"));
+        if(mainPage.getChildren().size() == 0)
+            mainPage.getChildren().add(fxmlLoader.load());
+        else
+            mainPage.getChildren().set(0, fxmlLoader.load());
+    }
+
+    @FXML
+    public void initialize() throws IOException {
+
+        controller = new HomepageController(this);
+
+        sidePanel.setTranslateX(-220.0);
+
+        sidePanel.setVisible(false);
+        sidePanel.setDisable(true);
+
+        borderPane.setLeft(null);
+
+        User user = controller.getUser();
+
+        // Setup side panel
+        switch (user.getType()) {
+            case 1 -> {
+                studentButtons.setVisible(true);
+                teacherButtons.setVisible(false);
+                prinButtons.setVisible(false);
+                StackPane.setMargin(studentButtons, null);
+                buttonContainer.getChildren().setAll(studentButtons);
+            }
+            case 2 -> {
+                studentButtons.setVisible(false);
+                teacherButtons.setVisible(true);
+                prinButtons.setVisible(false);
+                StackPane.setMargin(teacherButtons, null);
+                buttonContainer.getChildren().setAll(teacherButtons);
+            }
+            case 3 -> {
+                studentButtons.setVisible(false);
+                teacherButtons.setVisible(false);
+                prinButtons.setVisible(true);
+                StackPane.setMargin(prinButtons, null);
+                buttonContainer.getChildren().setAll(prinButtons);
+            }
+        }
+
+        // Setup Welcome Page
+        titleText.setText("Welcome " + user.getFirstName() + " " + user.getLastName());
+
+        maskRectangle.widthProperty().bind(mainPage.widthProperty());
+        maskRectangle.heightProperty().bind(mainPage.heightProperty());
+
+        transparentPane.prefWidthProperty().bind(mainPage.widthProperty());
+        transparentPane.prefHeightProperty().bind(mainPage.heightProperty());
+
+        loadPage("bye");
+    }
+
+}

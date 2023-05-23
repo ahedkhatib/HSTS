@@ -17,6 +17,10 @@ public class Principal extends User implements Serializable{
         super.setType(3);
     }
 
+    public Principal(String username, String password, String firstname, String lastname) {
+        super(username, password, firstname, lastname, 3);
+    }
+
     public List<Report> getReportList() {
         return reportList;
     }

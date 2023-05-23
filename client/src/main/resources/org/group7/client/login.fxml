@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="601.0" prefWidth="705.0" styleClass="root" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.LoginBoundary">
+    <VBox alignment="CENTER" layoutX="250.0" layoutY="1.0" prefHeight="600.0" prefWidth="301.0" spacing="20.0" styleClass="vbox" stylesheets="@../../../stylesheet.css">
+        <Text text="HSTS" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets bottom="20.0" />
+            </VBox.margin>
+            <font>
+                <Font name="Arial" size="47.0" />
+            </font>
+        </Text>
+        <Text text="Login" textAlignment="CENTER">
+            <VBox.margin>
+                <Insets bottom="25.0" />
+            </VBox.margin>
+            <font>
+                <Font name="Arial" size="26.0" />
+            </font>
+        </Text>
+        <TextField fx:id="usernameTF" prefHeight="18.0" prefWidth="156.0" promptText="Username" styleClass="login-text" />
+        <PasswordField fx:id="passwordTF" promptText="Password" styleClass="login-text">
+            <VBox.margin>
+                <Insets bottom="30.0" />
+            </VBox.margin>
+        </PasswordField>
+        <Button fx:id="loginBtn" onAction="#login" styleClass="login-button" text="Login" />
+        <opaqueInsets>
+            <Insets />
+        </opaqueInsets>
+        <padding>
+            <Insets left="20.0" right="20.0" />
+        </padding>
+    </VBox>
+</AnchorPane>
