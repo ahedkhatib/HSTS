@@ -48,7 +48,8 @@
                             <VBox fx:id="teacherButtons" spacing="10.0" visible="false">
                                 <Button fx:id="newExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Exam" />
                                 <Button fx:id="newQuestionBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Question" />
-                                <Button fx:id="teacherReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="55.0" prefWidth="217.0" styleClass="menu-button" text="Reports" />
+                                <Button fx:id="newTimeRequestBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Time Request" />
+                                <Button fx:id="teacherReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Reports" />
                             </VBox>
                             <VBox fx:id="studentButtons" spacing="10.0" visible="false">
                                 <Button fx:id="startExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Start Exam" />

@@ -37,6 +37,21 @@ public class Client extends AbstractClient {
             });
         } else if (post.startsWith("#Logout")) {
             user = null;
+        } else if (post.startsWith("#ExtraTime_")) {
+
+            String temp = post.substring(11);
+
+            if(temp.equals("Fail")){
+               String m = ("Exam: " + message.getObject() + " could not be found!");
+                Platform.runLater(() -> {
+                    EventBus.getDefault().post(m);
+                });
+            }
+            else {
+                Platform.runLater(() -> {
+                    EventBus.getDefault().post("Request Sent");
+                });
+            }
         }
     }
 

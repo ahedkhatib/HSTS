@@ -1,7 +1,11 @@
 package org.group7.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
+@Entity
+@Table(name = "manual_exams")
 public class ManualExam extends Exam implements Serializable {
 
     float time;

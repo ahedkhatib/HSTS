@@ -6,6 +6,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "exams")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Exam implements Serializable {
 
     @Id
@@ -49,6 +50,10 @@ public class Exam implements Serializable {
 
     public Exam() {
 
+    }
+
+    public Exam(int examId){
+        this.examId = examId;
     }
 
     public Exam(int examid, int examNum, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {

@@ -48,6 +48,9 @@ public class HomepageBoundary {
     private Button newExamBtn;
 
     @FXML
+    private Button newTimeRequestBtn;
+
+    @FXML
     private Button newQuestionBtn;
 
     @FXML
@@ -92,7 +95,16 @@ public class HomepageBoundary {
     @FXML
     public void goToPage(ActionEvent event) throws IOException {
         toggleMenu(event);
-        loadPage("welcome");
+
+        Button pressed = (Button) event.getSource();
+
+        if(pressed == newTimeRequestBtn){
+            loadPage("timeRequest");
+            titleText.setText("Extra Time Request");
+        } else {
+            loadPage("bye");
+            titleText.setText("bye");
+        }
     }
 
     @FXML
@@ -200,7 +212,7 @@ public class HomepageBoundary {
         transparentPane.prefWidthProperty().bind(mainPage.widthProperty());
         transparentPane.prefHeightProperty().bind(mainPage.heightProperty());
 
-        loadPage("bye");
+        loadPage("welcome");
     }
 
 }
