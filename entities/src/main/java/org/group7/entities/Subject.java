@@ -12,6 +12,9 @@ public class Subject implements Serializable {
     @Column(name = "subject_id")
     private int subjectId;
 
+    @Column(name = "subject_name")
+    private String subjectName;
+
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Course> courseList;
 
@@ -22,14 +25,16 @@ public class Subject implements Serializable {
 
     }
 
-    public Subject(int subjectId) {
+    public Subject(int subjectId, String subjectName) {
         this.subjectId = subjectId;
+        this.subjectName = subjectName;
         this.courseList = new ArrayList<>();
         this.questionList = new ArrayList<>();
     }
 
-    public Subject(int subjectId, List<Course> courseList, List<Question> questionList) {
+    public Subject(int subjectId, String subjectName, List<Course> courseList, List<Question> questionList) {
         this.subjectId = subjectId;
+        this.subjectName = subjectName;
         this.courseList = courseList;
         this.questionList = questionList;
     }
