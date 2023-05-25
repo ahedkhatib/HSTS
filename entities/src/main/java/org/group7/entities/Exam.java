@@ -12,6 +12,9 @@ public class Exam implements Serializable {
     @Column(name = "exam_id")
     private int examId;
 
+    @Column(name = "exam_num")
+    private int examNum;
+
     private int duration;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,13 +45,16 @@ public class Exam implements Serializable {
     @Column(name = "question_points")
     private List<Integer> questionPoints;
 
+    int type;
+
     public Exam() {
 
     }
 
-    public Exam(int examid, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
+    public Exam(int examid, int examNum, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
         this.duration = duration;
         this.creator = creator;
+        this.type = type;
         this.teacherComments = teacherComments;
         this.studentComments = studentComments;
         this.questionList = questionList;
@@ -57,7 +63,31 @@ public class Exam implements Serializable {
         this.teacherList = new ArrayList<>();
         this.studentList = new ArrayList<>();
 
-        this.examId = course.getSubject().getSubjectId() * 1000 + course.getCourseId() * 100 + examid;
+        this.examId = course.getSubject().getSubjectId() * 1000 + course.getCourseId() * 100 + examNum;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public int getExamNum() {
+        return examNum;
+    }
+
+    public void setExamNum(int examNum) {
+        this.examNum = examNum;
     }
 
     public int getExamId() {
