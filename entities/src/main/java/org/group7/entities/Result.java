@@ -25,6 +25,9 @@ public class Result implements Serializable {
     @Column(name = "teacher_note")
     private String teacherNote;
 
+    @Column(name = "elapsed")
+    private float elapsed;
+
     public Result() {
     }
 

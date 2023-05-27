@@ -9,6 +9,8 @@ import java.util.*;
 public class Subject implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subject_id_sequence")
+    @SequenceGenerator(name = "subject_id_sequence", sequenceName = "subject_id_sequence", allocationSize = 1, initialValue = 10)
     @Column(name = "subject_id")
     private int subjectId;
 
@@ -25,15 +27,13 @@ public class Subject implements Serializable {
 
     }
 
-    public Subject(int subjectId, String subjectName) {
-        this.subjectId = subjectId;
+    public Subject(String subjectName) {
         this.subjectName = subjectName;
         this.courseList = new ArrayList<>();
         this.questionList = new ArrayList<>();
     }
 
-    public Subject(int subjectId, String subjectName, List<Course> courseList, List<Question> questionList) {
-        this.subjectId = subjectId;
+    public Subject(String subjectName, List<Course> courseList, List<Question> questionList) {
         this.subjectName = subjectName;
         this.courseList = courseList;
         this.questionList = questionList;

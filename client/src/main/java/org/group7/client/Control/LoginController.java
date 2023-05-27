@@ -12,7 +12,7 @@ import org.group7.entities.User;
 
 import java.util.Objects;
 
-public class LoginController {
+public class LoginController extends Controller{
 
     private LoginBoundary boundary;
 
@@ -37,7 +37,7 @@ public class LoginController {
             User user = event.getUser();
 
             if (Objects.equals(event.getMessage(), "Success")) {
-                EventBus.getDefault().unregister(this);
+                unregisterController();
                 App.switchScreen("homepage");
             } else {
                 Alert alert;
@@ -54,6 +54,11 @@ public class LoginController {
             alert.setHeaderText("Error: Incorrect Input");
             alert.show();
         }
+    }
+
+    @Override
+    public void unregisterController(){
+        EventBus.getDefault().unregister(this);
     }
 
 }

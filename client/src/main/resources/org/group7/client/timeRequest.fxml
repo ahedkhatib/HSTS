@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TimeRequestBoundary">
    <children>
-      <HBox alignment="CENTER" layoutX="307.0" layoutY="125.0" spacing="30.0">
+      <HBox alignment="CENTER" layoutX="307.0" layoutY="128.0" spacing="30.0">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Number: ">
                <font>
@@ -31,7 +31,10 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <TextArea fx:id="teachersNotesTA" prefHeight="200.0" prefWidth="572.0" />
+            <TextArea fx:id="teachersNotesTA" prefHeight="200.0" prefWidth="572.0">
+               <font>
+                  <Font size="24.0" />
+               </font></TextArea>
          </children>
       </HBox>
       <Button fx:id="sendReqBtn" layoutX="474.0" layoutY="530.0" mnemonicParsing="false" onAction="#sendRequest" prefHeight="81.0" prefWidth="197.0" text="Send Request">

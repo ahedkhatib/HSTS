@@ -17,7 +17,7 @@ public class ExtraTime implements Serializable{
     private boolean status;
 
     @Column(name = "exam_id")
-    private int examId;
+    private String examId;
 
     @Column(name = "teacher_message")
     private String teacherMessage;
@@ -26,7 +26,7 @@ public class ExtraTime implements Serializable{
 
     }
 
-    public ExtraTime(int examId, String teacherMessage) {
+    public ExtraTime(String examId, String teacherMessage) {
         this.status = false;
         this.examId = examId;
         this.teacherMessage = teacherMessage;
@@ -48,11 +48,11 @@ public class ExtraTime implements Serializable{
         this.status = status;
     }
 
-    public int getExamId() {
+    public String getExamId() {
         return examId;
     }
 
-    public void setExamId(int examId) {
+    public void setExamId(String examId) {
         this.examId = examId;
     }
 

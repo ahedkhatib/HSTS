@@ -1,5 +1,6 @@
 package org.group7.server;
 
+import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
 import org.group7.server.ocsf.AbstractServer;
@@ -37,8 +38,6 @@ public class Server extends AbstractServer {
 
         configuration.addAnnotatedClass(Course.class);
         configuration.addAnnotatedClass(Exam.class);
-        configuration.addAnnotatedClass(AutomatedExam.class);
-        configuration.addAnnotatedClass(ManualExam.class);
         configuration.addAnnotatedClass(ExtraTime.class);
         configuration.addAnnotatedClass(Principal.class);
         configuration.addAnnotatedClass(Question.class);
@@ -184,11 +183,63 @@ public class Server extends AbstractServer {
                                 session.flush();
                             }
 
-                            session.getTransaction().commit();
-
                             client.sendToClient(new Message(null, "#ExtraTime_Success"));
-
                         }
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#GetTimeRequests" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Principal principal = (Principal) message.getObject();
+
+                        principal = session.find(Principal.class, principal.getUsername());
+
+                        List<ExtraTime> requests = principal.getRequestList();
+
+                        client.sendToClient(new Message(requests, "#GotRequestsList"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#ApproveTimeRequest" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        ExtraTime request = (ExtraTime) message.getObject();
+                        request = session.find(ExtraTime.class, request.getRequestId());
+                        request.setStatus(true);
+                        session.save(request);
+                        session.flush();
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#DenyTimeRequest" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        ExtraTime request = (ExtraTime) message.getObject();
+                        request = session.find(ExtraTime.class, request.getRequestId());
+                        request.setStatus(false);
+                        session.save(request);
+                        session.flush();
+
+                        session.getTransaction().commit();
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -246,15 +297,15 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject(10, "math");
-        Subject cs = new Subject(20, "Computer Science");
+        Subject math = new Subject("math");
+        Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);
         session.flush();
 
         // Add courses
-        Course algebra = new Course(10, "Linear Algebra", math);
-        Course calculus = new Course(20, "Calculus", math);
+        Course algebra = new Course("Linear Algebra", math);
+        Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
@@ -263,10 +314,10 @@ public class Server extends AbstractServer {
         session.save(math);
         session.flush();
 
-        Course intro = new Course(30, "Into to CS", cs);
-        Course algo = new Course(40, "Algorithms", cs);
-        Course graphics = new Course(50, "Computer Graphics", cs);
-        Course cv = new Course(60, "Computer Vision", cs);
+        Course intro = new Course("Into to CS", cs);
+        Course algo = new Course("Algorithms", cs);
+        Course graphics = new Course("Computer Graphics", cs);
+        Course cv = new Course("Computer Vision", cs);
         session.save(intro);
         session.save(algo);
         session.save(graphics);
@@ -307,13 +358,13 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add questions
-        Question mathQ1 = new Question(10, "What is 5+2 ?", List.of(new Course[]{algebra, calculus}),
+        Question mathQ1 = new Question("What is 5+2 ?", List.of(new Course[]{algebra, calculus}),
                 math, 0, (new String[]{"7", "3", "12", "0"}));
 
-        Question mathQ2 = new Question(11, "What is 5-3 ?", List.of(new Course[]{algebra}),
+        Question mathQ2 = new Question("What is 5-3 ?", List.of(new Course[]{algebra}),
                 math, 2, (new String[]{"4", "1", "2", "0"}));
 
-        Question mathQ3 = new Question(12, "What is integral of x ?", List.of(new Course[]{calculus}),
+        Question mathQ3 = new Question("What is integral of x ?", List.of(new Course[]{calculus}),
                 math, 1, (new String[]{"x", "x^2 / 2", "2x", "Doesn't have integral!"}));
 
         session.save(mathQ1);
@@ -321,22 +372,22 @@ public class Server extends AbstractServer {
         session.save(mathQ3);
         session.flush();
 
-        Question csQ1 = new Question(20, "What does this print: cout << \"Hi\" << endl; ?",
+        Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
-        Question csQ2 = new Question(21, "Who created FFT ?", List.of(new Course[]{graphics, cv, algo}),
+        Question csQ2 = new Question("Who created FFT ?", List.of(new Course[]{graphics, cv, algo}),
                 cs, 3, (new String[]{"Dr. Shuly", "Lagrange", "ME!", "Fourier"}));
 
-        Question csQ3 = new Question(22, "How many image pyramids do we know ?",
+        Question csQ3 = new Question("How many image pyramids do we know ?",
                 List.of(new Course[]{cv}), cs, 1, (new String[]{"1", "2", "3", "None"}));
 
-        Question csQ4 = new Question(23, "How do we find shortest path in graph ?",
+        Question csQ4 = new Question("How do we find shortest path in graph ?",
                 List.of(new Course[]{intro, algo}), cs, 2, (new String[]{"DFS", "BFS", "Daijkstra", "A + B"}));
 
-        Question csQ5 = new Question(24, "How do we get edges of an image ?", List.of(new Course[]{cv, graphics}),
+        Question csQ5 = new Question("How do we get edges of an image ?", List.of(new Course[]{cv, graphics}),
                 cs, 2, (new String[]{"Sobel", "Canny", "No way!", "A + B"}));
 
-        Question csQ6 = new Question(25, "What is recursion ?", List.of(new Course[]{intro, algo}),
+        Question csQ6 = new Question("What is recursion ?", List.of(new Course[]{intro, algo}),
                 cs, 1, (new String[]{"What is recursion ?", "Yes", "No", "Error"}));
 
         session.save(csQ1);
@@ -372,10 +423,6 @@ public class Server extends AbstractServer {
         session.save(cv);
         session.flush();
 
-        // Add exams
-        AutomatedExam exam = new AutomatedExam(1010);
-        session.save(exam);
-        session.flush();
 
         session.getTransaction().commit();
     }

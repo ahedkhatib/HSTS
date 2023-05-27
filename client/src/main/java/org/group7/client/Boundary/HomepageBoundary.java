@@ -14,12 +14,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.group7.client.App;
 import org.group7.client.Client;
+import org.group7.client.Control.Controller;
 import org.group7.client.Control.HomepageController;
 import org.group7.entities.User;
 
 import java.io.IOException;
 
-public class HomepageBoundary {
+public class HomepageBoundary extends Boundary{
 
     private HomepageController controller;
 
@@ -98,9 +99,20 @@ public class HomepageBoundary {
 
         Button pressed = (Button) event.getSource();
 
+        FXMLLoader loader = (FXMLLoader) mainPage.getProperties().get(FXMLLoader.class.getName());
+
+        if(loader != null) {
+            Boundary boundary = loader.getController();
+            Controller control = boundary.getController();
+            control.unregisterController();
+        }
+
         if(pressed == newTimeRequestBtn){
             loadPage("timeRequest");
             titleText.setText("Extra Time Request");
+        } else if (pressed == principalReqBtn) {
+            loadPage("checkTimeRequests");
+            titleText.setText("Extra Time Requests");
         } else {
             loadPage("bye");
             titleText.setText("bye");

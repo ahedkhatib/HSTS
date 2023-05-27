@@ -1,0 +1,57 @@
+package org.group7.client.Control;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.group7.client.Boundary.CheckTimeRequestsBoundary;
+import org.group7.client.Client;
+import org.group7.entities.ExtraTime;
+import org.group7.entities.Message;
+
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+public class CheckTimeRequestsController extends Controller {
+
+    private CheckTimeRequestsBoundary boundary;
+
+    public CheckTimeRequestsController(CheckTimeRequestsBoundary boundary) {
+        EventBus.getDefault().register(this);
+        this.boundary = boundary;
+    }
+
+    @Override
+    public void unregisterController() {EventBus.getDefault().unregister(this);
+    }
+
+    public void getAllRequests() {
+        try {
+            Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTimeRequests"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateRequest(String update, ExtraTime request) {
+
+        if (update.equals("approve")) {
+            try {
+                Client.getClient().sendToServer(new Message(request, "#ApproveTimeRequest"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Client.getClient().sendToServer(new Message(request, "#DenyTimeRequest"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Subscribe
+    public void setRequestListItems(List<ExtraTime> reqList) {
+        boundary.getRequestList().getItems().addAll(reqList);
+        boundary.getRequestList().refresh();
+    }
+
+}

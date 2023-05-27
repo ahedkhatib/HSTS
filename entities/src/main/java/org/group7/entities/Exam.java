@@ -11,8 +11,10 @@ public class Exam implements Serializable {
 
     @Id
     @Column(name = "exam_id")
-    private int examId;
+    private String examId;
 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_num_sequence")
+    @SequenceGenerator(name = "exam_num_sequence", sequenceName = "exam_num_sequence", allocationSize = 1, initialValue = 10)
     @Column(name = "exam_num")
     private int examNum;
 
@@ -52,11 +54,11 @@ public class Exam implements Serializable {
 
     }
 
-    public Exam(int examId){
+    public Exam(String examId){
         this.examId = examId;
     }
 
-    public Exam(int examid, int examNum, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
+    public Exam(String examId, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
         this.duration = duration;
         this.creator = creator;
         this.type = type;
@@ -68,7 +70,9 @@ public class Exam implements Serializable {
         this.teacherList = new ArrayList<>();
         this.studentList = new ArrayList<>();
 
-        this.examId = course.getSubject().getSubjectId() * 1000 + course.getCourseId() * 100 + examNum;
+        this.examId = examId;
+
+        this.examNum = course.getSubject().getSubjectId() * 1000 + course.getCourseId() * 100 + this.examNum;
     }
 
     public int getType() {
@@ -95,11 +99,11 @@ public class Exam implements Serializable {
         this.examNum = examNum;
     }
 
-    public int getExamId() {
+    public String getExamId() {
         return examId;
     }
 
-    public void setExamId(int examId) {
+    public void setExamId(String examId) {
         this.examId = examId;
     }
 

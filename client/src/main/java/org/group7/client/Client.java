@@ -6,6 +6,8 @@ import org.group7.client.Events.LoginEvent;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
 
+import java.util.List;
+
 public class Client extends AbstractClient {
 
     private static Client client = null;
@@ -52,6 +54,11 @@ public class Client extends AbstractClient {
                     EventBus.getDefault().post("Request Sent");
                 });
             }
+        } else if (post.startsWith("#GotRequestsList")) {
+            List<ExtraTime> reqs = (List<ExtraTime>) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(reqs);
+            });
         }
     }
 

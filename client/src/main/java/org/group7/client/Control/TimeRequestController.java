@@ -5,9 +5,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.TimeRequestBoundary;
 import org.group7.client.Client;
+import org.group7.entities.ExtraTime;
 import org.group7.entities.Message;
 
-public class TimeRequestController {
+public class TimeRequestController extends Controller {
 
     private TimeRequestBoundary boundary;
 
@@ -54,5 +55,10 @@ public class TimeRequestController {
                 message
         );
         alert.show();
+    }
+
+    @Override
+    public void unregisterController(){
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -8,7 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.group7.client.Control.LoginController;
 
-public class LoginBoundary {
+public class LoginBoundary extends Boundary {
 
     private LoginController controller;
 
