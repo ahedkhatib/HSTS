@@ -13,7 +13,8 @@ public class ExecutableExam implements Serializable {
     @Column(name = "exam_id")
     private String examId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username")
     private Teacher teacher;
 
     @ManyToMany(mappedBy = "examList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
