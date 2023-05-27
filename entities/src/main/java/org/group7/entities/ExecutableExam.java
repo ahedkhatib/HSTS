@@ -18,7 +18,7 @@ public class ExecutableExam implements Serializable {
     private Teacher teacher;
 
     @ManyToMany(mappedBy = "examList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Teacher> studentList;
+    private List<Student> studentList;
 
     @Transient
     private Exam exam;
@@ -69,11 +69,11 @@ public class ExecutableExam implements Serializable {
         this.teacher = teacher;
     }
 
-    public List<Teacher> getStudentList() {
+    public List<Student> getStudentList() {
         return studentList;
     }
 
-    public void setStudentList(List<Teacher> studentList) {
+    public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
 }

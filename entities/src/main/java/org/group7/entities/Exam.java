@@ -6,7 +6,6 @@ import java.util.*;
 
 @Entity
 @Table(name = "exams")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Exam implements Serializable {
 
     @Id
