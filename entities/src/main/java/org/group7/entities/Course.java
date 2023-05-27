@@ -9,7 +9,8 @@ import java.util.*;
 public class Course implements Serializable{
 
     @Id
-    @Column(name = "course_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_id_sequence")
+    @SequenceGenerator(name = "course_id_sequence", sequenceName = "course_id_sequence", allocationSize = 1, initialValue = 10)    @Column(name = "course_id")
     private int courseId;
 
     @Column(name = "course_name")
@@ -35,8 +36,7 @@ public class Course implements Serializable{
 
     }
 
-    public Course(int courseId, String courseName, Subject subject) {
-        this.courseId = courseId;
+    public Course(String courseName, Subject subject) {
         this.courseName = courseName;
         this.subject = subject;
         this.studentList = new ArrayList<>();

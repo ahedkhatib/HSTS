@@ -8,7 +8,7 @@ import org.group7.client.Control.TimeRequestController;
 
 import java.awt.event.ActionEvent;
 
-public class TimeRequestBoundary {
+public class TimeRequestBoundary extends Boundary{
 
     @FXML
     private TextField examIdTF;
@@ -28,9 +28,7 @@ public class TimeRequestBoundary {
 
     @FXML
     public void initialize(){
-
         controller = new TimeRequestController(this);
-
     }
 
 }

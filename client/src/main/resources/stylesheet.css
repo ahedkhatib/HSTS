@@ -14,7 +14,6 @@
 
 /* Login button */
 .login-button {
-    -fx-background-color: 491c79c;
     -fx-text-fill: white; /* Set the text color */
     -fx-font-size: 25px; /* Set the font size */
     -fx-background-color: #91c79c;

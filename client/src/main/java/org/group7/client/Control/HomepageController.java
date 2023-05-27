@@ -1,12 +1,11 @@
 package org.group7.client.Control;
 
-import org.greenrobot.eventbus.EventBus;
 import org.group7.client.Boundary.HomepageBoundary;
 import org.group7.client.Client;
 import org.group7.entities.Message;
 import org.group7.entities.User;
 
-public class HomepageController {
+public class HomepageController extends Controller{
 
     private HomepageBoundary boundary;
 
