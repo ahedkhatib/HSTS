@@ -19,11 +19,14 @@ public class TimeRequestBoundary extends Boundary{
     @FXML
     private TextArea teachersNotesTA;
 
+    @FXML
+    private TextField extraTime;
+
     private TimeRequestController controller;
 
     @FXML
     public void sendRequest() {
-        controller.sendRequest(examIdTF.getText(), teachersNotesTA.getText());
+        controller.sendRequest(examIdTF.getText(), teachersNotesTA.getText(), extraTime.getText());
     }
 
     @FXML

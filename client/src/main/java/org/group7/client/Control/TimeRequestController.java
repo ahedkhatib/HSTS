@@ -17,11 +17,12 @@ public class TimeRequestController extends Controller {
         this.boundary = boundary;
     }
 
-    public void sendRequest(String examId, String notes){
+    public void sendRequest(String examId, String notes, String extraTime){
         try {
-            int id = Integer.parseInt(examId);
 
-            if(id % 100000 == 0){
+            int et = Integer.parseInt(extraTime);
+
+            if(examId.length() != 4){
                 Alert alert;
                 alert = new Alert(Alert.AlertType.ERROR,
                         String.format("'" + examId + "' is not a valid exam id!")
@@ -29,7 +30,7 @@ public class TimeRequestController extends Controller {
                 alert.show();
             } else {
 
-                Object[] obj = {id, notes};
+                Object[] obj = {examId, notes, et};
 
                 try {
                     Client.getClient().sendToServer(new Message(obj, "#SendTimeRequest"));
@@ -42,7 +43,7 @@ public class TimeRequestController extends Controller {
         } catch (Exception e){
             Alert alert;
             alert = new Alert(Alert.AlertType.ERROR,
-                    "Exam id is a 4 digit integer!"
+                    "The added time is an integer in minutes!"
             );
             alert.show();
         }

@@ -6,4 +6,6 @@ public class Boundary {
     private Controller controller;
 
     public Controller getController(){return this.controller;}
+
+    public void setController(Controller controller){this.controller = controller;}
 }

@@ -20,7 +20,7 @@ public class Result implements Serializable {
     private Student student;
 
     @Column(name = "exam")
-    private Exam exam;
+    private ExecutableExam exam;
 
     @Column(name = "teacher_note")
     private String teacherNote;
@@ -31,7 +31,7 @@ public class Result implements Serializable {
     public Result() {
     }
 
-    public Result(int grade, Student student, String teacherNote, Exam exam){
+    public Result(int grade, Student student, String teacherNote, ExecutableExam exam){
         this.grade = grade;
         this.student = student;
         this.teacherNote = teacherNote;
@@ -46,11 +46,11 @@ public class Result implements Serializable {
         this.resultId = resultId;
     }
 
-    public Exam getExam() {
+    public ExecutableExam getExam() {
         return exam;
     }
 
-    public void setExam(Exam exam) {
+    public void setExam(ExecutableExam exam) {
         this.exam = exam;
     }
 

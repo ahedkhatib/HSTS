@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 import org.group7.client.Control.CheckTimeRequestsController;
 import org.group7.entities.ExtraTime;
 
+import java.util.Comparator;
+
 public class CheckTimeRequestsBoundary extends Boundary{
 
     @FXML
@@ -41,6 +43,12 @@ public class CheckTimeRequestsBoundary extends Boundary{
     @FXML
     private Text titleText;
 
+    @FXML
+    private AnchorPane emptyAP;
+
+    @FXML
+    private Text emptyText;
+
     private CheckTimeRequestsController controller;
 
     private ExtraTime activeReq;
@@ -49,6 +57,10 @@ public class CheckTimeRequestsBoundary extends Boundary{
     public CheckTimeRequestsController getController(){
         return controller;
     }
+
+    public AnchorPane getEmptyAP(){return this.emptyAP;}
+    public AnchorPane getListAP(){return this.listAP;}
+
 
     @FXML
     public void backToList(ActionEvent event) {
@@ -59,7 +71,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
         requestAP.setVisible(false);
 
         listAP.setDisable(false);
-        listAP.setDisable(true);
+        listAP.setVisible(true);
     }
 
     @FXML
@@ -103,14 +115,19 @@ public class CheckTimeRequestsBoundary extends Boundary{
 
                     Text reqText = new Text(req.getRequestId() + ": " + teacherMsg.substring(0,
                             Math.min(teacherMsg.length(), 20)) + "...");
-                    reqText.setFont(Font.font("Arial", 16));
+                    reqText.setFont(Font.font("Arial", 20));
                     Text arrow = new Text(">");
-                    arrow.setFont(Font.font("Arial", 16));
+                    arrow.setFont(Font.font("Arial", 20));
 
                     Region spacer = new Region();
                     HBox.setHgrow(spacer, Priority.ALWAYS);
 
                     hbox.getChildren().addAll(reqText, spacer, arrow);
+
+                    if(req.isStatus()){
+                        setDisable(true);
+                        reqText.setStrikethrough(true);
+                    }
 
                     setGraphic(hbox);
                 }
@@ -127,7 +144,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
                     requestAP.setVisible(true);
 
                     listAP.setDisable(true);
-                    listAP.setDisable(false);
+                    listAP.setVisible(false);
 
                     titleText.setText("Request for exam: " + activeReq.getExamId());
 

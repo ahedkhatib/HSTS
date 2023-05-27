@@ -39,6 +39,14 @@ public class Subject implements Serializable {
         this.questionList = questionList;
     }
 
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
     public int getSubjectId() {
         return subjectId;
     }

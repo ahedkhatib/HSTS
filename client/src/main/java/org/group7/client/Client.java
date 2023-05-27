@@ -59,6 +59,13 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(reqs);
             });
+        } else if (post.startsWith("#GotTeacherExams")) {
+            List<Exam> exams = (List<Exam>) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(exams);
+            });
+            
+        } else if (post.startsWith("#TimeRequestApproved")) {
         }
     }
 
