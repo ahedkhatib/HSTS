@@ -15,11 +15,11 @@ public class Teacher extends User implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> courseList;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ExecutableExam> examList;
-
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exam> createdExams;
+
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ExecutableExam> examList;
 
     public Teacher() {
         super();
