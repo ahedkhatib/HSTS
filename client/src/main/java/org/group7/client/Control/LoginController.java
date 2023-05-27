@@ -24,6 +24,12 @@ public class LoginController extends Controller{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        message = new Message(obj, "#NewClient");
+        try {
+            Client.getClient().sendToServer(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public LoginController(LoginBoundary boundary) {

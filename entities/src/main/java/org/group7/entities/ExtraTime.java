@@ -22,14 +22,26 @@ public class ExtraTime implements Serializable{
     @Column(name = "teacher_message")
     private String teacherMessage;
 
+    @Column(name = "extra")
+    private int extra;
+
     public ExtraTime() {
 
     }
 
-    public ExtraTime(String examId, String teacherMessage) {
+    public ExtraTime(String examId, String teacherMessage, int extra) {
         this.status = false;
         this.examId = examId;
         this.teacherMessage = teacherMessage;
+        this.extra = extra;
+    }
+
+    public int getExtra() {
+        return extra;
+    }
+
+    public void setExtra(int extra) {
+        this.extra = extra;
     }
 
     public int getRequestId() {

@@ -12,7 +12,7 @@ public class Student extends User implements Serializable {
     @JoinTable(name = "student_exam",
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "exam_id"))
-    private List<Exam> examList;
+    private List<ExecutableExam> examList;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "student_course",
@@ -43,11 +43,11 @@ public class Student extends User implements Serializable {
         this.resultList = resultList;
     }
 
-    public List<Exam> getExamList() {
+    public List<ExecutableExam> getExamList() {
         return examList;
     }
 
-    public void setExamList(List<Exam> examList) {
+    public void setExamList(List<ExecutableExam> examList) {
         this.examList = examList;
     }
 

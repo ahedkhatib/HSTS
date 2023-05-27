@@ -19,7 +19,7 @@ public class Teacher extends User implements Serializable{
     @JoinTable(name = "teacher_exam",
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "exam_id"))
-    private List<Exam> examList;
+    private List<ExecutableExam> examList;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exam> createdExams;
@@ -36,7 +36,7 @@ public class Teacher extends User implements Serializable{
         this.createdExams = new ArrayList<>();
     }
 
-    public Teacher(String username, String password, String firstname, String lastname, List<Course> courseList, List<Exam> examList, List<Exam> createdExams) {
+    public Teacher(String username, String password, String firstname, String lastname, List<Course> courseList, List<ExecutableExam> examList, List<Exam> createdExams) {
         super(username, password, firstname, lastname, 2);
         this.courseList = courseList;
         this.examList = examList;
@@ -51,11 +51,11 @@ public class Teacher extends User implements Serializable{
         this.courseList = courseList;
     }
 
-    public List<Exam> getExamList() {
+    public List<ExecutableExam> getExamList() {
         return examList;
     }
 
-    public void setExamList(List<Exam> examList) {
+    public void setExamList(List<ExecutableExam> examList) {
         this.examList = examList;
     }
 

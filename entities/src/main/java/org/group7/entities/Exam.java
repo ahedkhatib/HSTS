@@ -10,25 +10,19 @@ import java.util.*;
 public class Exam implements Serializable {
 
     @Id
-    @Column(name = "exam_id")
-    private String examId;
-
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_num_sequence")
     @SequenceGenerator(name = "exam_num_sequence", sequenceName = "exam_num_sequence", allocationSize = 1, initialValue = 10)
-    @Column(name = "exam_num")
-    private int examNum;
+    @Column(name = "exam_id")
+    private int examId;
 
     private int duration;
+
+    @Column(name = "exam_name")
+    private String examName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
     private Teacher creator;
-
-    @ManyToMany(mappedBy = "examList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Teacher> teacherList;
-
-    @ManyToMany(mappedBy = "examList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Student> studentList;
 
     @Column(name = "teacher_comments")
     private String teacherComments;
@@ -54,11 +48,8 @@ public class Exam implements Serializable {
 
     }
 
-    public Exam(String examId){
-        this.examId = examId;
-    }
-
-    public Exam(String examId, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
+    public Exam(String name, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
+        this.examName = name;
         this.duration = duration;
         this.creator = creator;
         this.type = type;
@@ -67,12 +58,16 @@ public class Exam implements Serializable {
         this.questionList = questionList;
         this.questionPoints = questionPoints;
 
-        this.teacherList = new ArrayList<>();
-        this.studentList = new ArrayList<>();
+        this.examId = course.getSubject().getSubjectId() * 10000 + course.getCourseId() * 100 + this.examId;
 
-        this.examId = examId;
+    }
 
-        this.examNum = course.getSubject().getSubjectId() * 1000 + course.getCourseId() * 100 + this.examNum;
+    public String getExamName() {
+        return examName;
+    }
+
+    public void setExamName(String examName) {
+        this.examName = examName;
     }
 
     public int getType() {
@@ -91,19 +86,11 @@ public class Exam implements Serializable {
         this.course = course;
     }
 
-    public int getExamNum() {
-        return examNum;
-    }
-
-    public void setExamNum(int examNum) {
-        this.examNum = examNum;
-    }
-
-    public String getExamId() {
+    public int getExamId() {
         return examId;
     }
 
-    public void setExamId(String examId) {
+    public void setExamId(int examId) {
         this.examId = examId;
     }
 
@@ -121,22 +108,6 @@ public class Exam implements Serializable {
 
     public void setCreator(Teacher creator) {
         this.creator = creator;
-    }
-
-    public List<Teacher> getTeacherList() {
-        return teacherList;
-    }
-
-    public void setTeacherList(List<Teacher> teachers) {
-        this.teacherList = teachers;
-    }
-
-    public List<Student> getStudentList() {
-        return studentList;
-    }
-
-    public void setStudentList(List<Student> studentList) {
-        this.studentList = studentList;
     }
 
     public String getTeacherComments() {

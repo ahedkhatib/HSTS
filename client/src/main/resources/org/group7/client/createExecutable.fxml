@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.CreateExecutableBoundary">
+    <HBox alignment="CENTER" layoutX="284.0" layoutY="218.0" spacing="50.0">
+        <children>
+            <HBox alignment="CENTER" spacing="8.0">
+                <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exam:  ">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Text>
+               <ComboBox fx:id="examsCombo" prefWidth="150.0" />
+                </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="8.0">
+                <children>
+                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Code: ">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Text>
+                    <TextField fx:id="examCodeTF" prefHeight="51.0" prefWidth="140.0">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </TextField>
+                </children>
+            </HBox>
+        </children>
+    </HBox>
+   <Button fx:id="saveBtn" layoutX="497.0" layoutY="416.0" mnemonicParsing="false" onAction="#saveExecutable" prefHeight="110.0" prefWidth="222.0" text="Save">
+      <font>
+         <Font size="25.0" />
+      </font>
+   </Button>
+</AnchorPane>

@@ -21,7 +21,7 @@
 }
 
 .login-button:hover {
-    -fx-background-color: 07d9a4;
+    -fx-background-color: #07d9a4;
     -fx-cursor: hand;
 }
 

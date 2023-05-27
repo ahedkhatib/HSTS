@@ -5,18 +5,18 @@ import org.group7.entities.*;
 
 import org.group7.server.ocsf.AbstractServer;
 import org.group7.server.ocsf.ConnectionToClient;
+import org.group7.server.ocsf.SubscribedClient;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.Session;
-import org.hibernate.boot.jaxb.hbm.spi.SubEntityInfo;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.sound.midi.SysexMessage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +24,9 @@ import java.util.Objects;
 public class Server extends AbstractServer {
 
     public static Session session;
+
+    private static ArrayList<SubscribedClient> SubscribersList = new ArrayList<>();
+
 
     public Server(int port) {
         super(port);
@@ -38,6 +41,7 @@ public class Server extends AbstractServer {
 
         configuration.addAnnotatedClass(Course.class);
         configuration.addAnnotatedClass(Exam.class);
+        configuration.addAnnotatedClass(ExecutableExam.class);
         configuration.addAnnotatedClass(ExtraTime.class);
         configuration.addAnnotatedClass(Principal.class);
         configuration.addAnnotatedClass(Question.class);
@@ -63,6 +67,16 @@ public class Server extends AbstractServer {
         return data;
     }
 
+    public void sendToAllClients(Message message) {
+        try {
+            for (SubscribedClient SubscribedClient : SubscribersList) {
+                SubscribedClient.getClient().sendToClient(message);
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     @Override
     protected void handleMessageFromClient(Object msg, ConnectionToClient client) {
         Message message = (Message) msg;
@@ -70,6 +84,10 @@ public class Server extends AbstractServer {
 
         try {
             switch (req) {
+                case "#NewClient" -> {
+                    SubscribedClient connection = new SubscribedClient(client);
+                    SubscribersList.add(connection);
+                }
                 case "#GetStudents" -> {
                     List<Student> students = getAll(Student.class);
                     client.sendToClient(new Message(students, "#GotStudents"));
@@ -164,13 +182,15 @@ public class Server extends AbstractServer {
                     try {
                         session.beginTransaction();
 
-                        Exam exam = session.find(Exam.class, obj[0]);
+                        ExecutableExam exam = session.find(ExecutableExam.class, obj[0]);
 
                         if (exam == null) {
                             client.sendToClient(new Message(obj[0], "#ExtraTime_Fail"));
                         } else {
 
-                            ExtraTime et = new ExtraTime(exam.getExamId(), (String) obj[1]);
+                            int time = (int) obj[2];
+
+                            ExtraTime et = new ExtraTime(exam.getExamId(), (String) obj[1], time);
 
                             session.save(et);
                             session.flush();
@@ -220,8 +240,14 @@ public class Server extends AbstractServer {
                         request.setStatus(true);
                         session.save(request);
                         session.flush();
+                        Exam exam = session.find(Exam.class, request.getExamId());
+                        exam.setDuration(exam.getDuration() + request.getExtra());
+                        session.save(exam);
+                        session.flush();
 
                         session.getTransaction().commit();
+
+                        sendToAllClients(new Message(request, "#TimeRequestApproved"));
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -234,8 +260,56 @@ public class Server extends AbstractServer {
 
                         ExtraTime request = (ExtraTime) message.getObject();
                         request = session.find(ExtraTime.class, request.getRequestId());
-                        request.setStatus(false);
-                        session.save(request);
+                        session.delete(request);
+                        session.flush();
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#GetTeacherExams" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Teacher teacher = (Teacher) message.getObject();
+
+                        teacher = session.find(Teacher.class, teacher.getUsername());
+
+                        List<Course> courses = teacher.getCourseList();
+
+                        List<Exam> exams = new ArrayList<>();
+
+                        for (Course course : courses) {
+                            List<Exam> temp = course.getExamList();
+                            if (temp != null) {
+                                exams.addAll(temp);
+                            }
+                        }
+
+                        client.sendToClient(new Message(exams, "#GotTeacherExams"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#SaveExecutable" -> {
+
+                    Object[] obj = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        Teacher teacher = session.find(Teacher.class, ((Teacher)obj[2]).getUsername());
+
+                        ExecutableExam exam = new ExecutableExam((String) obj[1], (Exam)obj[0], teacher);
+                        teacher.getExamList().add(exam);
+                        session.save(exam);
+                        session.save(teacher);
                         session.flush();
 
                         session.getTransaction().commit();
@@ -423,6 +497,15 @@ public class Server extends AbstractServer {
         session.save(cv);
         session.flush();
 
+        // Add exams
+        List<Question> algebraQuestions = algebra.getQuestionList();
+        List<Integer> points = List.of(new Integer[]{70, 30});
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        or.getCreatedExams().add(algebraExam);
+        algebra.getExamList().add(algebraExam);
+        session.save(algebraExam);
+        session.save(or);
+        session.save(algebra);
 
         session.getTransaction().commit();
     }

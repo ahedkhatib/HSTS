@@ -49,6 +49,9 @@ public class HomepageBoundary extends Boundary{
     private Button newExamBtn;
 
     @FXML
+    private Button setExecutableBtn;
+
+    @FXML
     private Button newTimeRequestBtn;
 
     @FXML
@@ -113,6 +116,9 @@ public class HomepageBoundary extends Boundary{
         } else if (pressed == principalReqBtn) {
             loadPage("checkTimeRequests");
             titleText.setText("Extra Time Requests");
+        }else if (pressed == setExecutableBtn) {
+            loadPage("createExecutable");
+            titleText.setText("Create Executable");
         } else {
             loadPage("bye");
             titleText.setText("bye");
