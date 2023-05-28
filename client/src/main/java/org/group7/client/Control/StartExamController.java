@@ -26,6 +26,22 @@ public class StartExamController extends Controller {
         }
     }
 
+    public boolean checkId(String id){
+        if(id.length() != 9 || !id.matches("\\d+")){
+
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Id is 9 digits, all numbers!"
+            );
+            alert.setTitle("Error!");
+            alert.setHeaderText("Error: Incorrect Input");
+            alert.show();
+
+            return false;
+        }
+
+        return true;
+    }
+
     @Subscribe
     public void startExam(StartExamEvent event){
 
@@ -41,9 +57,7 @@ public class StartExamController extends Controller {
         } else {
             if(event.getType() == 1){
                 pane = boundary.openAutoExam();
-
-
-
+                boundary.setQuestions(event.getExam());
             } else {
                 pane = boundary.openManualExam();
             }
