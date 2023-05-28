@@ -5,19 +5,47 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary">
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ScrollPane?>
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary" stylesheets="@../../../stylesheet.css">
     <children>
-      <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0" >
-         <children>
-              <TextField fx:id="examNumber" prefHeight="71.0" prefWidth="289.0" promptText="ExamNum">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </TextField>
-              <Button fx:id="startButton" layoutX="37.0" layoutY="188.0" mnemonicParsing="false" onAction="#startExam" prefHeight="90.0" prefWidth="216.0" text="start" textAlignment="CENTER" />
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="autoAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
-      <AnchorPane fx:id="manualAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
+        <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0">
+            <children>
+                <TextField fx:id="examNumber" prefHeight="71.0" prefWidth="289.0" promptText="ExamNum">
+                    <font>
+                        <Font size="22.0"/>
+                    </font>
+                </TextField>
+                <Button fx:id="startButton" layoutX="37.0" layoutY="188.0" mnemonicParsing="false" onAction="#startExam"
+                        prefHeight="90.0" prefWidth="216.0" text="start" textAlignment="CENTER"/>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="autoAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
+            <children>
+                <HBox alignment="CENTER" layoutX="390.0" layoutY="31.0" spacing="8.0">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Student Id: ">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
+                        </Text>
+                        <TextField fx:id="idTf" prefHeight="51.0" prefWidth="246.0">
+                            <font>
+                                <Font size="24.0"/>
+                            </font>
+                        </TextField>
+                        <Button fx:id="idBtn" onAction="#idEntered" mnemonicParsing="false" text="Start">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+                <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="105.0" prefHeight="500.0" prefWidth="1215.0"/>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="manualAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false"/>
     </children>
 </AnchorPane>

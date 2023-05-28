@@ -532,6 +532,13 @@ public class Server extends AbstractServer {
         session.save(or);
         session.save(algebra);
 
+        // Add executables
+        ExecutableExam executableAlgebra = new ExecutableExam("1000", algebraExam, or);
+        or.getExamList().add(executableAlgebra);
+        session.save(executableAlgebra);
+        session.save(or);
+        session.flush();
+
         session.getTransaction().commit();
     }
 }

@@ -13,7 +13,7 @@ public class StartExamEvent  {
     public StartExamEvent(ExecutableExam exam, String msg){
         this.exam = exam;
         this.type = exam.getExam().getType();
-        exists = msg.equals("Success");
+        this.exists = !msg.equals("Incorrect");
     }
 
     public boolean isExists() {

@@ -1,19 +1,27 @@
 package org.group7.client.Boundary;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.group7.client.Control.StartExamController;
+import org.group7.entities.Exam;
+import org.group7.entities.ExecutableExam;
+import org.group7.entities.Question;
 
 public class StartExamBoundary extends Boundary {
 
     private StartExamController controller;
 
+    // Intro Pane
     @FXML
     private Button startButton;
 
@@ -21,17 +29,38 @@ public class StartExamBoundary extends Boundary {
     private AnchorPane introAp;
 
     @FXML
+    private TextField examNumber;
+
+    // Automated Exam Pane
+    @FXML
     private AnchorPane autoAp;
 
     @FXML
-    private AnchorPane manualAp;
+    private TextField idTf;
 
     @FXML
-    private TextField examNumber;
+    private Button idBtn;
+
+    @FXML
+    private ScrollPane scrollPane;
+
+    // Manual Exam Pane
+    @FXML
+    private AnchorPane manualAp;
+
+    private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
     @FXML
     void startExam(ActionEvent event) {
         controller.getExam(examNumber.getText());
+    }
+
+    @FXML
+    void idEntered(ActionEvent event){
+        boolean flag = controller.checkId(idTf.getText());
+
+        if(flag)
+            scrollPane.setDisable(false);
     }
 
     public AnchorPane openAutoExam() {
@@ -58,6 +87,71 @@ public class StartExamBoundary extends Boundary {
     void initialize() {
         controller = new StartExamController(this);
         super.setController(controller);
+    }
+
+    public VBox questionCard(int questionNum, Question question){
+
+        VBox card = new VBox();
+        card.setPrefWidth(600);
+        card.setSpacing(35);
+        card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
+
+        Text questionText = new Text(questionNum + ".   " + question.getInstructions());
+        questionText.setStyle("-fx-font-size: 24;");
+
+        VBox answersBox = new VBox();
+        answersBox.setSpacing(15);
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroups.add(toggleGroup);
+
+        for(int i = 0; i < 4; i++){
+            HBox answer = new HBox();
+            answer.setSpacing(25);
+
+            Text answerText = new Text(question.getAnswerList()[i]);
+            answerText.setStyle("-fx-font-size: 20;");
+
+            RadioButton radioButton = new RadioButton();
+            radioButton.setToggleGroup(toggleGroup);
+
+            answer.getChildren().addAll(radioButton, answerText);
+            answersBox.getChildren().add(answer);
+        }
+
+        card.getChildren().addAll(questionText, answersBox);
+
+        return card;
+    }
+
+    public void setQuestions(ExecutableExam executableExam){
+
+        Exam exam = executableExam.getExam();
+        List<Question> questions = exam.getQuestionList();
+
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        int count = 1;
+
+        Pane pane = new Pane();
+        pane.setPrefWidth(scrollPane.getPrefWidth());
+
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER);
+        content.setSpacing(50);
+        content.setLayoutX(300);
+
+        for(Question q : questions){
+            VBox card = questionCard(count, q);
+            content.getChildren().add(card);
+            count++;
+        }
+
+        pane.getChildren().add(content);
+
+        scrollPane.setContent(pane);
+        scrollPane.setDisable(true);
     }
 
 }

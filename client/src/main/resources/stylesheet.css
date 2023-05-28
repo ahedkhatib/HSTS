@@ -1,7 +1,10 @@
 
 /* Add to all AnchorPanes */
-.root {
+.* {
     -fx-font-family: "Arial", sans-serif;
+}
+
+.root {
     -fx-pref-width: 800;
     -fx-pref-height: 600;
 }
