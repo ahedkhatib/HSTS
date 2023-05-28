@@ -6,7 +6,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.CreateExecutableBoundary;
 import org.group7.client.Client;
 import org.group7.entities.Exam;
-import org.group7.entities.ExecutableExam;
 import org.group7.entities.Message;
 
 import java.util.List;

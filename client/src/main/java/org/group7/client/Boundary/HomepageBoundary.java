@@ -96,16 +96,17 @@ public class HomepageBoundary extends Boundary{
     @FXML
     private VBox prinButtons;
 
+    private FXMLLoader fxmlLoader;
+
     @FXML
     public void goToPage(ActionEvent event) throws IOException {
         toggleMenu(event);
 
         Button pressed = (Button) event.getSource();
 
-        FXMLLoader loader = (FXMLLoader) mainPage.getProperties().get(FXMLLoader.class.getName());
+        Boundary boundary = fxmlLoader.getController();
 
-        if(loader != null) {
-            Boundary boundary = loader.getController();
+        if(boundary != null) {
             Controller control = boundary.getController();
             control.unregisterController();
         }
@@ -119,6 +120,9 @@ public class HomepageBoundary extends Boundary{
         }else if (pressed == setExecutableBtn) {
             loadPage("createExecutable");
             titleText.setText("Create Executable");
+        }else if (pressed == startExamBtn) {
+            loadPage("startExam");
+            titleText.setText("Start Exam");
         } else {
             loadPage("bye");
             titleText.setText("bye");
@@ -127,6 +131,14 @@ public class HomepageBoundary extends Boundary{
 
     @FXML
     void logout(ActionEvent event) {
+
+        Boundary boundary = fxmlLoader.getController();
+
+        if(boundary != null) {
+            Controller control = boundary.getController();
+            control.unregisterController();
+        }
+
         controller.logout();
         App.switchScreen("login");
     }
@@ -175,7 +187,7 @@ public class HomepageBoundary extends Boundary{
     }
 
     public void loadPage(String path) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(path + ".fxml"));
+        fxmlLoader = new FXMLLoader(App.class.getResource(path + ".fxml"));
         if(mainPage.getChildren().size() == 0)
             mainPage.getChildren().add(fxmlLoader.load());
         else
@@ -186,6 +198,7 @@ public class HomepageBoundary extends Boundary{
     public void initialize() throws IOException {
 
         controller = new HomepageController(this);
+        super.setController(controller);
 
         sidePanel.setTranslateX(-220.0);
 

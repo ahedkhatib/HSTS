@@ -93,6 +93,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
     @FXML
     public void initialize() {
         controller = new CheckTimeRequestsController(this);
+        super.setController(controller);
 
         requestAP.setDisable(true);
         requestAP.setVisible(false);

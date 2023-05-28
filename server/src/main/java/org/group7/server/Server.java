@@ -240,8 +240,8 @@ public class Server extends AbstractServer {
                         request.setStatus(true);
                         session.save(request);
                         session.flush();
-                        Exam exam = session.find(Exam.class, request.getExamId());
-                        exam.setDuration(exam.getDuration() + request.getExtra());
+                        ExecutableExam exam = session.find(ExecutableExam.class, request.getExamId());
+                        exam.setTime(exam.getTime() + request.getExtra());
                         session.save(exam);
                         session.flush();
 
@@ -304,13 +304,38 @@ public class Server extends AbstractServer {
                     try {
                         session.beginTransaction();
 
-                        Teacher teacher = session.find(Teacher.class, ((Teacher)obj[2]).getUsername());
+                        Teacher teacher = session.find(Teacher.class, ((Teacher) obj[2]).getUsername());
 
-                        ExecutableExam exam = new ExecutableExam((String) obj[1], (Exam)obj[0], teacher);
+                        ExecutableExam exam = new ExecutableExam((String) obj[1], (Exam) obj[0], teacher);
                         teacher.getExamList().add(exam);
                         session.save(exam);
                         session.save(teacher);
                         session.flush();
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#StartExam" -> {
+
+                    String examId = (String) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, examId);
+
+                        if (exam == null) {
+                            client.sendToClient(new Message(examId, "#StartExam_Incorrect"));
+                        } else {
+                            if (exam.getExam().getType() == 1) {
+                                client.sendToClient(new Message(exam, "#StartExam_Auto"));
+                            } else {
+                                client.sendToClient(new Message(exam, "#StartExam_Manual"));
+                            }
+                        }
 
                         session.getTransaction().commit();
 
