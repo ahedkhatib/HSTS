@@ -29,6 +29,8 @@ public class LoginBoundary extends Boundary {
     @FXML
     public void initialize(){
         controller = new LoginController(this);
+        super.setController(controller);
+
     }
 
 }

@@ -32,6 +32,8 @@ public class TimeRequestBoundary extends Boundary{
     @FXML
     public void initialize(){
         controller = new TimeRequestController(this);
+        super.setController(controller);
+
     }
 
 }

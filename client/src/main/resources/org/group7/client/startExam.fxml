@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary">
+    <children>
+      <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0" >
+         <children>
+              <TextField fx:id="examNumber" prefHeight="71.0" prefWidth="289.0" promptText="ExamNum">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </TextField>
+              <Button fx:id="startButton" layoutX="37.0" layoutY="188.0" mnemonicParsing="false" onAction="#startExam" prefHeight="90.0" prefWidth="216.0" text="start" textAlignment="CENTER" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="autoAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
+      <AnchorPane fx:id="manualAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
+    </children>
+</AnchorPane>

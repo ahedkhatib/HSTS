@@ -3,6 +3,7 @@ package org.group7.client;
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 import org.group7.client.Events.LoginEvent;
+import org.group7.client.Events.StartExamEvent;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
 
@@ -21,6 +22,7 @@ public class Client extends AbstractClient {
     public User getUser() {
         return user;
     }
+
 
     @Override
     protected void handleMessageFromServer(Object msg) {
@@ -64,7 +66,11 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(exams);
             });
-            
+        } else if (post.startsWith("#StartExam_")) {
+            StartExamEvent event = new StartExamEvent((ExecutableExam) message.getObject(), post.substring(11));
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
         } else if (post.startsWith("#TimeRequestApproved")) {
         }
     }
