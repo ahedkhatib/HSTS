@@ -123,6 +123,9 @@ public class HomepageBoundary extends Boundary{
         }else if (pressed == startExamBtn) {
             loadPage("startExam");
             titleText.setText("Start Exam");
+        }else if (pressed == newExamBtn) {
+            loadPage("createExam");
+            titleText.setText("New Exam");
         } else {
             loadPage("bye");
             titleText.setText("bye");
@@ -245,5 +248,6 @@ public class HomepageBoundary extends Boundary{
 
         loadPage("welcome");
     }
+
 
 }
