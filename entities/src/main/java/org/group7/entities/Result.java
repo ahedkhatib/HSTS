@@ -28,14 +28,34 @@ public class Result implements Serializable {
     @Column(name = "elapsed")
     private float elapsed;
 
+    private boolean status;
+
     public Result() {
     }
 
-    public Result(int grade, Student student, String teacherNote, ExecutableExam exam){
+    public Result(int grade, Student student, String teacherNote, ExecutableExam exam, int elapsed){
         this.grade = grade;
         this.student = student;
         this.teacherNote = teacherNote;
         this.exam = exam;
+        this.elapsed = elapsed;
+        this.status = false;
+    }
+
+    public float getElapsed() {
+        return elapsed;
+    }
+
+    public void setElapsed(float elapsed) {
+        this.elapsed = elapsed;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public int getResultId() {
