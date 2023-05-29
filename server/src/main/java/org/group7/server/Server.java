@@ -112,7 +112,8 @@ public class Server extends AbstractServer {
                         session.flush();
 
                         session.getTransaction().commit();
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -340,6 +341,33 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                     } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }case "#GetSubjects" -> {
+                    List<Subject> subjects = getAll(Subject.class);
+                    client.sendToClient(new Message(subjects, "#GotSubjects"));
+                }
+                case "#saveExam" -> {
+                    Object obj = (Object) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        Exam exam = (Exam) obj;
+                        session.save(exam);
+
+                        Teacher teacher = session.find(Teacher.class, exam.getCreator().getUsername());
+                        teacher.getCreatedExams().add(exam);
+                        session.save(teacher);
+
+                        Course course = session.find(Course.class, exam.getCourse().getCourseId());
+                        course.getExamList().add(exam);
+                        session.save(course);
+
+                        session.flush();
+                        session.getTransaction().commit();
+
+                    }   catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
