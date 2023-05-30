@@ -371,6 +371,75 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#preparQues" -> {
+                    Object obj = (Object) message.getObject();
+                    try {
+                        session.beginTransaction();
+                        System.out.println("1");
+
+                        Question q = (Question) obj;
+                        System.out.println(q);
+                        System.out.println(q.getCourseList());
+                        System.out.println(q.getSubject());
+
+//                        for(Course course: q.getCourseList()){
+//                            System.out.println(course.getCourseName());
+//                        }
+//                        System.out.println("selected_subject: " + q.getSubject().getSubjectName());
+//                        System.out.println("correct_asnwer: " + q.getCorrectAnswer());
+//                        System.out.println("answerList: ");
+                        for(String s: q.getAnswerList()){
+                            System.out.println(s);
+                        }
+
+                        if (q.getCorrectAnswer() == 0) {
+                            client.sendToClient(new Message(q, "#preparQues_Fail"));
+                        } else if (q.getInstructions() == "") {
+                            client.sendToClient(new Message(q, "#preparQues_Fail"));
+                        } else  if (q.getAnswerList()[0] == "") {
+                            client.sendToClient(new Message(null, "#preparQues_Fail"));
+                        }else  if (q.getAnswerList()[1] == "") {
+                            client.sendToClient(new Message(null, "#preparQues_Fail"));
+                        }
+                        else  if (q.getAnswerList()[2] == "") {
+                            client.sendToClient(new Message(null, "#preparQues_Fail"));
+                        }
+                        else  if (q.getAnswerList()[3] == "") {
+                            client.sendToClient(new Message(null, "#preparQues_Fail"));
+                        }
+                        else {
+                            System.out.println("2");
+                            System.out.println(q.getCourseList().size());
+                            session.save(q);
+                            System.out.println("3");
+                            List<Course> courses = q.getCourseList();
+                            Subject subject = q.getSubject();
+
+                            subject.getQuestionList().add(q);
+                            for (Course c : courses) {
+                                c.getQuestionList().add(q);
+                            }
+
+                            System.out.println("44");
+                            session.save(subject);
+                            for (Course c : courses) {
+                                session.save(c);
+                            }
+                            session.flush();
+//                            System.out.println("4");
+                            client.sendToClient(new Message(q, "#preparQues_Success"));
+
+                            session.getTransaction().commit();
+                        }
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+                    }
+                }
+                case "#getSubject" ->{
+                    List<Subject> subject = getAll(Subject.class);
+                    client.sendToClient(new Message(subject, "#GotSubject"));
+                }
             }
 
         } catch (IOException e) {
@@ -429,18 +498,18 @@ public class Server extends AbstractServer {
         session.save(math);
         session.save(cs);
         session.flush();
-
+//
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
-
+//
         math.setCourseList(List.of(new Course[]{algebra, calculus}));
         session.save(math);
         session.flush();
-
+//
         Course intro = new Course("Into to CS", cs);
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
@@ -450,7 +519,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
         session.save(cs);
         session.flush();
@@ -465,7 +534,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
         calculus.setTeacherList(List.of(new Teacher[]{or}));
         session.save(algebra);
@@ -498,7 +567,7 @@ public class Server extends AbstractServer {
         session.save(mathQ2);
         session.save(mathQ3);
         session.flush();
-
+//
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
