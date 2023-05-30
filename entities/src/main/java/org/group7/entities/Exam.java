@@ -54,9 +54,9 @@ public class Exam implements Serializable {
         this.type = type;
         this.teacherComments = teacherComments;
         this.studentComments = studentComments;
-        this.course = course;
         this.questionList = questionList;
         this.questionPoints = questionPoints;
+        this.course = course;
 
         this.examId = course.getSubject().getSubjectId() * 10000 + course.getCourseId() * 100 + this.examId;
 

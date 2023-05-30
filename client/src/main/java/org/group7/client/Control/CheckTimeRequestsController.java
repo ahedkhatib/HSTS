@@ -6,6 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.CheckTimeRequestsBoundary;
 import org.group7.client.Client;
+import org.group7.entities.ExecutableExam;
 import org.group7.entities.ExtraTime;
 import org.group7.entities.Message;
 
@@ -49,6 +50,19 @@ public class CheckTimeRequestsController extends Controller {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void getExam(String examId){
+        try {
+            Client.getClient().sendToServer(new Message(examId, "#TimeRequestGetExam"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Subscribe
+    public void setActiveExam(ExecutableExam exam){
+        boundary.setExam(exam);
     }
 
     @Subscribe

@@ -75,6 +75,7 @@ public class CreateExamBoundary extends Boundary {
     @FXML
     public void initialize() {
         controller = new CreateExamController(this);
+        super.setController(controller);
 
         examTypeComboBox.getItems().add("Manual exam");
         examTypeComboBox.getItems().add("Automated exam");
