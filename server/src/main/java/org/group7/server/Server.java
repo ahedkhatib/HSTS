@@ -67,10 +67,15 @@ public class Server extends AbstractServer {
         return data;
     }
 
-    public void sendToAllClients(Message message) {
+    public void sendToAllClients(Message message, ConnectionToClient client) {
         try {
             for (SubscribedClient SubscribedClient : SubscribersList) {
+
+                if(SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
+                    continue;
+
                 SubscribedClient.getClient().sendToClient(message);
+                System.out.println(SubscribedClient.getClient().getId());
             }
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -231,6 +236,22 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#TimeRequestGetExam" -> {
+                    try {
+                        session.beginTransaction();
+
+                        String examId = (String) message.getObject();
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, examId);
+
+                        client.sendToClient(new Message(exam, "#GotTimeRequestExam"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 case "#ApproveTimeRequest" -> {
 
                     try {
@@ -248,7 +269,7 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
-                        sendToAllClients(new Message(request, "#TimeRequestApproved"));
+                        sendToAllClients(new Message(request, "#TimeRequestApproved"), client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -263,6 +284,15 @@ public class Server extends AbstractServer {
                         request = session.find(ExtraTime.class, request.getRequestId());
                         session.delete(request);
                         session.flush();
+
+                        List<Principal> principals = getAll(Principal.class);
+
+                        for (Principal p : principals) {
+                            ExtraTime finalRequest = request;
+                            p.getRequestList().removeIf(item -> item.getRequestId() == finalRequest.getRequestId());
+                            session.save(p);
+                            session.flush();
+                        }
 
                         session.getTransaction().commit();
 
@@ -424,7 +454,7 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject("math");
+        Subject math = new Subject("Math");
         Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);
@@ -553,7 +583,7 @@ public class Server extends AbstractServer {
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
         List<Integer> points = List.of(new Integer[]{70, 30});
-        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);

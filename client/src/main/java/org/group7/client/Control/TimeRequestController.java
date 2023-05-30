@@ -52,9 +52,17 @@ public class TimeRequestController extends Controller {
     @Subscribe
     public void checkData(String message){
         Alert alert;
-        alert = new Alert(Alert.AlertType.ERROR,
-                message
-        );
+
+        if(message.startsWith("Exam")){
+            alert = new Alert(Alert.AlertType.ERROR,
+                    message
+            );
+        } else {
+            alert = new Alert(Alert.AlertType.INFORMATION,
+                    message
+            );
+        }
+
         alert.show();
     }
 

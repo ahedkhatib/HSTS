@@ -73,7 +73,15 @@ public class Client extends AbstractClient {
                 EventBus.getDefault().post(event);
             });
         } else if (post.startsWith("#TimeRequestApproved")) {
-
+            ExtraTime extraTime = (ExtraTime) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(extraTime);
+            });
+        }else if (post.startsWith("#GotTimeRequestExam")) {
+            ExecutableExam exam = (ExecutableExam) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(exam);
+            });
         } else if (post.startsWith("#GotSubjects")) {
             SubjectsListEvent event = new SubjectsListEvent(message);
             Platform.runLater(() -> {
