@@ -31,23 +31,23 @@ public class StartExamController extends Controller {
 
         AnchorPane pane = null;
 
-        if(!event.isExists()){
-            Alert alert = new Alert(Alert.AlertType.ERROR,
-                    "Exam Doesn't Exist!"
-            );
-            alert.setTitle("Error!");
-            alert.setHeaderText("Error: Incorrect Input");
-            alert.show();
-        } else {
-            if(event.getType() == 1){
-                pane = boundary.openAutoExam();
-
-
-
-            } else {
+//        if(!event.isExists()){
+//            Alert alert = new Alert(Alert.AlertType.ERROR,
+//                    "Exam Doesn't Exist!"
+//            );
+//            alert.setTitle("Error!");
+//            alert.setHeaderText("Error: Incorrect Input");
+//            alert.show();
+//        } else {
+//            if(event.getType() == 1){
+//                pane = boundary.openAutoExam();
+//
+//
+//
+//            } else {
                 pane = boundary.openManualExam();
-            }
-        }
+//            }
+//        }
     }
 
 }

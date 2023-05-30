@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary">
     <children>
-      <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0" >
+      <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0">
          <children>
               <TextField fx:id="examNumber" prefHeight="71.0" prefWidth="289.0" promptText="ExamNum">
                <font>
@@ -18,6 +18,13 @@
          </children>
       </AnchorPane>
       <AnchorPane fx:id="autoAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
-      <AnchorPane fx:id="manualAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false" />
+      <AnchorPane fx:id="manualAp" disable="false" prefHeight="693.0" prefWidth="1215.0" visible="true">
+        <children>
+            <TextField fx:id="file" layoutX="124.0" layoutY="1.0" prefHeight="26.0" prefWidth="189.0" promptText="File path" />
+            <Button fx:id="uploadButton" layoutX="314.0" layoutY="1.0" mnemonicParsing="false" onAction="#uploadExam" prefHeight="26.0" prefWidth="84.0" text="Upload" textAlignment="CENTER" />
+            <TextField fx:id="statusLabel" layoutX="124.0" layoutY="27.0" prefHeight="26.0" prefWidth="190.0" promptText="status upload" />
+            <Button fx:id="downloadButton" layoutX="124.0" layoutY="53.0" mnemonicParsing="false" onAction="#downloadExam" prefHeight="26.0" prefWidth="84.0" text="Download" />
+        </children>
+      </AnchorPane>
     </children>
 </AnchorPane>
