@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
 import org.group7.client.Events.LoginEvent;
 import org.group7.client.Events.StartExamEvent;
+import org.group7.client.Events.SubjectsListEvent;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
 
@@ -72,6 +73,20 @@ public class Client extends AbstractClient {
                 EventBus.getDefault().post(event);
             });
         } else if (post.startsWith("#TimeRequestApproved")) {
+            ExtraTime extraTime = (ExtraTime) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(extraTime);
+            });
+        }else if (post.startsWith("#GotTimeRequestExam")) {
+            ExecutableExam exam = (ExecutableExam) message.getObject();
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(exam);
+            });
+        } else if (post.startsWith("#GotSubjects")) {
+            SubjectsListEvent event = new SubjectsListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
         }
     }
 

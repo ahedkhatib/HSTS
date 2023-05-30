@@ -532,12 +532,6 @@ public class Server extends AbstractServer {
         session.save(or);
         session.save(algebra);
 
-        //ahed added
-        session.flush();
-        ExecutableExam exam1 = new ExecutableExam("1010" ,algebraExam, shir);
-        session.save(exam1);
-        session.flush();
-
         session.getTransaction().commit();
     }
 }
