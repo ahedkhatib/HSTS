@@ -374,12 +374,11 @@ public class Server extends AbstractServer {
                     }
                 }
                 case "#saveExam" -> {
-                    Object obj = (Object) message.getObject();
 
                     try {
                         session.beginTransaction();
 
-                        Exam exam = (Exam) obj;
+                        Exam exam = (Exam) message.getObject();
                         session.save(exam);
 
                         Teacher teacher = session.find(Teacher.class, exam.getCreator().getUsername());
@@ -396,28 +395,39 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } case "#preparQues" -> {
-                    Object obj = (Object) message.getObject();
-                    session.beginTransaction();
-                    System.out.println("1");
-                    Question q = (Question) obj;
+                }
+                case "#preparQues" -> {
+
                     try {
                         session.beginTransaction();
 
+                        Question q = (Question) message.getObject();
+                        session.flush();
 
-                        session.save(q);
-                        List<Course> courses = q.getCourseList();
                         Subject subject = q.getSubject();
-
+                        subject = session.find(Subject.class, subject.getSubjectId());
                         subject.getQuestionList().add(q);
+                        System.out.println(subject.getSubjectName());
+                        session.save(subject);
+
+                        List<Course> courses = q.getCourseList();
                         for (Course c : courses) {
+                            c = session.find(Course.class, c.getCourseId());
                             c.getQuestionList().add(q);
+                            System.out.println(c.getCourseName());
                             session.save(c);
                         }
-                        session.save(subject);
+
+                        System.out.println("here");
+
+                        session.save(q);
                         session.flush();
-                        client.sendToClient(new Message(q, "#preparQues_Success"));
                         session.getTransaction().commit();
+
+                        System.out.println("here2");
+
+                        client.sendToClient(new Message(q, "#preparQues_Success"));
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -459,9 +469,6 @@ public class Server extends AbstractServer {
                     }
                 }
             }
-        }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }

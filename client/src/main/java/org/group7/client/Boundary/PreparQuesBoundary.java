@@ -14,8 +14,10 @@ import javax.swing.text.html.ImageView;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 public class PreparQuesBoundary extends Boundary {
-    private int correct_asnwer=0;
+    private int correct_asnwer = 0;
     PreparQuesController controller;
     public List<Course> cur;
     public List<Subject> sub;
@@ -81,6 +83,7 @@ public class PreparQuesBoundary extends Boundary {
     void prev(ActionEvent event) {
         App.switchScreen("homepage");
     }
+
     @FXML
     void selectCourse(javafx.scene.input.MouseEvent mouseEvent) {
 
@@ -97,20 +100,15 @@ public class PreparQuesBoundary extends Boundary {
             }
             updateListView();
 
-            System.out.println("selectedQuestions:      size: " + all_courses.size());
             courses_after_selection.clear();
-            for(String s: all_courses){
-                for(Course d:selected_courses){
-                    if(s==d.getCourseName()){
-//                        System.out.println(s);
+            for (String s : all_courses) {
+                for (Course d : selected_courses) {
+                    if (Objects.equals(s, d.getCourseName())) {
                         courses_after_selection.add(d);
                     }
                 }
             }
-            System.out.println("///////////");
-            System.out.println(" size: " + courses_after_selection.size());
-            System.out.println(courses_after_selection);
-            System.out.println("///////////");
+
             list.setVisible(true);
             sultion_1.setVisible(true);
             sultion_2.setVisible(true);
@@ -147,20 +145,20 @@ public class PreparQuesBoundary extends Boundary {
 
     @FXML
     void select_subject(ActionEvent event) {
-        String select= subject.getSelectionModel().getSelectedItem();
-        Subject subject_selected=new Subject();
+        String select = subject.getSelectionModel().getSelectedItem();
+        Subject subject_selected = new Subject();
 
         for (Subject d : sub) {
-            if (select == d.getSubjectName()) {
-                System.out.println("!1111111111111111");
+            if (Objects.equals(select, d.getSubjectName())) {
                 subject_selected = d;
-                selected_subject=d;
+                selected_subject = d;
             }
         }
-        cur=subject_selected.getCourseList();
-        selected_courses=cur;
+
+        cur = subject_selected.getCourseList();
+        selected_courses = cur;
         list.getItems().removeAll();
-        for(Course k:cur) {
+        for (Course k : cur) {
             list.getItems().add(k.getCourseName());
 
         }
@@ -172,13 +170,14 @@ public class PreparQuesBoundary extends Boundary {
 
 
     }
+
     @FXML
     void correct1(ActionEvent event) {
         correct1.setSelected(true);
         correct2.setSelected(false);
         correct3.setSelected(false);
         correct4.setSelected(false);
-        correct_asnwer=1;
+        correct_asnwer = 1;
     }
 
     @FXML
@@ -187,7 +186,7 @@ public class PreparQuesBoundary extends Boundary {
         correct2.setSelected(true);
         correct3.setSelected(false);
         correct4.setSelected(false);
-        correct_asnwer=2;
+        correct_asnwer = 2;
     }
 
     @FXML
@@ -196,7 +195,7 @@ public class PreparQuesBoundary extends Boundary {
         correct2.setSelected(false);
         correct3.setSelected(true);
         correct4.setSelected(false);
-        correct_asnwer=3;
+        correct_asnwer = 3;
     }
 
     @FXML
@@ -205,47 +204,32 @@ public class PreparQuesBoundary extends Boundary {
         correct2.setSelected(false);
         correct3.setSelected(false);
         correct4.setSelected(true);
-        correct_asnwer=4;
+        correct_asnwer = 4;
     }
+
     @FXML
     void save_ques(ActionEvent event) {
-        String[] answerList=new String[4];
-        answerList[0]=sultion_1.getText();
-        answerList[1]=sultion_2.getText();
-        answerList[2]=sultion_3.getText();
-        answerList[3]=sultion_4.getText();
-        String questions=qustion.getText();
-      //  Course ca=courses_after_selection.get(0);
+        String[] answerList = new String[4];
+        answerList[0] = sultion_1.getText();
+        answerList[1] = sultion_2.getText();
+        answerList[2] = sultion_3.getText();
+        answerList[3] = sultion_4.getText();
+        String questions = qustion.getText();
 
+        Question ques = new Question(questions, courses_after_selection, selected_subject, correct_asnwer, answerList);
 
-//        List.of(new Course[]{algebra, calculus})
-
-        Question ques = new Question(questions,courses_after_selection, selected_subject, correct_asnwer, answerList);
-        System.out.println(ques.getQuestionId());
-        System.out.println(ques.getInstructions());
-        System.out.println(ques.getSubject());
-        System.out.println("question:");
-        for(int i=0;i<ques.getCourseList().size();i++){
-            Course course=ques.getCourseList().get(i);
-            System.out.print(course.getCourseId()+""+course.getSubject()+""+course.getCourseName()+""+course.getQuestionList().size());
-            System.out.println("");
-        }
-        System.out.println("answers :");
-        System.out.println(ques.getAnswerList()[0]);
-        System.out.println(ques.getAnswerList()[1]);
-        System.out.println(ques.getAnswerList()[2]);
-        System.out.println(ques.getAnswerList()[3]);
-
-        System.out.println("saving1_");
         controller.save(ques);
     }
 
     @FXML
-    public void initialize(){
-        courses_after_selection=new ArrayList<Course>();
-        all_courses=new ArrayList<>();
+    public void initialize() {
+        courses_after_selection = new ArrayList<Course>();
+
+        all_courses = new ArrayList<>();
+
         controller = new PreparQuesController(this);
         super.setController(controller);
+
         list.setVisible(false);
         sultion_1.setVisible(false);
         sultion_2.setVisible(false);
@@ -259,20 +243,18 @@ public class PreparQuesBoundary extends Boundary {
         labelC.setVisible(false);
         labelQ.setVisible(false);
 
-
+        controller.getCourses();
     }
 
-    public void update_Subject(){
-        if(!subjects.isEmpty()) {
+    public void update_Subject() {
+        if (!subjects.isEmpty()) {
             for (String c : subjects) {
-                subject.getItems().add(c.toString());
+                subject.getItems().add(c);
             }
         }
     }
-    public void done(){
+
+    public void done() {
         screen.setVisible(false);
     }
-
-
-
 }

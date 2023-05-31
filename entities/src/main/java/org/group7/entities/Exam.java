@@ -59,7 +59,6 @@ public class Exam implements Serializable {
         this.course = course;
 
         this.examId = course.getSubject().getSubjectId() * 10000 + course.getCourseId() * 100 + this.examId;
-
     }
 
     public String getExamName() {
