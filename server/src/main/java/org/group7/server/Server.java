@@ -117,8 +117,7 @@ public class Server extends AbstractServer {
                         session.flush();
 
                         session.getTransaction().commit();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -394,11 +393,35 @@ public class Server extends AbstractServer {
                         session.flush();
                         session.getTransaction().commit();
 
-                    }   catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
-                case "#FinishExam" -> {
+                } case "#preparQues" -> {
+                    Object obj = (Object) message.getObject();
+                    session.beginTransaction();
+                    System.out.println("1");
+                    Question q = (Question) obj;
+                    try {
+                        session.beginTransaction();
+
+
+                        session.save(q);
+                        List<Course> courses = q.getCourseList();
+                        Subject subject = q.getSubject();
+
+                        subject.getQuestionList().add(q);
+                        for (Course c : courses) {
+                            c.getQuestionList().add(q);
+                            session.save(c);
+                        }
+                        session.save(subject);
+                        session.flush();
+                        client.sendToClient(new Message(q, "#preparQues_Success"));
+                        session.getTransaction().commit();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } case "#FinishExam" -> {
 
                     Object[] objects = (Object[]) message.getObject();
 
@@ -436,6 +459,8 @@ public class Server extends AbstractServer {
                     }
                 }
             }
+        }
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -493,18 +518,18 @@ public class Server extends AbstractServer {
         session.save(math);
         session.save(cs);
         session.flush();
-
+//
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
-
+//
         math.setCourseList(List.of(new Course[]{algebra, calculus}));
         session.save(math);
         session.flush();
-
+//
         Course intro = new Course("Into to CS", cs);
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
@@ -514,7 +539,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
         session.save(cs);
         session.flush();
@@ -529,7 +554,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
         calculus.setTeacherList(List.of(new Teacher[]{or}));
         session.save(algebra);
@@ -562,7 +587,7 @@ public class Server extends AbstractServer {
         session.save(mathQ2);
         session.save(mathQ3);
         session.flush();
-
+//
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
