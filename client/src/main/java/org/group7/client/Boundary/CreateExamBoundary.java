@@ -16,6 +16,8 @@ import org.group7.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 
@@ -75,6 +77,9 @@ public class CreateExamBoundary extends Boundary {
     @FXML
     public void initialize() {
         controller = new CreateExamController(this);
+        super.setController(controller);
+
+        controller.setData();
 
         examTypeComboBox.getItems().add("Manual exam");
         examTypeComboBox.getItems().add("Automated exam");
@@ -88,7 +93,8 @@ public class CreateExamBoundary extends Boundary {
     }
 
     @FXML
-    void examName(ActionEvent event) { }
+    void examName(ActionEvent event) {
+    }
 
     @FXML
     void selectType(ActionEvent event) {
@@ -101,37 +107,40 @@ public class CreateExamBoundary extends Boundary {
     }
 
     @FXML
-    void selectSubject(ActionEvent event){
-        String select= subjectsComboBox.getSelectionModel().getSelectedItem();
+    void selectSubject(ActionEvent event) {
+        String select = subjectsComboBox.getSelectionModel().getSelectedItem();
 
         Subject selectedSubject = new Subject();
         CoursesCombobox.setVisible(true);
         for (Subject s : subjects) {
-            if (select == s.getSubjectName()) {
+            if (Objects.equals(select, s.getSubjectName())) {
                 selectedSubject = s;
             }
         }
+
         courses = selectedSubject.getCourseList();
+
         CoursesCombobox.getItems().clear();
-        for(Course course : courses){
+        for (Course course : courses) {
             CoursesCombobox.getItems().add(course.getCourseName());
         }
 
     }
 
-    @FXML void selectCourse(){
-        String select= CoursesCombobox.getSelectionModel().getSelectedItem();
+    @FXML
+    void selectCourse() {
+        String select = CoursesCombobox.getSelectionModel().getSelectedItem();
 
         selectQuestionAnchor.setVisible(true);
         questionsListView.setVisible(true);
         for (Course c : courses) {
-            if (select == c.getCourseName()) {
+            if (Objects.equals(select, c.getCourseName())) {
                 selectedCourse = c;
             }
         }
         questions = selectedCourse.getQuestionList();
         questionsListView.getItems().clear();
-        for(Question question : questions){
+        for (Question question : questions) {
             questionsListView.getItems().add(question.getInstructions());
         }
         questionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -140,7 +149,7 @@ public class CreateExamBoundary extends Boundary {
     }
 
     public void updateSubjectsComboBox() {
-        if(!subjectsNames.isEmpty()) {
+        if (!subjectsNames.isEmpty()) {
             for (String s : subjectsNames) {
                 subjectsComboBox.getItems().add(s);
             }
@@ -234,15 +243,18 @@ public class CreateExamBoundary extends Boundary {
     }
 
     @FXML
-    void addNotesForStudents(ActionEvent event) { }
+    void addNotesForStudents(ActionEvent event) {
+    }
 
     @FXML
-    void addNotesForTeachers(ActionEvent event) { }
+    void addNotesForTeachers(ActionEvent event) {
+    }
 
     @FXML
-    void setDurationText(ActionEvent event) { }
+    void setDurationText(ActionEvent event) {
+    }
 
-    public void alert(String errorMessage){
+    public void alert(String errorMessage) {
         Alert alert;
         alert = new Alert(Alert.AlertType.ERROR, String.format(errorMessage));
         alert.show();
@@ -251,37 +263,37 @@ public class CreateExamBoundary extends Boundary {
     @FXML
     void save(ActionEvent event) {
 
-        if(examNameText.getText().isEmpty()){
+        if (examNameText.getText().isEmpty()) {
             alert("Please select exam name!");
             return;
-        }else if(examTypeComboBox.getSelectionModel().getSelectedItem() == null){
+        } else if (examTypeComboBox.getSelectionModel().getSelectedItem() == null) {
             alert("Please select exam type!");
             return;
-        }else if(subjectsComboBox.getSelectionModel().getSelectedItem() == null){
+        } else if (subjectsComboBox.getSelectionModel().getSelectedItem() == null) {
             alert("Please select exam subject!");
             return;
-        }else if(CoursesCombobox.getSelectionModel().getSelectedItem() == null){
+        } else if (CoursesCombobox.getSelectionModel().getSelectedItem() == null) {
             alert("Please select exam course!");
             return;
-        }else if (questionsListView.getSelectionModel().getSelectedItems().size() == 0) {
+        } else if (questionsListView.getSelectionModel().getSelectedItems().size() == 0) {
             alert("Please select exam questions!");
             return;
-        }else if (!(controller.isValidNumber(durationText.getText()))){
+        } else if (!(controller.isValidNumber(durationText.getText()))) {
             alert("'" + durationText.getText() + "' is not a valid exam duration!");
             return;
         }
 
         List<Integer> sendGrades = new ArrayList<>();
         List<Question> sendQuestions = new ArrayList<>();
-        for (String s : selectedQuestions){
-            if (!(controller.isValidNumber(questionGrades.get(s)))){
+        for (String s : selectedQuestions) {
+            if (!(controller.isValidNumber(questionGrades.get(s)))) {
                 alert("'" + questionGrades.get(s) + "' is not a valid question grade for ' " + s + " '");
                 return;
             }
             sendGrades.add(Integer.valueOf(questionGrades.get(s)));
 
-            for (Question q : questions){
-                if(s.equals(q.getInstructions())){
+            for (Question q : questions) {
+                if (s.equals(q.getInstructions())) {
                     sendQuestions.add(q);
                 }
             }
@@ -289,16 +301,16 @@ public class CreateExamBoundary extends Boundary {
 
         //checking if the sum of the grades is 100
         int sum = 0;
-        for (Integer i : sendGrades){
+        for (Integer i : sendGrades) {
             sum += i;
         }
-        if(sum != 100){
+        if (sum != 100) {
             alert("Exam points are not equall to 100!");
             return;
         }
 
-        controller.save(examNameText.getText(), (manualExam)? 1 : 2, durationText.getText(), (Teacher) Client.getClient().getUser(),
-                        notesForTeachersText.getText(), notesForStudentsText.getText(), selectedCourse ,sendQuestions, sendGrades);
+        controller.save(examNameText.getText(), (manualExam) ? 1 : 2, durationText.getText(), (Teacher) Client.getClient().getUser(),
+                notesForTeachersText.getText(), notesForStudentsText.getText(), selectedCourse, sendQuestions, sendGrades);
 
     }
 }

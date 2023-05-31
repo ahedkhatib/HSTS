@@ -25,6 +25,13 @@ public class ExecutableExam implements Serializable {
 
     private int time;
 
+    // Statistics
+    double average;
+
+    double median;
+
+    int[] distribution;
+
     public ExecutableExam(){
 
     }
@@ -35,6 +42,42 @@ public class ExecutableExam implements Serializable {
         this.time = exam.getDuration();
         this.teacher = teacher;
         this.studentList  = new ArrayList<>();
+
+        this.average = 0;
+        this.median = 0;
+        this.distribution = new int[10];
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public double getAverage() {
+        return average;
+    }
+
+    public void setAverage(double average) {
+        this.average = average;
+    }
+
+    public double getMedian() {
+        return median;
+    }
+
+    public void setMedian(double median) {
+        this.median = median;
+    }
+
+    public int[] getDistribution() {
+        return distribution;
+    }
+
+    public void setDistribution(int[] distribution) {
+        this.distribution = distribution;
     }
 
     public int getTime() {
@@ -59,14 +102,6 @@ public class ExecutableExam implements Serializable {
 
     public void setExamId(String examId) {
         this.examId = examId;
-    }
-
-    public Teacher getTeacherList() {
-        return teacher;
-    }
-
-    public void setTeacherList(Teacher teacher) {
-        this.teacher = teacher;
     }
 
     public List<Student> getStudentList() {

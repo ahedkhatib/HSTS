@@ -13,11 +13,12 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Control.CheckTimeRequestsController;
+import org.group7.entities.ExecutableExam;
 import org.group7.entities.ExtraTime;
 
 import java.util.Comparator;
 
-public class CheckTimeRequestsBoundary extends Boundary{
+public class CheckTimeRequestsBoundary extends Boundary {
 
     @FXML
     private ListView<ExtraTime> requestList;
@@ -53,13 +54,20 @@ public class CheckTimeRequestsBoundary extends Boundary{
 
     private ExtraTime activeReq;
 
+    private ExecutableExam activeExam;
+
     @Override
-    public CheckTimeRequestsController getController(){
+    public CheckTimeRequestsController getController() {
         return controller;
     }
 
-    public AnchorPane getEmptyAP(){return this.emptyAP;}
-    public AnchorPane getListAP(){return this.listAP;}
+    public AnchorPane getEmptyAP() {
+        return this.emptyAP;
+    }
+
+    public AnchorPane getListAP() {
+        return this.listAP;
+    }
 
 
     @FXML
@@ -86,7 +94,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
         backToList(event);
     }
 
-    public ListView<ExtraTime> getRequestList(){
+    public ListView<ExtraTime> getRequestList() {
         return requestList;
     }
 
@@ -114,7 +122,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
 
                     String teacherMsg = req.getTeacherMessage();
 
-                    Text reqText = new Text(req.getRequestId() + ": " + teacherMsg.substring(0,
+                    Text reqText = new Text((getIndex() + 1) + ": " + teacherMsg.substring(0,
                             Math.min(teacherMsg.length(), 20)) + "...");
                     reqText.setFont(Font.font("Arial", 20));
                     Text arrow = new Text(">");
@@ -125,7 +133,7 @@ public class CheckTimeRequestsBoundary extends Boundary{
 
                     hbox.getChildren().addAll(reqText, spacer, arrow);
 
-                    if(req.isStatus()){
+                    if (req.isStatus()) {
                         setDisable(true);
                         reqText.setStrikethrough(true);
                     }
@@ -141,13 +149,16 @@ public class CheckTimeRequestsBoundary extends Boundary{
                 if (selected && !isEmpty()) {
                     activeReq = getItem();
 
+                    controller.getExam(activeReq.getExamId());
+
                     requestAP.setDisable(false);
                     requestAP.setVisible(true);
 
                     listAP.setDisable(true);
                     listAP.setVisible(false);
 
-                    titleText.setText("Request for exam: " + activeReq.getExamId());
+                    titleText.setText("Request for exam: " + activeExam.getExam().getExamName() + "\nId: "
+                            + activeReq.getExamId() + ", Time: " + activeReq.getExtra());
 
                     commentText.setText(activeReq.getTeacherMessage());
                 }
@@ -155,6 +166,10 @@ public class CheckTimeRequestsBoundary extends Boundary{
         });
 
         controller.getAllRequests();
+    }
+
+    public void setExam(ExecutableExam exam) {
+        activeExam = exam;
     }
 }
 

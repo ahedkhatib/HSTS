@@ -2,6 +2,7 @@ package org.group7.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "results")
@@ -19,6 +20,7 @@ public class Result implements Serializable {
     @JoinColumn(name = "username")
     private Student student;
 
+    @Transient
     @Column(name = "exam")
     private ExecutableExam exam;
 
@@ -26,16 +28,60 @@ public class Result implements Serializable {
     private String teacherNote;
 
     @Column(name = "elapsed")
-    private float elapsed;
+    private double elapsed;
+
+    private boolean status;
+
+    @Column(name = "time_up")
+    private boolean timeUp;
+
+    @Transient
+    private HashMap<Question, Integer> answers;
 
     public Result() {
     }
 
-    public Result(int grade, Student student, String teacherNote, ExecutableExam exam){
+    public Result(int grade, Student student, String teacherNote, ExecutableExam exam, double elapsed, boolean timeUp, HashMap<Question, Integer> answers){
         this.grade = grade;
         this.student = student;
         this.teacherNote = teacherNote;
         this.exam = exam;
+        this.elapsed = elapsed;
+        this.timeUp = timeUp;
+        this.answers = answers;
+        this.status = false;
+    }
+
+    public HashMap<Question, Integer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(HashMap<Question, Integer> answers) {
+        this.answers = answers;
+    }
+
+    public boolean isTimeUp() {
+        return timeUp;
+    }
+
+    public void setTimeUp(boolean timeUp) {
+        this.timeUp = timeUp;
+    }
+
+    public double getElapsed() {
+        return elapsed;
+    }
+
+    public void setElapsed(double elapsed) {
+        this.elapsed = elapsed;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public int getResultId() {

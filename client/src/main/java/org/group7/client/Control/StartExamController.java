@@ -1,17 +1,35 @@
 package org.group7.client.Control;
 
+import com.sun.scenario.animation.shared.TimerReceiver;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.Alert;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.StartExamBoundary;
 import org.group7.client.Client;
 import org.group7.client.Events.StartExamEvent;
-import org.group7.entities.Message;
+import org.group7.entities.*;
+
+import java.io.IOException;
+import java.util.*;
 
 public class StartExamController extends Controller {
 
     private StartExamBoundary boundary;
+
+    private ExecutableExam exam;
+
+    private Thread timer;
+
+    private volatile boolean isTimerRunning = false;
+
+    private int durationSeconds;
+
+    private int elapsedSeconds = 0;
 
     public StartExamController(StartExamBoundary boundary) {
         this.boundary = boundary;
@@ -19,15 +37,62 @@ public class StartExamController extends Controller {
     }
 
     public void getExam(String examId) {
-        try{
+        try {
             Client.getClient().sendToServer(new Message(examId, "#StartExam"));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public boolean checkId(String id){
-        if(id.length() != 9 || !id.matches("\\d+")){
+    public void startTimer() {
+
+        timer = new Thread(() -> {
+
+            isTimerRunning = true;
+
+            try {
+                for (int i = durationSeconds; i >= 0; i--) {
+                    Thread.sleep(1000);
+                    if (!isTimerRunning) {
+                        return;
+                    }
+                    durationSeconds--;
+                    elapsedSeconds++;
+                    boundary.setTimeSeconds(i);
+                }
+
+                isTimerRunning = false;
+                finishExam(true);
+
+            } catch (InterruptedException e) {
+                System.out.println("Timer Interrupted!");
+            }
+        });
+
+        timer.setDaemon(true);
+        timer.start();
+    }
+
+    @Subscribe
+    public void updateTimer(ExtraTime request) {
+        if (Objects.equals(request.getExamId(), exam.getExamId())) {
+            durationSeconds += (request.getExtra() * 60);
+
+            if (isTimerRunning) {
+                isTimerRunning = false;
+                try {
+                    timer.join();
+                } catch (InterruptedException e) {
+                    System.out.println("Time Extended");
+                }
+            }
+
+            startTimer();
+        }
+    }
+
+    public boolean checkId(String id) {
+        if (id.length() != 9 || !id.matches("\\d+")) {
 
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Id is 9 digits, all numbers!"
@@ -39,15 +104,18 @@ public class StartExamController extends Controller {
             return false;
         }
 
+        durationSeconds = exam.getTime() * 60;
+        startTimer();
+
         return true;
     }
 
     @Subscribe
-    public void startExam(StartExamEvent event){
+    public void startExam(StartExamEvent event) {
 
         AnchorPane pane = null;
 
-        if(!event.isExists()){
+        if (!event.isExists()) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Exam Doesn't Exist!"
             );
@@ -55,13 +123,111 @@ public class StartExamController extends Controller {
             alert.setHeaderText("Error: Incorrect Input");
             alert.show();
         } else {
-            if(event.getType() == 1){
+            if (event.getType() == 1) {
                 pane = boundary.openAutoExam();
+                exam = event.getExam();
                 boundary.setQuestions(event.getExam());
             } else {
                 pane = boundary.openManualExam();
+                exam = event.getExam();
             }
         }
+    }
+
+    public void finishExam(boolean flag) {
+
+        if (isTimerRunning && timer != null && timer.isAlive()) {
+            timer.interrupt();
+        }
+
+        double elapsed = elapsedSeconds / 60.0;
+
+        List<ToggleGroup> answersToggle = boundary.getToggleGroups();
+
+        List<Integer> points = exam.getExam().getQuestionPoints();
+        List<Question> questions = exam.getExam().getQuestionList();
+
+        HashMap<Question, Integer> answers = new HashMap<>();
+
+        int grade = 0;
+
+        for (int i = 0; i < questions.size(); i++) {
+            if (answersToggle.get(i).getSelectedToggle() != null && questions.get(i).getCorrectAnswer() == answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle())) {
+                grade += points.get(i);
+                answers.put(questions.get(i), points.get(i));
+            } else {
+                answers.put(questions.get(i), 0);
+            }
+        }
+
+        //update average
+        int n = exam.getStudentList().size();
+        double avg = exam.getAverage();
+
+        avg = (avg * n + grade)/ (n + 1);
+
+        Result result = new Result(grade, (Student) Client.getClient().getUser(), "", exam, elapsed, flag, answers);
+
+        //update median
+        List<Student> students = exam.getStudentList();
+        List<Result> results = new ArrayList<>();
+
+        for(Student student : students){
+            results.addAll(student.getResultList());
+        }
+
+        results.add(result);
+
+        List<Integer> grades = new ArrayList<>();
+        for(Result r : results){
+            grades.add(r.getGrade());
+        }
+
+        Collections.sort(grades);
+        double median = 0;
+
+        n++;
+
+        if(n % 2 == 0){
+            int midIndex = n / 2;
+            median = (grades.get(midIndex - 1) + grades.get(midIndex)) / 2.0;
+        } else {
+            int midIndex = n / 2;
+            median = (grades.get(midIndex ));
+        }
+
+        //update distribution
+        int[] updatedDistribution = exam.getDistribution().clone();
+        int[] gradeRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+        for (int i = 0; i < gradeRanges.length - 1; i++) {
+            if (grade >= gradeRanges[i] && grade < gradeRanges[i + 1]) {
+                updatedDistribution[i]++;
+                break;
+            }
+        }
+
+        //Send to server
+        double[] arr = {avg, median};
+        Object[] objects = {result, Client.getClient().getUser(), exam, arr, updatedDistribution};
+
+        try {
+            Client.getClient().sendToServer(new Message(objects, "#FinishExam"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Subscribe
+    public void examEndedMessage(String message){
+
+        boundary.getAutoAp().setDisable(true);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                message
+        );
+
+        alert.show();
     }
 
 }

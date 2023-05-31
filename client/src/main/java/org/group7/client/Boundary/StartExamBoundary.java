@@ -3,6 +3,9 @@ package org.group7.client.Boundary;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -42,6 +45,14 @@ public class StartExamBoundary extends Boundary {
     private Button idBtn;
 
     @FXML
+    private Button autoFinishBtn;
+
+    @FXML
+    private Text autoTimerText;
+
+    private IntegerProperty timeSeconds = new SimpleIntegerProperty();
+
+    @FXML
     private ScrollPane scrollPane;
 
     // Manual Exam Pane
@@ -50,9 +61,32 @@ public class StartExamBoundary extends Boundary {
 
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
+    public AnchorPane getAutoAp(){
+        return autoAp;
+    }
+
+    public int getTimeSeconds() {
+        return timeSeconds.get();
+    }
+
+    public IntegerProperty timeSecondsProperty() {
+        return timeSeconds;
+    }
+
+    public void setTimeSeconds(int timeSeconds) {
+        this.timeSeconds.set(timeSeconds);
+    }
+
+    public List<ToggleGroup> getToggleGroups(){return toggleGroups;}
+
     @FXML
     void startExam(ActionEvent event) {
         controller.getExam(examNumber.getText());
+    }
+
+    @FXML
+    void finishExam(ActionEvent event){
+        controller.finishExam(false);
     }
 
     @FXML
@@ -87,6 +121,16 @@ public class StartExamBoundary extends Boundary {
     void initialize() {
         controller = new StartExamController(this);
         super.setController(controller);
+
+        autoTimerText.textProperty().bind(Bindings.createStringBinding(
+                () -> formatTime(timeSeconds.get()),
+                timeSeconds));
+    }
+
+    private String formatTime(int seconds) {
+        int minutes = seconds / 60;
+        int remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
     }
 
     public VBox questionCard(int questionNum, Question question){

@@ -15,6 +15,9 @@ public class Report implements Serializable {
     @Column(name = "type")
     private String reportType;
 
+    public Report() {
+
+    }
     public Report(String reportType) {
         this.reportType = reportType;
     }
