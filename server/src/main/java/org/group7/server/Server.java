@@ -112,8 +112,7 @@ public class Server extends AbstractServer {
                         session.flush();
 
                         session.getTransaction().commit();
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
 
@@ -343,7 +342,8 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }case "#GetSubjects" -> {
+                }
+                case "#GetSubjects" -> {
                     List<Subject> subjects = getAll(Subject.class);
                     client.sendToClient(new Message(subjects, "#GotSubjects"));
                 }
@@ -367,80 +367,43 @@ public class Server extends AbstractServer {
                         session.flush();
                         session.getTransaction().commit();
 
-                    }   catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
+
                 case "#preparQues" -> {
                     Object obj = (Object) message.getObject();
+                    session.beginTransaction();
+                    System.out.println("1");
+                    Question q = (Question) obj;
                     try {
                         session.beginTransaction();
-                        System.out.println("1");
 
-                        Question q = (Question) obj;
-                        System.out.println(q);
-                        System.out.println(q.getCourseList());
-                        System.out.println(q.getSubject());
 
-//                        for(Course course: q.getCourseList()){
-//                            System.out.println(course.getCourseName());
-//                        }
-//                        System.out.println("selected_subject: " + q.getSubject().getSubjectName());
-//                        System.out.println("correct_asnwer: " + q.getCorrectAnswer());
-//                        System.out.println("answerList: ");
-                        for(String s: q.getAnswerList()){
-                            System.out.println(s);
+                        session.save(q);
+                        List<Course> courses = q.getCourseList();
+                        Subject subject = q.getSubject();
+
+                        subject.getQuestionList().add(q);
+                        for (Course c : courses) {
+                            c.getQuestionList().add(q);
+                            session.save(c);
                         }
-
-                        if (q.getCorrectAnswer() == 0) {
-                            client.sendToClient(new Message(q, "#preparQues_Fail"));
-                        } else if (q.getInstructions() == "") {
-                            client.sendToClient(new Message(q, "#preparQues_Fail"));
-                        } else  if (q.getAnswerList()[0] == "") {
-                            client.sendToClient(new Message(null, "#preparQues_Fail"));
-                        }else  if (q.getAnswerList()[1] == "") {
-                            client.sendToClient(new Message(null, "#preparQues_Fail"));
-                        }
-                        else  if (q.getAnswerList()[2] == "") {
-                            client.sendToClient(new Message(null, "#preparQues_Fail"));
-                        }
-                        else  if (q.getAnswerList()[3] == "") {
-                            client.sendToClient(new Message(null, "#preparQues_Fail"));
-                        }
-                        else {
-                            System.out.println("2");
-                            System.out.println(q.getCourseList().size());
-                            session.save(q);
-                            System.out.println("3");
-                            List<Course> courses = q.getCourseList();
-                            Subject subject = q.getSubject();
-
-                            subject.getQuestionList().add(q);
-                            for (Course c : courses) {
-                                c.getQuestionList().add(q);
-                            }
-
-                            System.out.println("44");
-                            session.save(subject);
-                            for (Course c : courses) {
-                                session.save(c);
-                            }
-                            session.flush();
-//                            System.out.println("4");
-                            client.sendToClient(new Message(q, "#preparQues_Success"));
-
-                            session.getTransaction().commit();
-                        }
+                        session.save(subject);
+                        session.flush();
+                        client.sendToClient(new Message(q, "#preparQues_Success"));
+                        session.getTransaction().commit();
                     } catch (IOException e) {
-
                         e.printStackTrace();
                     }
                 }
-                case "#getSubject" ->{
-                    List<Subject> subject = getAll(Subject.class);
-                    client.sendToClient(new Message(subject, "#GotSubject"));
-                }
+            case "#getSubject" -> {
+                List<Subject> subject = getAll(Subject.class);
+                client.sendToClient(new Message(subject, "#GotSubject"));
             }
+        }
+
 
         } catch (IOException e) {
             e.printStackTrace();
