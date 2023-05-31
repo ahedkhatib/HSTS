@@ -61,6 +61,10 @@ public class StartExamBoundary extends Boundary {
 
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
+    public AnchorPane getAutoAp(){
+        return autoAp;
+    }
+
     public int getTimeSeconds() {
         return timeSeconds.get();
     }
@@ -73,13 +77,17 @@ public class StartExamBoundary extends Boundary {
         this.timeSeconds.set(timeSeconds);
     }
 
+    public List<ToggleGroup> getToggleGroups(){return toggleGroups;}
+
     @FXML
     void startExam(ActionEvent event) {
         controller.getExam(examNumber.getText());
     }
 
     @FXML
-    void finishExam(ActionEvent event){}
+    void finishExam(ActionEvent event){
+        controller.finishExam(false);
+    }
 
     @FXML
     void idEntered(ActionEvent event){

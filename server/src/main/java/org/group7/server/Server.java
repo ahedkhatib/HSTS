@@ -373,9 +373,6 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }case "#GetSubjects" -> {
-                    List<Subject> subjects = getAll(Subject.class);
-                    client.sendToClient(new Message(subjects, "#GotSubjects"));
                 }
                 case "#saveExam" -> {
                     Object obj = (Object) message.getObject();
@@ -398,6 +395,43 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                     }   catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#FinishExam" -> {
+
+                    Object[] objects = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        User user = session.find(User.class, ((User)objects[1]).getUsername());
+                        Result result = (Result) objects[0];
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, ((ExecutableExam) objects[2]).getExamId());
+                        double[] arr = (double[]) objects[3];
+                        exam.setAverage(arr[0]);
+                        exam.setMedian(arr[1]);
+                        exam.setDistribution((int[])objects[4]);
+                        session.save(exam);
+
+                        result.setExam(exam);
+                        session.save(result);
+
+                        Student student = (Student) user;
+                        student.getExamList().add(exam);
+                        student.getResultList().add(result);
+                        session.save(student);
+
+                        exam.getStudentList().add(student);
+                        session.save(student);
+                        session.flush();
+
+                        session.getTransaction().commit();
+
+                        client.sendToClient(new Message(null, "#ExamFinished"));
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

@@ -82,6 +82,11 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(exam);
             });
+        }else if (post.startsWith("#ExamFinished")) {
+            String s = "Exam Finished!";
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(s);
+            });
         } else if (post.startsWith("#GotSubjects")) {
             SubjectsListEvent event = new SubjectsListEvent(message);
             Platform.runLater(() -> {
