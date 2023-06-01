@@ -18,7 +18,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -493,6 +492,25 @@ public class Server extends AbstractServer {
                         List<Course> courses = teacher.getCourseList();
 
                         client.sendToClient(new Message(courses, "#GotTeacherCourses"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#GetStudentResults" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Student student = (Student) message.getObject();
+
+                        student = session.find(Student.class, student.getUsername());
+
+                        List<Result> results = student.getResultList();
+
+                        client.sendToClient(new Message(results, "#GotStudentResults"));
 
                         session.getTransaction().commit();
 

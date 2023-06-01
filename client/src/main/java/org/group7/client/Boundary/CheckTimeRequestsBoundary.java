@@ -118,15 +118,17 @@ public class CheckTimeRequestsBoundary extends Boundary {
 
                     setPrefWidth(USE_COMPUTED_SIZE);
 
+                    setHeight(35);
+
                     HBox hbox = new HBox();
 
                     String teacherMsg = req.getTeacherMessage();
 
                     Text reqText = new Text((getIndex() + 1) + ": " + teacherMsg.substring(0,
                             Math.min(teacherMsg.length(), 20)) + "...");
-                    reqText.setFont(Font.font("Arial", 20));
+                    reqText.setFont(Font.font("Arial", 24));
                     Text arrow = new Text(">");
-                    arrow.setFont(Font.font("Arial", 20));
+                    arrow.setFont(Font.font("Arial", 24));
 
                     Region spacer = new Region();
                     HBox.setHgrow(spacer, Priority.ALWAYS);

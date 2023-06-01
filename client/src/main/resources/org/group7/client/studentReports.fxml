@@ -10,6 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.ScrollPane?>
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StudentReportsBoundary">
     <children>
         <AnchorPane fx:id="emptyAP" prefHeight="693.0" prefWidth="1215.0" visible="false">
@@ -20,7 +21,7 @@
             </Text>
         </AnchorPane>
         <AnchorPane fx:id="listAP" prefHeight="693.0" prefWidth="1215.0">
-            <ListView fx:id="examListView" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0" />
+            <ListView fx:id="resultListView" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0" />
         </AnchorPane>
         <AnchorPane fx:id="examAP" prefHeight="693.0" prefWidth="1215.0">
             <children>
@@ -43,6 +44,7 @@
                         <Font size="25.0" />
                     </font>
                 </Text>
+                <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="105.0" prefHeight="500.0" prefWidth="1215.0" />
             </children>
         </AnchorPane>
     </children>

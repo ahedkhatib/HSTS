@@ -20,7 +20,7 @@ import org.group7.entities.User;
 
 import java.io.IOException;
 
-public class HomepageBoundary extends Boundary{
+public class HomepageBoundary extends Boundary {
 
     private HomepageController controller;
 
@@ -106,31 +106,33 @@ public class HomepageBoundary extends Boundary{
 
         Boundary boundary = fxmlLoader.getController();
 
-        if(boundary != null) {
+        if (boundary != null) {
             Controller control = boundary.getController();
             control.unregisterController();
         }
 
-        if(pressed == newTimeRequestBtn){
+        if (pressed == newTimeRequestBtn) {
             loadPage("timeRequest");
             titleText.setText("Extra Time Request");
         } else if (pressed == principalReqBtn) {
             loadPage("checkTimeRequests");
             titleText.setText("Extra Time Requests");
-        }else if (pressed == setExecutableBtn) {
+        } else if (pressed == setExecutableBtn) {
             loadPage("createExecutable");
             titleText.setText("Create Executable");
-        }else if (pressed == startExamBtn) {
+        } else if (pressed == startExamBtn) {
             loadPage("startExam");
             titleText.setText("Start Exam");
-        }else if (pressed == newExamBtn) {
+        } else if (pressed == newExamBtn) {
             loadPage("createExam");
             titleText.setText("New Exam");
-        } else if (pressed ==newQuestionBtn){
+        } else if (pressed == newQuestionBtn) {
             loadPage("prepareQuestion");
             titleText.setText("Add Question");
-        }
-        else {
+        } else if (pressed == studentReportsBtn) {
+            loadPage("studentReports");
+            titleText.setText("Your Exams");
+        } else {
             loadPage("bye");
             titleText.setText("bye");
         }
@@ -141,7 +143,7 @@ public class HomepageBoundary extends Boundary{
 
         Boundary boundary = fxmlLoader.getController();
 
-        if(boundary != null) {
+        if (boundary != null) {
             Controller control = boundary.getController();
             control.unregisterController();
         }
@@ -168,7 +170,7 @@ public class HomepageBoundary extends Boundary{
             maskRectangle.setVisible(false);
             maskRectangle.setDisable(false);
 
-            slide.setOnFinished((ActionEvent e)-> {
+            slide.setOnFinished((ActionEvent e) -> {
                 sidePanel.setVisible(false);
                 borderPane.setLeft(null);
             });
@@ -195,7 +197,7 @@ public class HomepageBoundary extends Boundary{
 
     public void loadPage(String path) throws IOException {
         fxmlLoader = new FXMLLoader(App.class.getResource(path + ".fxml"));
-        if(mainPage.getChildren().size() == 0)
+        if (mainPage.getChildren().size() == 0)
             mainPage.getChildren().add(fxmlLoader.load());
         else
             mainPage.getChildren().set(0, fxmlLoader.load());
