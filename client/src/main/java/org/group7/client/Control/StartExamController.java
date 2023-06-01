@@ -211,9 +211,9 @@ public class StartExamController extends Controller {
         for (int i = 0; i < questions.size(); i++) {
             if (answersToggle.get(i).getSelectedToggle() != null && questions.get(i).getCorrectAnswer() == answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle())) {
                 grade += points.get(i);
-                answers.put(questions.get(i), points.get(i));
+                answers.put(questions.get(i), answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle()));
             } else {
-                answers.put(questions.get(i), 0);
+                answers.put(questions.get(i), -1);
             }
         }
 

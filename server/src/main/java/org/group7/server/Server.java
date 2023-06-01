@@ -1,5 +1,6 @@
 package org.group7.server;
 
+import com.mysql.cj.CoreSession;
 import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
@@ -16,9 +17,9 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Server extends AbstractServer {
@@ -71,7 +72,7 @@ public class Server extends AbstractServer {
         try {
             for (SubscribedClient SubscribedClient : SubscribersList) {
 
-                if(SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
+                if (SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
                     continue;
 
                 SubscribedClient.getClient().sendToClient(message);
@@ -374,12 +375,11 @@ public class Server extends AbstractServer {
                     }
                 }
                 case "#saveExam" -> {
-                    Object obj = (Object) message.getObject();
 
                     try {
                         session.beginTransaction();
 
-                        Exam exam = (Exam) obj;
+                        Exam exam = (Exam) message.getObject();
                         session.save(exam);
 
                         Teacher teacher = session.find(Teacher.class, exam.getCreator().getUsername());
@@ -393,49 +393,72 @@ public class Server extends AbstractServer {
                         session.flush();
                         session.getTransaction().commit();
 
+                        client.sendToClient(new Message(null, "#ExamSaved"));
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } case "#preparQues" -> {
-                    Object obj = (Object) message.getObject();
-                    session.beginTransaction();
-                    System.out.println("1");
-                    Question q = (Question) obj;
+                }
+
+                case "#SaveQuestion" -> {
+
                     try {
+
                         session.beginTransaction();
 
+                        Question question = (Question) message.getObject();
 
-                        session.save(q);
-                        List<Course> courses = q.getCourseList();
-                        Subject subject = q.getSubject();
-
-                        subject.getQuestionList().add(q);
-                        for (Course c : courses) {
-                            c.getQuestionList().add(q);
-                            session.save(c);
-                        }
+                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
+                        List<Question> subjectQuestions = subject.getQuestionList();
+                        List<Question> updatedSubQuestions = Stream.concat(subjectQuestions.stream(), Stream.of(question))
+                                .toList();
+                        subject.setQuestionList(updatedSubQuestions);
                         session.save(subject);
+
+
+                        List<Course> courses = question.getCourseList();
+                        question.setCourseList(new ArrayList<>());
+                        for (Course course : courses) {
+                            course = session.find(Course.class, course.getCourseId());
+                            List<Question> courseQuestions = course.getQuestionList();
+                            List<Question> updatedCourseQuestions = Stream.concat(courseQuestions.stream(), Stream.of(question))
+                                    .toList();
+                            course.setQuestionList(updatedCourseQuestions);
+                            session.save(course);
+
+                            List<Course> questionCourses = question.getCourseList();
+                            List<Course> updatedQuestionCourses = Stream.concat(questionCourses.stream(), Stream.of(course))
+                                    .toList();
+                            question.setCourseList(updatedQuestionCourses);
+                        }
+
+                        session.save(question);
                         session.flush();
-                        client.sendToClient(new Message(q, "#preparQues_Success"));
                         session.getTransaction().commit();
-                    } catch (IOException e) {
+
+                        client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } case "#FinishExam" -> {
+                }
+
+                case "#FinishExam" -> {
 
                     Object[] objects = (Object[]) message.getObject();
 
                     try {
                         session.beginTransaction();
 
-                        User user = session.find(User.class, ((User)objects[1]).getUsername());
+                        User user = session.find(User.class, ((User) objects[1]).getUsername());
                         Result result = (Result) objects[0];
 
                         ExecutableExam exam = session.find(ExecutableExam.class, ((ExecutableExam) objects[2]).getExamId());
                         double[] arr = (double[]) objects[3];
                         exam.setAverage(arr[0]);
                         exam.setMedian(arr[1]);
-                        exam.setDistribution((int[])objects[4]);
+                        exam.setDistribution((int[]) objects[4]);
                         session.save(exam);
 
                         result.setExam(exam);
@@ -458,10 +481,26 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#GetTeacherCourses" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Teacher teacher = (Teacher) message.getObject();
+
+                        teacher = session.find(Teacher.class, teacher.getUsername());
+
+                        List<Course> courses = teacher.getCourseList();
+
+                        client.sendToClient(new Message(courses, "#GotTeacherCourses"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -518,18 +557,18 @@ public class Server extends AbstractServer {
         session.save(math);
         session.save(cs);
         session.flush();
-//
+
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
-//
+
         math.setCourseList(List.of(new Course[]{algebra, calculus}));
         session.save(math);
         session.flush();
-//
+
         Course intro = new Course("Into to CS", cs);
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
@@ -539,7 +578,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-//
+
         cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
         session.save(cs);
         session.flush();
@@ -554,7 +593,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-//
+
         algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
         calculus.setTeacherList(List.of(new Teacher[]{or}));
         session.save(algebra);
@@ -587,7 +626,7 @@ public class Server extends AbstractServer {
         session.save(mathQ2);
         session.save(mathQ3);
         session.flush();
-//
+
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
