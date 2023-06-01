@@ -42,6 +42,9 @@ public class CreateExamBoundary extends Boundary {
     public List<Exam> teacherExams;
 
     @FXML
+    private AnchorPane screen;
+
+    @FXML
     private TextField examNameText;
 
     @FXML
@@ -78,8 +81,6 @@ public class CreateExamBoundary extends Boundary {
     public void initialize() {
         controller = new CreateExamController(this);
         super.setController(controller);
-
-        controller.setData();
 
         examTypeComboBox.getItems().add("Manual exam");
         examTypeComboBox.getItems().add("Automated exam");
@@ -312,5 +313,9 @@ public class CreateExamBoundary extends Boundary {
         controller.save(examNameText.getText(), (manualExam) ? 1 : 2, durationText.getText(), (Teacher) Client.getClient().getUser(),
                 notesForTeachersText.getText(), notesForStudentsText.getText(), selectedCourse, sendQuestions, sendGrades);
 
+    }
+
+    public void done(){
+        screen.setDisable(true);
     }
 }

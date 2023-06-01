@@ -1,7 +1,10 @@
 package org.group7.entities;
 
+import org.hibernate.Session;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.*;
 
 @Entity
@@ -10,7 +13,7 @@ public class Question implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_sequence")
-    @SequenceGenerator(name = "question_id_sequence", sequenceName = "question_id_sequence", allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "question_id_sequence", sequenceName = "question_id_sequence", allocationSize = 1, initialValue = 100)
     @Column(name = "question_id")
     private int questionId;
 
@@ -21,7 +24,7 @@ public class Question implements Serializable{
     @JoinTable(name = "question_course",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courseList;
+    private List<Course> courseList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")

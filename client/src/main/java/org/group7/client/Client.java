@@ -44,13 +44,12 @@ public class Client extends AbstractClient {
 
             String temp = post.substring(11);
 
-            if(temp.equals("Fail")){
-               String m = ("Exam: " + message.getObject() + " could not be found!");
+            if (temp.equals("Fail")) {
+                String m = ("Exam: " + message.getObject() + " could not be found!");
                 Platform.runLater(() -> {
                     EventBus.getDefault().post(m);
                 });
-            }
-            else {
+            } else {
                 Platform.runLater(() -> {
                     EventBus.getDefault().post("Request Sent");
                 });
@@ -75,12 +74,12 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(extraTime);
             });
-        }else if (post.startsWith("#GotTimeRequestExam")) {
+        } else if (post.startsWith("#GotTimeRequestExam")) {
             ExecutableExam exam = (ExecutableExam) message.getObject();
             Platform.runLater(() -> {
                 EventBus.getDefault().post(exam);
             });
-        }else if (post.startsWith("#ExamFinished")) {
+        } else if (post.startsWith("#ExamFinished")) {
             String s = "Exam Finished!";
             Platform.runLater(() -> {
                 EventBus.getDefault().post(s);
@@ -90,17 +89,19 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
-        }else if (post.startsWith("#preparQues_")) {
-            System.out.println("ebr");
-            System.out.println(post.substring(12));
+        } else if (post.startsWith("#PrepareQuestion_")) {
             QuestionEvent event = new QuestionEvent(new Message(message.getObject(), post.substring(12)));
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
-        }
-        else if(post.startsWith("#GotSubject")){
+        } else if (post.startsWith("#ExamSaved")) {
+            MessageEvent event = new MessageEvent(message);
             Platform.runLater(() -> {
-                CoursesEvent event = new CoursesEvent(message);
+                EventBus.getDefault().post(event);
+            });
+        } else if(post.startsWith("#GotTeacherCourses")){
+            CoursesEvent event = new CoursesEvent(message);
+            Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
         }
