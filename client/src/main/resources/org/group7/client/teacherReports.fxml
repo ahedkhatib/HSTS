@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="778.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TeacherReportsBoundary">
+    <children>
+      <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="190.0" layoutX="39.0" layoutY="85.0" stroke="BLACK" strokeType="INSIDE" width="285.0" />
+        <ComboBox fx:id="executableExamsComboBox" layoutX="334.0" layoutY="103.0" onAction="#selectExam" prefHeight="46.0" prefWidth="313.0" promptText="Select executed exam:" />
+        <ComboBox fx:id="executalbeExamTeacherComboBox" layoutX="334.0" layoutY="162.0" onAction="#selectExecutableExamTeacher" prefHeight="46.0" prefWidth="313.0" promptText="Select teacher:" />
+        <AnchorPane layoutX="662.0" layoutY="294.0" prefHeight="411.0" prefWidth="538.0">
+            <children>
+                <TableView fx:id="statisticInfoTable" layoutX="38.0" layoutY="48.0" prefHeight="338.0" prefWidth="490.0">
+                    <columns>
+                        <TableColumn fx:id="firstNameColumn" prefWidth="78.39996337890625" text="First Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="student.firstName" />
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn fx:id="lastNameColumn" prefWidth="88.7999267578125" text="Last Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="student.lastName" />
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn fx:id="gradeColumn" prefWidth="70.4000244140625" text="Grade" />
+                        <TableColumn fx:id="teacherNoteColumn" prefWidth="128.0001220703125" text="Teacher Note" />
+                  <TableColumn fx:id="timeColumn" prefWidth="56.7999267578125" text="Time " />
+                  <TableColumn fx:id="timeUpColumn" prefWidth="68.0001220703125" text="TimeUp?" />
+                    </columns>
+                </TableView>
+                <Text layoutX="47.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="here you can find the students results in the exam you choose:" wrappingWidth="469.3367156982422">
+                    <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+      <BarChart fx:id="gradeChart" layoutX="14.0" layoutY="366.0" prefHeight="338.0" prefWidth="650.0">
+        <xAxis>
+          <CategoryAxis fx:id="gradeAxis" side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="countAxis" side="LEFT" />
+        </yAxis>
+      </BarChart>
+      <Label fx:id="averageLabel" layoutX="58.0" layoutY="103.0" prefHeight="22.0" prefWidth="162.0" text="Average: ">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="medianLabel" layoutX="56.0" layoutY="138.0" prefHeight="22.0" prefWidth="162.0" text="Median:">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="passedLabel" layoutX="57.0" layoutY="174.0" prefHeight="19.0" prefWidth="265.0" text="Passed percentage: ">
+         <font>
+            <Font name="System Bold Italic" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="failedLabel" layoutX="58.0" layoutY="208.0" prefHeight="22.0" prefWidth="266.0" text="Failed percentage: ">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="inTimeLabel" layoutX="58.0" layoutY="241.0" prefHeight="22.0" prefWidth="266.0" text="finished in time percentage:">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+    </children>
+</AnchorPane>
