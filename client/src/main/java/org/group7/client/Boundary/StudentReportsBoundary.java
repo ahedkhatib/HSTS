@@ -2,23 +2,22 @@ package org.group7.client.Boundary;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Control.StudentReportsController;
+import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
+import org.group7.entities.Question;
 import org.group7.entities.Result;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class StudentReportsBoundary extends Boundary{
+public class StudentReportsBoundary extends Boundary {
 
     @FXML
     private AnchorPane emptyAP;
@@ -45,6 +44,7 @@ public class StudentReportsBoundary extends Boundary{
     private Text titleText;
 
     @FXML
+    private Text noteText;
 
     private StudentReportsController controller;
 
@@ -52,7 +52,7 @@ public class StudentReportsBoundary extends Boundary{
 
     private Result activeResult;
 
-    public void setResultList(List<Result> resultList){
+    public void setResultList(List<Result> resultList) {
         this.resultList = resultList;
     }
 
@@ -98,7 +98,7 @@ public class StudentReportsBoundary extends Boundary{
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
         controller = new StudentReportsController(this);
         super.setController(controller);
 
@@ -108,15 +108,18 @@ public class StudentReportsBoundary extends Boundary{
                 super.updateItem(result, empty);
 
                 if (empty || result == null) {
+                    setStyle("-fx-background-color: transparent;");
                     setText(null);
                     setGraphic(null);
                 } else {
 
                     setPrefWidth(USE_COMPUTED_SIZE);
 
-                    setHeight(35);
-
                     HBox hbox = new HBox();
+
+                    hbox.setPrefHeight(50);
+                    hbox.setAlignment(Pos.CENTER_LEFT);
+                    hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black;");
 
                     String examName = result.getExam().getExam().getExamName();
 
@@ -147,13 +150,126 @@ public class StudentReportsBoundary extends Boundary{
                     listAP.setDisable(true);
                     listAP.setVisible(false);
 
+                    String timeString = Double.toString(activeResult.getElapsed());
+                    int decimalIndex = timeString.indexOf('.');
+
+                    String decimalPart;
+
+                    if (decimalIndex != -1) {
+                        decimalPart = timeString.substring(0, decimalIndex + 2);
+                    } else {
+                        decimalPart = timeString;
+                    }
+
                     titleText.setText(activeResult.getExam().getExam().getExamName() + "\nGrade: "
-                            + activeResult.getGrade() + ", Time: " + activeResult.getElapsed());
+                            + activeResult.getGrade() + ", Time: " + decimalPart);
+
+                    setQuestions(activeResult);
+
+                    noteText.setText("Teacher's Note: " + activeResult.getTeacherNote());
                 }
             }
         });
 
-
         controller.getResults();
+    }
+
+    public VBox questionCard(int questionNum, Question question, int correctIndex, int toggleIndex) {
+
+        VBox card = new VBox();
+        card.setPrefWidth(scrollPane.getPrefWidth() / 2);
+        card.setSpacing(35);
+        card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
+
+        Text questionText = new Text(questionNum + ".   " + question.getInstructions());
+        questionText.setStyle("-fx-font-size: 24;");
+
+        VBox answersBox = new VBox();
+        answersBox.setSpacing(15);
+
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        for (int i = 0; i < 4; i++) {
+            HBox answer = new HBox();
+            answer.setAlignment(Pos.CENTER_LEFT);
+            answer.setSpacing(25);
+
+            Text answerText = new Text(question.getAnswerList()[i]);
+            answerText.setStyle("-fx-font-size: 20;");
+
+            RadioButton radioButton = new RadioButton();
+            radioButton.setToggleGroup(toggleGroup);
+
+            if (toggleIndex == i) {
+                radioButton.setSelected(true);
+
+                if (correctIndex != i) {
+                    answerText.setStyle("-fx-text-fill: white;");
+                    answer.setStyle("-fx-background-color: F67280; ");
+                }
+            }
+
+            if (correctIndex == i) {
+                answerText.setStyle("-fx-text-fill: white;");
+                answer.setStyle("-fx-background-color: #91c79c; ");
+            }
+
+            answer.getChildren().addAll(radioButton, answerText);
+            answersBox.getChildren().add(answer);
+        }
+
+        card.getChildren().addAll(questionText, answersBox);
+
+        card.setDisable(true);
+
+        return card;
+    }
+
+    public void setQuestions(Result result) {
+
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        int count = 1;
+
+        Pane pane = new Pane();
+        pane.setPrefWidth(scrollPane.getPrefWidth());
+
+        VBox content = new VBox();
+        content.setAlignment(Pos.CENTER);
+        content.setSpacing(50);
+        content.setLayoutX(scrollPane.getPrefWidth() / 4);
+
+        // Add teacher's notes
+        String examNote = result.getExam().getExam().getStudentComments();
+
+        VBox card = new VBox();
+        card.setPrefWidth(scrollPane.getPrefWidth() / 2);
+        card.setPrefHeight(scrollPane.getPrefHeight() / 2);
+        card.setSpacing(35);
+        card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
+
+        Text noteText = new Text(examNote);
+        noteText.setStyle("-fx-font-size: 20;");
+        card.getChildren().add(noteText);
+
+        if(examNote != null && !examNote.equals(""))
+            content.getChildren().add(card);
+
+        // Add Questions
+        HashMap<Question, Integer> map = result.getAnswers();
+
+        for (Map.Entry<Question, Integer> entry : map.entrySet()) {
+            Question q = entry.getKey();
+            card = questionCard(count, q, q.getCorrectAnswer(), result.getAnswers().get(q));
+            content.getChildren().add(card);
+            count++;
+        }
+
+        pane.getChildren().add(content);
+
+        scrollPane.setStyle("-fx-padding: 10px;");
+        scrollPane.setContent(pane);
+        scrollPane.setDisable(false);
     }
 }

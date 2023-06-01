@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import org.group7.client.Client;
 import org.group7.client.Control.CreateExamController;
 import org.group7.entities.*;
@@ -194,12 +196,14 @@ public class CreateExamBoundary extends Boundary {
                     if (cell == null) {
                         // Initialize the cell components
                         cell = new HBox();
+                        Region spacer = new Region();
+                        HBox.setHgrow(spacer, Priority.ALWAYS);
                         questionLabel = new Label();
                         gradeTextField = new TextField();
                         gradeTextField.setPromptText("Enter grade");
                         gradeTextField.setPrefWidth(100);
                         gradeTextField.setPrefHeight(15);
-                        cell.getChildren().addAll(questionLabel, gradeTextField);
+                        cell.getChildren().addAll(questionLabel, spacer, gradeTextField);
                     }
 
                     // Set the question text

@@ -1,7 +1,5 @@
 package org.group7.server;
 
-import com.mysql.cj.CoreSession;
-import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
 import org.group7.server.ocsf.AbstractServer;
@@ -740,7 +738,7 @@ public class Server extends AbstractServer {
 
         // Add results
         HashMap<Question, Integer> answers = new HashMap<>();
-        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 1 );
+        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
         answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
 
         Result result1 = new Result(96, lana, "Amazing!", executableAlgebra, 45, false, answers);
