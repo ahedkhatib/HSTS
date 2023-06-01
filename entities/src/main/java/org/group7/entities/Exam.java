@@ -9,8 +9,8 @@ import java.util.*;
 public class Exam implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_num_sequence")
-    @SequenceGenerator(name = "exam_num_sequence", sequenceName = "exam_num_sequence", allocationSize = 1, initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exam_id_sequence")
+    @SequenceGenerator(name = "exam_id_sequence", sequenceName = "exam_id_sequence", allocationSize = 1, initialValue = 10)
     @Column(name = "exam_id")
     private int examId;
 

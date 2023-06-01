@@ -396,42 +396,38 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
-                case "#preparQues" -> {
+
+                case "#SaveQuestion" -> {
 
                     try {
+
                         session.beginTransaction();
 
-                        Question q = (Question) message.getObject();
-                        session.flush();
-
-                        Subject subject = q.getSubject();
-                        subject = session.find(Subject.class, subject.getSubjectId());
-                        subject.getQuestionList().add(q);
-                        System.out.println(subject.getSubjectName());
-                        session.save(subject);
-
-                        List<Course> courses = q.getCourseList();
-                        for (Course c : courses) {
-                            c = session.find(Course.class, c.getCourseId());
-                            c.getQuestionList().add(q);
-                            System.out.println(c.getCourseName());
-                            session.save(c);
-                        }
-
-                        System.out.println("here");
-
+                        Question q = session.find(Question.class, 101);
+                        Subject subject = session.find(Subject.class, q.getSubject().getSubjectId());
+                        Course course = session.find(Course.class, 11);
+                        q.getCourseList().add(course);
+                        course.getQuestionList().add(q);
                         session.save(q);
+                        session.save(subject);
+                        session.save(course);
+
+//                        Question question = (Question) message.getObject();
+//                        session.save(question);
+//
+//                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
+//                        subject.getQuestionList().add(question);
+//                        session.save(subject);
+
                         session.flush();
                         session.getTransaction().commit();
 
-                        System.out.println("here2");
-
-                        client.sendToClient(new Message(q, "#preparQues_Success"));
-
-                    } catch (IOException e) {
+                    } catch (Exception e){
                         e.printStackTrace();
                     }
-                } case "#FinishExam" -> {
+                }
+
+                case "#FinishExam" -> {
 
                     Object[] objects = (Object[]) message.getObject();
 
@@ -525,18 +521,18 @@ public class Server extends AbstractServer {
         session.save(math);
         session.save(cs);
         session.flush();
-//
+
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
-//
+
         math.setCourseList(List.of(new Course[]{algebra, calculus}));
         session.save(math);
         session.flush();
-//
+
         Course intro = new Course("Into to CS", cs);
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
@@ -546,7 +542,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-//
+
         cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
         session.save(cs);
         session.flush();
@@ -561,7 +557,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-//
+
         algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
         calculus.setTeacherList(List.of(new Teacher[]{or}));
         session.save(algebra);
@@ -594,7 +590,7 @@ public class Server extends AbstractServer {
         session.save(mathQ2);
         session.save(mathQ3);
         session.flush();
-//
+
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 

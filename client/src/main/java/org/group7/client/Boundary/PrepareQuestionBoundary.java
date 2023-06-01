@@ -4,85 +4,84 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import org.group7.client.App;
-import org.group7.client.Control.PreparQuesController;
+import org.group7.client.Control.PrepareQuestionController;
 import org.group7.entities.Course;
-import org.group7.entities.Question;
 import org.group7.entities.Subject;
 
-import javax.swing.text.html.ImageView;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PreparQuesBoundary extends Boundary {
-    private int correct_asnwer = 0;
-    PreparQuesController controller;
+public class PrepareQuestionBoundary extends Boundary {
+
+    PrepareQuestionController controller;
+
     public List<Course> cur;
+
     public List<Subject> sub;
+
     public List<String> all_courses;
+
     public List<Course> selected_courses;
+
     public List<Course> courses_after_selection;
+
     public List<String> subjects;
+
     public Subject selected_subject;
+
     @FXML
     private AnchorPane screen;
+
     @FXML
-    private ImageView image;
-    @FXML
-    private Label labelsubject;
+    private Label subjectLabel;
+
     @FXML
     private Label labelC;
 
     @FXML
     private Label labelQ;
 
-
     @FXML
     private ComboBox<String> courses;
+
     @FXML
     private ComboBox<String> subject;
 
-    @FXML
-    private CheckBox correct1;
+    private ToggleGroup toggleGroup;
 
     @FXML
-    private CheckBox correct2;
+    private RadioButton radio1;
 
     @FXML
-    private CheckBox correct3;
+    private RadioButton radio2;
 
     @FXML
-    private CheckBox correct4;
+    private RadioButton radio3;
 
     @FXML
-    private Button prev;
+    private RadioButton radio4;
 
     @FXML
-    private TextField qustion;
+    private TextField question;
 
     @FXML
     private Button save_ques;
 
     @FXML
-    private TextField sultion_1;
+    private TextField solution1;
 
     @FXML
-    private TextField sultion_2;
+    private TextField solution2;
 
     @FXML
-    private TextField sultion_3;
+    private TextField solution3;
 
     @FXML
-    private TextField sultion_4;
+    private TextField solution4;
+
     @FXML
     private ListView<String> list;
-
-    @FXML
-    void prev(ActionEvent event) {
-        App.switchScreen("homepage");
-    }
 
     @FXML
     void selectCourse(javafx.scene.input.MouseEvent mouseEvent) {
@@ -110,15 +109,15 @@ public class PreparQuesBoundary extends Boundary {
             }
 
             list.setVisible(true);
-            sultion_1.setVisible(true);
-            sultion_2.setVisible(true);
-            sultion_3.setVisible(true);
-            sultion_4.setVisible(true);
-            qustion.setVisible(true);
-            correct1.setVisible(true);
-            correct2.setVisible(true);
-            correct3.setVisible(true);
-            correct4.setVisible(true);
+            solution1.setVisible(true);
+            solution2.setVisible(true);
+            solution3.setVisible(true);
+            solution4.setVisible(true);
+            question.setVisible(true);
+            radio1.setVisible(true);
+            radio2.setVisible(true);
+            radio3.setVisible(true);
+            radio4.setVisible(true);
             labelQ.setVisible(true);
         }
 
@@ -164,84 +163,52 @@ public class PreparQuesBoundary extends Boundary {
         }
         list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         subject.setVisible(false);
-        labelsubject.setVisible(false);
+        subjectLabel.setVisible(false);
         list.setVisible(true);
         labelC.setVisible(true);
-
-
-    }
-
-    @FXML
-    void correct1(ActionEvent event) {
-        correct1.setSelected(true);
-        correct2.setSelected(false);
-        correct3.setSelected(false);
-        correct4.setSelected(false);
-        correct_asnwer = 1;
-    }
-
-    @FXML
-    void correct2(ActionEvent event) {
-        correct1.setSelected(false);
-        correct2.setSelected(true);
-        correct3.setSelected(false);
-        correct4.setSelected(false);
-        correct_asnwer = 2;
-    }
-
-    @FXML
-    void correct3(ActionEvent event) {
-        correct1.setSelected(false);
-        correct2.setSelected(false);
-        correct3.setSelected(true);
-        correct4.setSelected(false);
-        correct_asnwer = 3;
-    }
-
-    @FXML
-    void correct4(ActionEvent event) {
-        correct1.setSelected(false);
-        correct2.setSelected(false);
-        correct3.setSelected(false);
-        correct4.setSelected(true);
-        correct_asnwer = 4;
     }
 
     @FXML
     void save_ques(ActionEvent event) {
         String[] answerList = new String[4];
-        answerList[0] = sultion_1.getText();
-        answerList[1] = sultion_2.getText();
-        answerList[2] = sultion_3.getText();
-        answerList[3] = sultion_4.getText();
-        String questions = qustion.getText();
+        answerList[0] = solution1.getText();
+        answerList[1] = solution2.getText();
+        answerList[2] = solution3.getText();
+        answerList[3] = solution4.getText();
+        String instructions = question.getText();
 
-        Question ques = new Question(questions, courses_after_selection, selected_subject, correct_asnwer, answerList);
-
-        controller.save(ques);
+        controller.save(instructions, courses_after_selection, selected_subject, toggleGroup.getToggles().indexOf(toggleGroup.getSelectedToggle()), answerList);
     }
 
     @FXML
     public void initialize() {
-        courses_after_selection = new ArrayList<Course>();
+        courses_after_selection = new ArrayList<>();
 
         all_courses = new ArrayList<>();
 
-        controller = new PreparQuesController(this);
+        controller = new PrepareQuestionController(this);
         super.setController(controller);
 
         list.setVisible(false);
-        sultion_1.setVisible(false);
-        sultion_2.setVisible(false);
-        sultion_3.setVisible(false);
-        sultion_4.setVisible(false);
-        qustion.setVisible(false);
-        correct1.setVisible(false);
-        correct2.setVisible(false);
-        correct3.setVisible(false);
-        correct4.setVisible(false);
+        solution1.setVisible(false);
+        solution2.setVisible(false);
+        solution3.setVisible(false);
+        solution4.setVisible(false);
+        question.setVisible(false);
+
         labelC.setVisible(false);
         labelQ.setVisible(false);
+
+        toggleGroup = new ToggleGroup();
+
+        radio1.setVisible(false);
+        radio2.setVisible(false);
+        radio3.setVisible(false);
+        radio4.setVisible(false);
+        radio1.setToggleGroup(toggleGroup);
+        radio2.setToggleGroup(toggleGroup);
+        radio3.setToggleGroup(toggleGroup);
+        radio4.setToggleGroup(toggleGroup);
 
         controller.getCourses();
     }

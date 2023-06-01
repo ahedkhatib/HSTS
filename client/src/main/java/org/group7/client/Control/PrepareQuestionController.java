@@ -3,48 +3,48 @@ package org.group7.client.Control;
 import javafx.scene.control.Alert;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.group7.client.Boundary.HomepageBoundary;
-import org.group7.client.Boundary.PreparQuesBoundary;
+import org.group7.client.Boundary.PrepareQuestionBoundary;
 import org.group7.client.Client;
-import org.group7.client.Events.CoursesEvent;
-import org.group7.client.Events.LoginEvent;
 import org.group7.client.Events.QuestionEvent;
 import org.group7.entities.*;
 
-import java.lang.ref.Cleaner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PreparQuesController extends Controller {
-    PreparQuesBoundary boundary;
+public class PrepareQuestionController extends Controller {
+    PrepareQuestionBoundary boundary;
     public List<Course> course;
     public Subject subject;
 
-    public PreparQuesController(PreparQuesBoundary  boundary){
+    public PrepareQuestionController(PrepareQuestionBoundary boundary){
         this.boundary = boundary;
         EventBus.getDefault().register(this);
     }
 
-    public void save(Question  q) {
-        if (q.getCorrectAnswer() == 0) {
+    public void save(String instructions, List<Course> courses, Subject subject, int correctAnswer, String[] answers) {
+
+        if (correctAnswer == -1) {
             alert();
-        } else if (Objects.equals(q.getInstructions(), "")) {
+        } else if (Objects.equals(instructions, "")) {
             alert();
-        } else  if (Objects.equals(q.getAnswerList()[0], "")) {
+        } else  if (Objects.equals(answers[0], "")) {
             alert();
-        }else  if (Objects.equals(q.getAnswerList()[1], "")) {
-            alert();
-        }
-        else  if (Objects.equals(q.getAnswerList()[2], "")) {
+        }else  if (Objects.equals(answers[1], "")) {
             alert();
         }
-        else  if (Objects.equals(q.getAnswerList()[3], "")) {
+        else  if (Objects.equals(answers[2], "")) {
+            alert();
+        }
+        else  if (Objects.equals(answers[3], "")) {
             alert();
         }
         else {
 
-            Message message = new Message(q, "#preparQues");
+            Question question = new Question(instructions, courses, subject, correctAnswer, answers);
+
+            Message message = new Message(question, "#SaveQuestion");
+
             try {
                 Client.getClient().sendToServer(message);
             } catch (Exception e) {

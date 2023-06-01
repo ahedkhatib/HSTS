@@ -10,7 +10,8 @@ public class Course implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_id_sequence")
-    @SequenceGenerator(name = "course_id_sequence", sequenceName = "course_id_sequence", allocationSize = 1, initialValue = 10)    @Column(name = "course_id")
+    @SequenceGenerator(name = "course_id_sequence", sequenceName = "course_id_sequence", allocationSize = 1, initialValue = 10)
+    @Column(name = "course_id")
     private int courseId;
 
     @Column(name = "course_name")
