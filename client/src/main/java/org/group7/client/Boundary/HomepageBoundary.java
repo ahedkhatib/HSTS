@@ -129,8 +129,10 @@ public class HomepageBoundary extends Boundary{
         } else if (pressed ==newQuestionBtn){
             loadPage("prepareQuestion");
             titleText.setText("Add Question");
-        }
-        else {
+        }else if (pressed == teacherReportsBtn){
+            loadPage("teacherReports");
+            titleText.setText("Show Reports");
+        }else {
             loadPage("bye");
             titleText.setText("bye");
         }

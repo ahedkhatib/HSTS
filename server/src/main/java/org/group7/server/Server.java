@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.HashMap;
+
 
 
 public class Server extends AbstractServer {
@@ -499,6 +501,9 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } case "#getExecutableExam" -> {
+                    List<ExecutableExam> executable = getAll(ExecutableExam.class);
+                    client.sendToClient(new Message(executable, "#GotExecutableExam"));
                 }
             }
         } catch (IOException e) {
@@ -538,6 +543,11 @@ public class Server extends AbstractServer {
         session.save(adan);
         session.flush();
 
+        List<Student> students = new ArrayList<>();
+        students.add(alaa);
+        students.add(ahed);
+
+
         // Add teachers
         Teacher shir = new Teacher("shir", "shirpass", "Shir", "Sneh");
         Teacher malki = new Teacher("malki", "malkipass", "Malki", "Grosman");
@@ -552,7 +562,7 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject("Math");
+        Subject math = new Subject("math");
         Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);
@@ -681,12 +691,21 @@ public class Server extends AbstractServer {
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
         List<Integer> points = List.of(new Integer[]{70, 30});
-        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
+        session.flush();
+
+        Exam algebraExamB = new Exam("Algebra Exam moed b", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        or.getCreatedExams().add(algebraExamB);
+        algebra.getExamList().add(algebraExamB);
+        session.save(algebraExamB);
+        session.save(or);
+        session.save(algebra);
+        session.flush();
 
         // Add executables
         ExecutableExam executableAlgebra = new ExecutableExam("1000", algebraExam, or);
@@ -695,6 +714,67 @@ public class Server extends AbstractServer {
         session.save(or);
         session.flush();
 
+        ExecutableExam executableAlgebraB = new ExecutableExam("1001", algebraExamB, dan);
+        dan.getExamList().add(executableAlgebraB);
+        session.save(executableAlgebraB);
+        session.save(dan);
+        session.flush();
+
+        // Add results
+        HashMap<Question, Integer> answers = new HashMap<>();
+        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 1 );
+        answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
+
+        Result result1 = new Result(96, lana, "Amazing!", executableAlgebra, 45, false, answers);
+        lana.getExamList().add(executableAlgebra);
+        lana.getResultList().add(result1);
+        executableAlgebra.getStudentList().add(lana);
+        session.save(result1);
+        session.save(lana);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result2 = new Result(84, alaa, "Well Done!", executableAlgebra,50, false, answers);
+        alaa.getExamList().add(executableAlgebra);
+        alaa.getResultList().add(result2);
+        executableAlgebra.getStudentList().add(alaa);
+        session.save(result2);
+        session.save(alaa);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result3 = new Result(81, ahed, "Well Done!", executableAlgebra,60, true, answers);
+        ahed.getExamList().add(executableAlgebra);
+        ahed.getResultList().add(result3);
+        executableAlgebra.getStudentList().add(ahed);
+        session.save(result3);
+        session.save(ahed);
+        session.save(executableAlgebra);
+        session.flush();
+
+        int[] distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 2, 1};
+        executableAlgebra.setDistribution(distribution);
+
+        double avg = (96 + 84 + 81) / 3;
+        executableAlgebra.setAverage(avg);
+
+        executableAlgebra.setMedian(84);
+
+        Result result4 = new Result(91, ebraheem, "Good Job!", executableAlgebraB, 45, false, answers);
+        ebraheem.getExamList().add(executableAlgebraB);
+        ebraheem.getResultList().add(result4);
+        executableAlgebraB.getStudentList().add(ebraheem);
+        session.save(result4);
+        session.save(ebraheem);
+        session.save(executableAlgebraB);
+        session.flush();
+
+        distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+        executableAlgebraB.setDistribution(distribution);
+        executableAlgebraB.setMedian(91);
+        executableAlgebraB.setAverage(91);
+
         session.getTransaction().commit();
     }
 }
+
