@@ -5,6 +5,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.group7.client.Events.*;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
+import org.group7.client.Events.ExecutableExamEvent;
+
 
 import java.util.List;
 
@@ -101,6 +103,11 @@ public class Client extends AbstractClient {
             });
         } else if(post.startsWith("#GotTeacherCourses")){
             CoursesEvent event = new CoursesEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#GotExecutableExam")) {
+            ExecutableExamEvent event = new ExecutableExamEvent(message);
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
