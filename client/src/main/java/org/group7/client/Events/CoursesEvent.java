@@ -8,14 +8,14 @@ import org.group7.entities.Subject;
 import java.util.List;
 
 public class CoursesEvent {
-    List<Subject> subjects;
+    List<Course> courses;
 
-    public List<Subject> getSubjects() {
-        return subjects;
+    public List<Course> getCourses() {
+        return courses;
     }
 
     public CoursesEvent(Message message){
-        this.subjects = (List<Subject>) message.getObject();;
+        this.courses = (List<Course>) message.getObject();;
     }
 
 }

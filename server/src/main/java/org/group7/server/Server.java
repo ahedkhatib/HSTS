@@ -1,5 +1,6 @@
 package org.group7.server;
 
+import com.mysql.cj.CoreSession;
 import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
@@ -16,9 +17,9 @@ import org.hibernate.service.ServiceRegistry;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Server extends AbstractServer {
@@ -71,7 +72,7 @@ public class Server extends AbstractServer {
         try {
             for (SubscribedClient SubscribedClient : SubscribersList) {
 
-                if(SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
+                if (SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
                     continue;
 
                 SubscribedClient.getClient().sendToClient(message);
@@ -392,6 +393,9 @@ public class Server extends AbstractServer {
                         session.flush();
                         session.getTransaction().commit();
 
+                        client.sendToClient(new Message(null, "#ExamSaved"));
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -403,26 +407,39 @@ public class Server extends AbstractServer {
 
                         session.beginTransaction();
 
-                        Question q = session.find(Question.class, 101);
-                        Subject subject = session.find(Subject.class, q.getSubject().getSubjectId());
-                        Course course = session.find(Course.class, 11);
-                        q.getCourseList().add(course);
-                        course.getQuestionList().add(q);
-                        session.save(q);
+                        Question question = (Question) message.getObject();
+
+                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
+                        List<Question> subjectQuestions = subject.getQuestionList();
+                        List<Question> updatedSubQuestions = Stream.concat(subjectQuestions.stream(), Stream.of(question))
+                                .toList();
+                        subject.setQuestionList(updatedSubQuestions);
                         session.save(subject);
-                        session.save(course);
 
-//                        Question question = (Question) message.getObject();
-//                        session.save(question);
-//
-//                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
-//                        subject.getQuestionList().add(question);
-//                        session.save(subject);
 
+                        List<Course> courses = question.getCourseList();
+                        question.setCourseList(new ArrayList<>());
+                        for (Course course : courses) {
+                            course = session.find(Course.class, course.getCourseId());
+                            List<Question> courseQuestions = course.getQuestionList();
+                            List<Question> updatedCourseQuestions = Stream.concat(courseQuestions.stream(), Stream.of(question))
+                                    .toList();
+                            course.setQuestionList(updatedCourseQuestions);
+                            session.save(course);
+
+                            List<Course> questionCourses = question.getCourseList();
+                            List<Course> updatedQuestionCourses = Stream.concat(questionCourses.stream(), Stream.of(course))
+                                    .toList();
+                            question.setCourseList(updatedQuestionCourses);
+                        }
+
+                        session.save(question);
                         session.flush();
                         session.getTransaction().commit();
 
-                    } catch (Exception e){
+                        client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -434,14 +451,14 @@ public class Server extends AbstractServer {
                     try {
                         session.beginTransaction();
 
-                        User user = session.find(User.class, ((User)objects[1]).getUsername());
+                        User user = session.find(User.class, ((User) objects[1]).getUsername());
                         Result result = (Result) objects[0];
 
                         ExecutableExam exam = session.find(ExecutableExam.class, ((ExecutableExam) objects[2]).getExamId());
                         double[] arr = (double[]) objects[3];
                         exam.setAverage(arr[0]);
                         exam.setMedian(arr[1]);
-                        exam.setDistribution((int[])objects[4]);
+                        exam.setDistribution((int[]) objects[4]);
                         session.save(exam);
 
                         result.setExam(exam);
@@ -459,6 +476,25 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(null, "#ExamFinished"));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#GetTeacherCourses" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Teacher teacher = (Teacher) message.getObject();
+
+                        teacher = session.find(Teacher.class, teacher.getUsername());
+
+                        List<Course> courses = teacher.getCourseList();
+
+                        client.sendToClient(new Message(courses, "#GotTeacherCourses"));
+
+                        session.getTransaction().commit();
 
                     } catch (Exception e) {
                         e.printStackTrace();

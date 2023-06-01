@@ -5,6 +5,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.PrepareQuestionBoundary;
 import org.group7.client.Client;
+import org.group7.client.Events.CoursesEvent;
 import org.group7.client.Events.QuestionEvent;
 import org.group7.entities.*;
 
@@ -20,6 +21,14 @@ public class PrepareQuestionController extends Controller {
     public PrepareQuestionController(PrepareQuestionBoundary boundary){
         this.boundary = boundary;
         EventBus.getDefault().register(this);
+
+
+        Message message = new Message(Client.getClient().getUser(), "#GetTeacherCourses");
+        try {
+            Client.getClient().sendToServer(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void save(String instructions, List<Course> courses, Subject subject, int correctAnswer, String[] answers) {
@@ -53,11 +62,10 @@ public class PrepareQuestionController extends Controller {
         }
     }
 
-    public void getCourses(){
+    @Subscribe
+    public void getCourses(CoursesEvent event){
 
-        Teacher teacher = (Teacher) Client.getClient().getUser();
-
-        List<Course> courses = teacher.getCourseList();
+        List<Course> courses = event.getCourses();
 
         List<Subject> subjects = new ArrayList<>();
 
@@ -87,7 +95,11 @@ public class PrepareQuestionController extends Controller {
 
     @Subscribe
     public void checkQues(QuestionEvent event) {
-            boundary.done();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Questions Added!"
+        );
+        alert.show();
+        boundary.done();
     }
 
     @Override

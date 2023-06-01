@@ -40,6 +40,7 @@ public class Course implements Serializable{
     public Course(String courseName, Subject subject) {
         this.courseName = courseName;
         this.subject = subject;
+
         this.studentList = new ArrayList<>();
         this.teacherList = new ArrayList<>();
         this.questionList = new ArrayList<>();

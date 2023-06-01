@@ -1,9 +1,12 @@
 package org.group7.client.Control;
 
+import javafx.scene.control.Alert;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.CreateExamBoundary;
 import org.group7.client.Client;
+import org.group7.client.Events.CoursesEvent;
+import org.group7.client.Events.MessageEvent;
 import org.group7.entities.*;
 
 import java.util.ArrayList;
@@ -15,14 +18,25 @@ public class CreateExamController extends Controller{
 
     public CreateExamController(CreateExamBoundary boundary){
         this.boundary = boundary;
+        EventBus.getDefault().register(this);
 
+        Message message = new Message(Client.getClient().getUser(), "#GetTeacherCourses");
+        try {
+            Client.getClient().sendToServer(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void setData(){
+    @Override
+    public void unregisterController(){
+        EventBus.getDefault().unregister(this);
+    }
 
-        Teacher teacher = (Teacher) Client.getClient().getUser();
+    @Subscribe
+    public void setData(CoursesEvent event){
 
-        List<Course> courses = teacher.getCourseList();
+        List<Course> courses = event.getCourses();
 
         List<Subject> subjects = new ArrayList<>();
 
@@ -61,7 +75,15 @@ public class CreateExamController extends Controller{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Subscribe
+    public void examSaved(MessageEvent event){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                "Exam Saved!"
+        );
+        alert.show();
+        boundary.done();
     }
 }
 

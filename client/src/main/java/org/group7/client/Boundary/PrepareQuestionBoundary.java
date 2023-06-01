@@ -209,8 +209,6 @@ public class PrepareQuestionBoundary extends Boundary {
         radio2.setToggleGroup(toggleGroup);
         radio3.setToggleGroup(toggleGroup);
         radio4.setToggleGroup(toggleGroup);
-
-        controller.getCourses();
     }
 
     public void update_Subject() {
@@ -222,6 +220,6 @@ public class PrepareQuestionBoundary extends Boundary {
     }
 
     public void done() {
-        screen.setVisible(false);
+        screen.setDisable(true);
     }
 }

@@ -24,7 +24,7 @@ public class Question implements Serializable{
     @JoinTable(name = "question_course",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courseList;
+    private List<Course> courseList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")
