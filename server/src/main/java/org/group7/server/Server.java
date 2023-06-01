@@ -1,7 +1,5 @@
 package org.group7.server;
 
-import com.mysql.cj.CoreSession;
-import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
 import org.group7.server.ocsf.AbstractServer;
@@ -18,7 +16,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.HashMap;
 
@@ -505,6 +502,25 @@ public class Server extends AbstractServer {
                     List<ExecutableExam> executable = getAll(ExecutableExam.class);
                     client.sendToClient(new Message(executable, "#GotExecutableExam"));
                 }
+                case "#GetStudentResults" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Student student = (Student) message.getObject();
+
+                        student = session.find(Student.class, student.getUsername());
+
+                        List<Result> results = student.getResultList();
+
+                        client.sendToClient(new Message(results, "#GotStudentResults"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -722,7 +738,7 @@ public class Server extends AbstractServer {
 
         // Add results
         HashMap<Question, Integer> answers = new HashMap<>();
-        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 1 );
+        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
         answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
 
         Result result1 = new Result(96, lana, "Amazing!", executableAlgebra, 45, false, answers);

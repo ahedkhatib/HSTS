@@ -106,6 +106,11 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
+        } else if(post.startsWith("#GotStudentResults")){
+            ResultListEvent event = new ResultListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
         }else if (post.startsWith("#GotExecutableExam")) {
             ExecutableExamEvent event = new ExecutableExamEvent(message);
             Platform.runLater(() -> {

@@ -13,8 +13,7 @@ public class ResultListEvent {
     }
 
     public ResultListEvent(Message message){
-        Student student = (Student) message.getObject();
-        this.results = student.getResultList();
+        this.results = (List<Result>) message.getObject();
     }
 
 }
