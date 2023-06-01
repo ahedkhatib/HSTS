@@ -2,9 +2,7 @@ package org.group7.client;
 
 import javafx.application.Platform;
 import org.greenrobot.eventbus.EventBus;
-import org.group7.client.Events.LoginEvent;
-import org.group7.client.Events.StartExamEvent;
-import org.group7.client.Events.SubjectsListEvent;
+import org.group7.client.Events.*;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
 
@@ -82,9 +80,27 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(exam);
             });
+        }else if (post.startsWith("#ExamFinished")) {
+            String s = "Exam Finished!";
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(s);
+            });
         } else if (post.startsWith("#GotSubjects")) {
             SubjectsListEvent event = new SubjectsListEvent(message);
             Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#preparQues_")) {
+            System.out.println("ebr");
+            System.out.println(post.substring(12));
+            QuestionEvent event = new QuestionEvent(new Message(message.getObject(), post.substring(12)));
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }
+        else if(post.startsWith("#GotSubject")){
+            Platform.runLater(() -> {
+                CoursesEvent event = new CoursesEvent(message);
                 EventBus.getDefault().post(event);
             });
         }

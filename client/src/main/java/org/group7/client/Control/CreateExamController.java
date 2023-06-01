@@ -4,10 +4,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.group7.client.Boundary.CreateExamBoundary;
 import org.group7.client.Client;
-import org.group7.client.Events.SubjectsListEvent;
 import org.group7.entities.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,29 +16,27 @@ public class CreateExamController extends Controller{
     public CreateExamController(CreateExamBoundary boundary){
         this.boundary = boundary;
 
-        EventBus.getDefault().register(this);
+    }
 
-        try {
-            Client.getClient().sendToServer(new Message(null, "#GetSubjects"));
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void setData(){
+
+        Teacher teacher = (Teacher) Client.getClient().getUser();
+
+        List<Course> courses = teacher.getCourseList();
+
+        List<Subject> subjects = new ArrayList<>();
+
+        for(Course course : courses){
+            if(!subjects.contains(course.getSubject())){
+                subjects.add(course.getSubject());
+            }
         }
 
-    }
-
-    @Override
-    public void unregisterController() {
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void gotSubjects(SubjectsListEvent event){
-
-        List<Subject> subjects = event.getSubjects();
         List<String> names = new ArrayList<>();
         for(Subject s : subjects){
             names.add(s.getSubjectName());
         }
+
         boundary.subjects = subjects;
         boundary.subjectsNames = names;
         boundary.updateSubjectsComboBox();

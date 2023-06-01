@@ -1,5 +1,11 @@
 package org.group7.client.Boundary;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.group7.client.Control.StartExamController;
 import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
@@ -59,7 +67,23 @@ public class StartExamBoundary extends Boundary {
     @FXML
     private AnchorPane manualAp;
 
+    @FXML
+    private TextField fileTf;
+
+    @FXML
+    private Button uploadBtn;
+
+    @FXML
+    private Button downloadBtn;
+
+    @FXML
+    private TextField statusTf;
+
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
+
+    public AnchorPane getAutoAp(){
+        return autoAp;
+    }
 
     public int getTimeSeconds() {
         return timeSeconds.get();
@@ -73,14 +97,51 @@ public class StartExamBoundary extends Boundary {
         this.timeSeconds.set(timeSeconds);
     }
 
+    public List<ToggleGroup> getToggleGroups(){return toggleGroups;}
+
     @FXML
     void startExam(ActionEvent event) {
         controller.getExam(examNumber.getText());
     }
 
     @FXML
-    void finishExam(ActionEvent event){}
+    void finishExam(ActionEvent event){
+        controller.finishExam(false);
+    }
 
+
+    @FXML
+    void uploadExam(ActionEvent event){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Word Files", "*.docx")
+        );
+
+        Stage stage = new Stage();
+        List<File> files = fileChooser.showOpenMultipleDialog(stage);
+
+        if (files != null && !files.isEmpty()) {
+            File uploadedFile = files.get(0);
+            try {
+                String uploadedAnswer = new String(Files.readAllBytes(Paths.get(uploadedFile.toURI())),
+                        StandardCharsets.UTF_8);
+                fileTf.setText(uploadedFile.getPath());
+                statusTf.setText("Upload successful: " + uploadedFile.getName());
+                //Perform further logic with uploadedAnswer if needed
+            } catch (IOException e) {
+                statusTf.setText("Error: " + e.getMessage());
+            }
+        } else {
+            statusTf.setText("Upload canceled.");
+        }
+
+    }
+
+    @FXML
+    void downloadExam(ActionEvent event)
+    {
+        controller.createWord();
+    }
     @FXML
     void idEntered(ActionEvent event){
         boolean flag = controller.checkId(idTf.getText());

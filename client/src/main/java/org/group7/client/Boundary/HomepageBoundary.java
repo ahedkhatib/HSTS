@@ -126,7 +126,11 @@ public class HomepageBoundary extends Boundary{
         }else if (pressed == newExamBtn) {
             loadPage("createExam");
             titleText.setText("New Exam");
-        } else {
+        } else if (pressed ==newQuestionBtn){
+            loadPage("PreparQues");
+            titleText.setText("Add Question");
+        }
+        else {
             loadPage("bye");
             titleText.setText("bye");
         }

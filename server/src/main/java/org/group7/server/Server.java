@@ -67,10 +67,15 @@ public class Server extends AbstractServer {
         return data;
     }
 
-    public void sendToAllClients(Message message) {
+    public void sendToAllClients(Message message, ConnectionToClient client) {
         try {
             for (SubscribedClient SubscribedClient : SubscribersList) {
+
+                if(SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
+                    continue;
+
                 SubscribedClient.getClient().sendToClient(message);
+                System.out.println(SubscribedClient.getClient().getId());
             }
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -230,6 +235,22 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#TimeRequestGetExam" -> {
+                    try {
+                        session.beginTransaction();
+
+                        String examId = (String) message.getObject();
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, examId);
+
+                        client.sendToClient(new Message(exam, "#GotTimeRequestExam"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 case "#ApproveTimeRequest" -> {
 
                     try {
@@ -247,7 +268,7 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
-                        sendToAllClients(new Message(request, "#TimeRequestApproved"));
+                        sendToAllClients(new Message(request, "#TimeRequestApproved"), client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -262,6 +283,15 @@ public class Server extends AbstractServer {
                         request = session.find(ExtraTime.class, request.getRequestId());
                         session.delete(request);
                         session.flush();
+
+                        List<Principal> principals = getAll(Principal.class);
+
+                        for (Principal p : principals) {
+                            ExtraTime finalRequest = request;
+                            p.getRequestList().removeIf(item -> item.getRequestId() == finalRequest.getRequestId());
+                            session.save(p);
+                            session.flush();
+                        }
 
                         session.getTransaction().commit();
 
@@ -343,7 +373,94 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#saveExam" -> {
+                    Object obj = (Object) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        Exam exam = (Exam) obj;
+                        session.save(exam);
+
+                        Teacher teacher = session.find(Teacher.class, exam.getCreator().getUsername());
+                        teacher.getCreatedExams().add(exam);
+                        session.save(teacher);
+
+                        Course course = session.find(Course.class, exam.getCourse().getCourseId());
+                        course.getExamList().add(exam);
+                        session.save(course);
+
+                        session.flush();
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } case "#preparQues" -> {
+                    Object obj = (Object) message.getObject();
+                    session.beginTransaction();
+                    System.out.println("1");
+                    Question q = (Question) obj;
+                    try {
+                        session.beginTransaction();
+
+
+                        session.save(q);
+                        List<Course> courses = q.getCourseList();
+                        Subject subject = q.getSubject();
+
+                        subject.getQuestionList().add(q);
+                        for (Course c : courses) {
+                            c.getQuestionList().add(q);
+                            session.save(c);
+                        }
+                        session.save(subject);
+                        session.flush();
+                        client.sendToClient(new Message(q, "#preparQues_Success"));
+                        session.getTransaction().commit();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } case "#FinishExam" -> {
+
+                    Object[] objects = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        User user = session.find(User.class, ((User)objects[1]).getUsername());
+                        Result result = (Result) objects[0];
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, ((ExecutableExam) objects[2]).getExamId());
+                        double[] arr = (double[]) objects[3];
+                        exam.setAverage(arr[0]);
+                        exam.setMedian(arr[1]);
+                        exam.setDistribution((int[])objects[4]);
+                        session.save(exam);
+
+                        result.setExam(exam);
+                        session.save(result);
+
+                        Student student = (Student) user;
+                        student.getExamList().add(exam);
+                        student.getResultList().add(result);
+                        session.save(student);
+
+                        exam.getStudentList().add(student);
+                        session.save(student);
+                        session.flush();
+
+                        session.getTransaction().commit();
+
+                        client.sendToClient(new Message(null, "#ExamFinished"));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        }
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -396,23 +513,23 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject("math");
+        Subject math = new Subject("Math");
         Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);
         session.flush();
-
+//
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
         session.save(algebra);
         session.save(calculus);
         session.flush();
-
+//
         math.setCourseList(List.of(new Course[]{algebra, calculus}));
         session.save(math);
         session.flush();
-
+//
         Course intro = new Course("Into to CS", cs);
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
@@ -422,7 +539,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
         session.save(cs);
         session.flush();
@@ -437,7 +554,7 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
-
+//
         algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
         calculus.setTeacherList(List.of(new Teacher[]{or}));
         session.save(algebra);
@@ -470,7 +587,7 @@ public class Server extends AbstractServer {
         session.save(mathQ2);
         session.save(mathQ3);
         session.flush();
-
+//
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
                 List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
@@ -525,12 +642,19 @@ public class Server extends AbstractServer {
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
         List<Integer> points = List.of(new Integer[]{70, 30});
-        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
+
+        // Add executables
+        ExecutableExam executableAlgebra = new ExecutableExam("1000", algebraExam, or);
+        or.getExamList().add(executableAlgebra);
+        session.save(executableAlgebra);
+        session.save(or);
+        session.flush();
 
         session.getTransaction().commit();
     }
