@@ -53,7 +53,7 @@ public class PrinExamReportsBoundary extends Boundary{
             }
         }
         examTF.setVisible(true);
-        examTF.setText(selectedExam.getString());
+        examTF.setText(controller.getStringExam(selectedExam));
 
     }
     public void updateExamsComboBox() {
@@ -78,7 +78,7 @@ public class PrinExamReportsBoundary extends Boundary{
 
         StringBuilder questionDetails = new StringBuilder("The questions belong to this subjects: "+"\n");
         for (Question q : selectedSubject.getQuestionList()) {
-            questionDetails.append(q.getString());
+            questionDetails.append(controller.getStringQues(q));
         }
         examTF.setText(questionDetails.toString());
 
@@ -108,7 +108,7 @@ public class PrinExamReportsBoundary extends Boundary{
                 examTF.setText("Sorry,it seems that this student doesn't have any results.");
             } else {
                 for (Result r : selectedStudent.getResultList()) {
-                    resultDetails.append(r.getString() + "\n");
+                    resultDetails.append(controller.getStringResult(r) + "\n");
                 }
                 examTF.setText(resultDetails.toString());
             }
