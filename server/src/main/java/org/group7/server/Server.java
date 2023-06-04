@@ -97,6 +97,22 @@ public class Server extends AbstractServer {
                     List<Student> students = getAll(Student.class);
                     client.sendToClient(new Message(students, "#GotStudents"));
                 }
+                case "#GetExams" -> {
+                    List<Exam> exams = getAll(Exam.class);
+                    client.sendToClient(new Message(exams, "#gotExams"));
+                }
+                case "#GetSubjects" -> {
+                    List<Subject> subjects = getAll(Subject.class);
+                    client.sendToClient(new Message(subjects, "#GotSubjects"));
+                }
+                case "#GetCourses" -> {
+                    List<Course> courses = getAll(Course.class);
+                    client.sendToClient(new Message(courses, "#getCourses"));
+                }
+                case "#GetTeachers" -> {
+                    List<Teacher> teachers = getAll(Teacher.class);
+                    client.sendToClient(new Message(teachers, "#getTeachers"));
+                }
                 case "#GetGrades" -> {
                     client.sendToClient(new Message(message.getObject(), "#GotGrades"));
                 }

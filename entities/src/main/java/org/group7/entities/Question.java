@@ -97,4 +97,14 @@ public class Question implements Serializable{
     public void setAnswerList(String[] answerList) {
         this.answerList = answerList;
     }
+    public String getString() {
+        StringBuilder questionDetails = new StringBuilder(" ");
+        questionDetails.append(this.getInstructions() + " ");
+        for (String s : this.getAnswerList()) {
+            questionDetails.append("\n" + "    " + s);
+        }
+        questionDetails.append("\n");
+        questionDetails.append("The correct answer is: " + this.getCorrectAnswer() + "\n");
+        return questionDetails.toString();
+    }
 }

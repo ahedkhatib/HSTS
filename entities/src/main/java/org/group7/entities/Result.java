@@ -131,4 +131,12 @@ public class Result implements Serializable {
     public String getLastName() {
         return student != null ? student.getLastName() : null;
     }
+    public String getString(){
+        String s="Result id: "+this.resultId+"\n"
+                +"Exam: "+this.exam.getExam().getExamName()+"\n"+
+                "Grade: "+this.grade +"\n"+
+                "Teacher's notes: "+this.getTeacherNote();
+        return s;
+
+    }
 }
