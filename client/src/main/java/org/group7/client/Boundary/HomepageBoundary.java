@@ -85,6 +85,15 @@ public class HomepageBoundary extends Boundary {
     private Button teacherReportsBtn;
 
     @FXML
+    private Button editExamBtn;
+
+    @FXML
+    private Button approveResultBtn;
+
+    @FXML
+    private Button editQuestionBtn;
+
+    @FXML
     private StackPane buttonContainer;
 
     @FXML
@@ -141,12 +150,10 @@ public class HomepageBoundary extends Boundary {
         }else if (pressed == prinTeacherReportsBtn) {
             loadPage("prinTeacherReport");
             titleText.setText("Teacher Reports");
-        }
-        else if (pressed == prinExamReportsBtn) {
+        }else if (pressed == prinExamReportsBtn) {
             loadPage("prinExamReports");
             titleText.setText("Exam Reports");
-        }
-        else if (pressed == prinStudentReportsBtn) {
+        }else if (pressed == prinStudentReportsBtn) {
             loadPage("prinStudentReports");
             titleText.setText("Student Reports");
         }else {
