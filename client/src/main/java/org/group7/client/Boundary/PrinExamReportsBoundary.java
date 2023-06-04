@@ -56,6 +56,7 @@ public class PrinExamReportsBoundary extends Boundary{
         examTF.setText(controller.getStringExam(selectedExam));
 
     }
+
     public void updateExamsComboBox() {
         if(!examNames.isEmpty()) {
             for (String e : examNames) {

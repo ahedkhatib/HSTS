@@ -69,7 +69,6 @@ public class PrinStudentReportsBoundary extends Boundary {
             }
         }
 
-
             if (selectedStudent.getResultList() == null || selectedStudent.getResultList().isEmpty()) {
                 reportTA.setVisible(true);
                 reportTA.setText("Sorry,it seems that this"+ "\n" +"student doesn't have any results");
