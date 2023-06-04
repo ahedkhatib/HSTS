@@ -86,6 +86,7 @@ public class PrinExamReportsController extends Controller {
         boundary.studentsNames = names;
         boundary.updateStudentsCB();
     }
+
     public String getStringExam(Exam selectedExam) {
         StringBuilder questionDetails = new StringBuilder(" ");
         for (Question q : selectedExam.getQuestionList()) {

@@ -17,6 +17,7 @@ public class PrinStudentReportsController extends Controller {
 
     PrinStudentReportsBoundary boundary;
 
+
     public PrinStudentReportsController(PrinStudentReportsBoundary boundary) {
         this.boundary = boundary;
 

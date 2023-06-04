@@ -115,6 +115,7 @@ public class PrinExamReportsBoundary extends Boundary{
 
         }
     }
+
     public void updateStudentsCB() {
         if(!studentsNames.isEmpty()) {
             for (String s : studentsNames) {
