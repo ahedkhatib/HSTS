@@ -135,7 +135,21 @@ public class HomepageBoundary extends Boundary {
         } else if (pressed == teacherReportsBtn) {
             loadPage("teacherReports");
             titleText.setText("Show Reports");
-        } else {
+        }else if (pressed == prinCourseReportsBtn) {
+            loadPage("prinCourseReport");
+            titleText.setText("Course Reports");
+        }else if (pressed == prinTeacherReportsBtn) {
+            loadPage("prinTeacherReport");
+            titleText.setText("Teacher Reports");
+        }
+        else if (pressed == prinExamReportsBtn) {
+            loadPage("prinExamReports");
+            titleText.setText("Exam Reports");
+        }
+        else if (pressed == prinStudentReportsBtn) {
+            loadPage("prinStudentReports");
+            titleText.setText("Student Reports");
+        }else {
             loadPage("bye");
             titleText.setText("bye");
         }

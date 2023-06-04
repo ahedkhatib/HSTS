@@ -58,4 +58,47 @@ public class Student extends User implements Serializable {
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
+    public double getAvg(){
+        int examNum=0,gradesSum=0;
+        if(this.resultList!=null)
+        {
+            for(Result r:this.resultList){
+                gradesSum+=r.getGrade();
+                examNum++;
+            } }else{return 0;}
+        return gradesSum/examNum;
+    }
+    public double getMedian(){
+        int examNum = getResultList().size();
+        List<Integer> grades = new ArrayList<>();
+        for(Result r : getResultList()){
+            grades.add(r.getGrade());
+        }
+        Collections.sort(grades);
+        double median = 0;
+
+        if(examNum % 2 == 0){
+            int midIndex = examNum / 2;
+            median = (grades.get(midIndex - 1) + grades.get(midIndex)) / 2;
+        } else {
+            int midIndex = examNum / 2;
+            median = (grades.get(midIndex ));
+        }
+        return median;
+    }
+    public int[] getDistribution(){
+        int[] updatedDistribution = new int[10];
+        List<Result> newList = getResultList();
+        int[] gradeRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+        for( int j = 0; j< getResultList().size(); j++) {
+            int grade = newList.get(j).getGrade();
+            for (int i = 0; i < gradeRanges.length - 1; i++) {
+                if (grade >= gradeRanges[i] && grade < gradeRanges[i + 1]) {
+                    updatedDistribution[i]++;
+                    break;
+                }
+            }
+        }
+        return updatedDistribution;
+    }
 }

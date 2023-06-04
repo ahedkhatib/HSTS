@@ -140,4 +140,18 @@ public class Exam implements Serializable {
     public void setQuestionPoints(List<Integer> questionPoints) {
         this.questionPoints = questionPoints;
     }
+    public String getString() {
+        StringBuilder questionDetails = new StringBuilder(" ");
+        for (Question q : this.getQuestionList()) {
+            questionDetails.append(q.getString());
+
+        }
+        String examDetails = "Exam Id: " + this.getExamId() + "\n" +
+                "Exam name: " + this.getExamName() + "\n" +
+                "This exam builded by: " + this.getCreator().getFirstName() + " " + this.getCreator().getLastName() + "\n" +
+                "It is belong to the course: " + this.getCourse().getCourseName() + "\n" +
+                "Duration: " + this.getDuration() + " h" + "\n" +
+                "Questions: " + "\n" + questionDetails + "\n";
+        return examDetails;
+    }
 }
