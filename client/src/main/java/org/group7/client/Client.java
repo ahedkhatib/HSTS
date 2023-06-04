@@ -91,7 +91,27 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
-        } else if (post.startsWith("#PrepareQuestion_")) {
+        }else if (post.startsWith("#getCourses")) {
+            CoursesListEvent event = new CoursesListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#GotStudents")) {
+            StudentListEvent event = new StudentListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#gotExams")) {
+            ExamsListEvent event = new ExamsListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#getTeachers")) {
+            TeachersListEvent event = new TeachersListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#PrepareQuestion_")) {
             QuestionEvent event = new QuestionEvent(new Message(message.getObject(), post.substring(12)));
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);

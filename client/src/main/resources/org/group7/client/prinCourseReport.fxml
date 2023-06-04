@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="1215.0" prefWidth="778.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinCourseReportsBoundary">
+    <children>
+        <ComboBox fx:id="teachersCB" layoutX="509.0" layoutY="131.0" onAction="#selectTeacher" prefHeight="29.0" prefWidth="188.0" promptText="Select teacher:" />
+        <ComboBox fx:id="examsCB" layoutX="509.0" layoutY="195.0" onAction="#selectExam" prefHeight="29.0" prefWidth="188.0" promptText="Select executed exam:" />
+        <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="126.0" layoutX="161.0" layoutY="83.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
+        <Label fx:id="averageLabel" layoutX="190.0" layoutY="87.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
+            <font>
+                <Font name="System Bold Italic" size="14.0" />
+            </font>
+        </Label>
+        <Label fx:id="medianLabel" layoutX="190.0" layoutY="131.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
+            <font>
+                <Font name="System Bold Italic" size="14.0" />
+            </font>
+        </Label>
+        <BarChart fx:id="gradeChart" layoutX="104.0" layoutY="266.0" prefHeight="425.0" prefWidth="685.0">
+            <xAxis>
+                <CategoryAxis fx:id="gradeAxis" prefHeight="0.0" prefWidth="579.0" side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="countAxis" side="LEFT" />
+            </yAxis>
+        </BarChart>
+        <Label fx:id="coursesInfo" alignment="TOP_LEFT" layoutX="766.0" layoutY="102.0" prefHeight="99.0" prefWidth="232.0">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <ComboBox fx:id="coursesCB" layoutX="509.0" layoutY="73.0" onAction="#selectCourse" prefHeight="29.0" prefWidth="188.0" promptText="Select course:" />
+    </children>
+</AnchorPane>
