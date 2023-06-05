@@ -156,6 +156,9 @@ public class HomepageBoundary extends Boundary {
         }else if (pressed == prinStudentReportsBtn) {
             loadPage("prinStudentReports");
             titleText.setText("Student Reports");
+        }else if (pressed == editExamBtn) {
+            loadPage("editExam");
+            titleText.setText("Edit Exam");
         }else {
             loadPage("bye");
             titleText.setText("bye");
