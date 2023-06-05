@@ -87,4 +87,38 @@ public class PrinExamReportsController extends Controller {
         boundary.updateStudentsCB();
     }
 
+
+    public String getStringExam(Exam selectedExam) {
+        StringBuilder questionDetails = new StringBuilder(" ");
+        for (Question q : selectedExam.getQuestionList()) {
+            questionDetails.append(getStringQues(q));
+
+        }
+        String examDetails = "Exam Id: " + selectedExam.getExamId() + "\n" +
+                "Exam name: " + selectedExam.getExamName() + "\n" +
+                "This exam builded by: " + selectedExam.getCreator().getFirstName() + " " + selectedExam.getCreator().getLastName() + "\n" +
+                "It is belong to the course: " + selectedExam.getCourse().getCourseName() + "\n" +
+                "Duration: " + selectedExam.getDuration() + " h" + "\n" +
+                "Questions: " + "\n" + questionDetails + "\n";
+        return examDetails;
+    }
+    public String getStringQues(Question ques) {
+        StringBuilder questionDetails = new StringBuilder(" ");
+        questionDetails.append(ques.getInstructions() + " ");
+        for (String s : ques.getAnswerList()) {
+            questionDetails.append("\n" + "    " + s);
+        }
+        questionDetails.append("\n");
+        questionDetails.append("The correct answer is: " + ques.getCorrectAnswer() + "\n");
+        return questionDetails.toString();
+    }
+    public String getStringResult(Result res){
+        String s="Result id: "+res.getResultId()+"\n"
+                +"Exam: "+res.getExam().getExam().getExamName()+"\n"+
+                "Grade: "+res.getGrade() +"\n"+
+                "Teacher's notes: "+res.getTeacherNote();
+        return s;
+
+    }
+
 }
