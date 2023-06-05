@@ -594,7 +594,7 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject("math");
+        Subject math = new Subject("Mathematics");
         Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);

@@ -8,8 +8,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Control.StudentReportsController;
-import org.group7.entities.Exam;
-import org.group7.entities.ExecutableExam;
 import org.group7.entities.Question;
 import org.group7.entities.Result;
 

@@ -65,9 +65,9 @@ public class CreateExamController extends Controller{
         }
     }
 
-    public void save(String name, int type, String duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints){
+    public void save(String name, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints){
 
-        Exam exam = new Exam(name, type, Integer.parseInt(duration), creator, teacherComments, studentComments, course, questionList, questionPoints );
+        Exam exam = new Exam(name, type, duration, creator, teacherComments, studentComments, course, questionList, questionPoints );
         Object obj = exam;
 
         try {
