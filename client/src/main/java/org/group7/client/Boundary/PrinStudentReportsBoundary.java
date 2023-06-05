@@ -73,9 +73,9 @@ public class PrinStudentReportsBoundary extends Boundary {
                 reportTA.setVisible(true);
                 reportTA.setText("Sorry,it seems that this"+ "\n" +"student doesn't have any results");
             } else {
-                updateGradeChart(selectedStudent.getDistribution());
-                averageLabel.setText("Average: " + selectedStudent.getAvg());
-                medianLabel.setText("Median: " + selectedStudent.getMedian());
+                updateGradeChart(controller.getDistribution(selectedStudent));
+                averageLabel.setText("Average: " + controller.getAvg(selectedStudent));
+                medianLabel.setText("Median: " + controller.getMedian(selectedStudent));
             }
         }
 
