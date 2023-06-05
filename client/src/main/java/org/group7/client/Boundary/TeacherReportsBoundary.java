@@ -157,8 +157,8 @@ public class TeacherReportsBoundary extends Boundary{
                         }
                     }
                     double passed = ((double) passedStudents / exam.getStudentList().size()) * 100;
-                    averageLabel.setText("Average: " + exam.getAverage());
-                    medianLabel.setText("Median: " + exam.getMedian());
+                    averageLabel.setText("Average: " + String.format("%.2f", exam.getAverage()));
+                    medianLabel.setText("Median: " + String.format("%.2f", exam.getMedian()));
                     passedLabel.setText("Passed percentage: " + String.format("%.2f", passed) + "%");
                     failedLabel.setText("Failed percentage: " + String.format("%.2f", (100 - passed)) + "%");
                     inTimeLabel.setText("finished in time percentage: " + String.format("%.2f", (((double) numOfFinishedInTime / exam.getStudentList().size()) * 100))  + "%");

@@ -537,6 +537,32 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
+                case "#approveResult" -> {
+
+                    Object[] objects = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        Result result = session.find(Result.class, ((Result) objects[0]).getResultId());
+                        ExecutableExam exam = session.find(ExecutableExam.class, result.getExam().getExamId());
+                        result.setStatus(true);
+                        result.setGrade((Integer) objects[2]);
+                        result.setTeacherNote((String) objects[3]);
+                        exam.setAverage((double) objects[4]);
+                        exam.setMedian((double) objects[5]);
+                        exam.setDistribution((int[]) objects[6]);
+
+                        session.save(result);
+                        session.save(exam);
+
+                        session.flush();
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -757,7 +783,7 @@ public class Server extends AbstractServer {
         answers.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
         answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
 
-        Result result1 = new Result(96, lana, "Amazing!", executableAlgebra, 45, false, answers);
+        Result result1 = new Result(96, lana, "", executableAlgebra, 45, false, answers);
         lana.getExamList().add(executableAlgebra);
         lana.getResultList().add(result1);
         executableAlgebra.getStudentList().add(lana);
@@ -766,7 +792,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result2 = new Result(84, alaa, "Well Done!", executableAlgebra,50, false, answers);
+        Result result2 = new Result(84, alaa, "", executableAlgebra,50, false, answers);
         alaa.getExamList().add(executableAlgebra);
         alaa.getResultList().add(result2);
         executableAlgebra.getStudentList().add(alaa);
@@ -775,7 +801,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result3 = new Result(81, ahed, "Well Done!", executableAlgebra,60, true, answers);
+        Result result3 = new Result(81, ahed, "", executableAlgebra,60, true, answers);
         ahed.getExamList().add(executableAlgebra);
         ahed.getResultList().add(result3);
         executableAlgebra.getStudentList().add(ahed);
@@ -792,7 +818,7 @@ public class Server extends AbstractServer {
 
         executableAlgebra.setMedian(84);
 
-        Result result4 = new Result(91, ebraheem, "Good Job!", executableAlgebraB, 45, false, answers);
+        Result result4 = new Result(91, ebraheem, "", executableAlgebraB, 45, false, answers);
         ebraheem.getExamList().add(executableAlgebraB);
         ebraheem.getResultList().add(result4);
         executableAlgebraB.getStudentList().add(ebraheem);
