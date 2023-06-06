@@ -681,7 +681,7 @@ public class Server extends AbstractServer {
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
         List<Integer> points = List.of(new Integer[]{70, 30});
-        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        Exam algebraExam = new Exam("Algebra Exam moed a", 2, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);

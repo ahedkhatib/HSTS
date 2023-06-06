@@ -79,11 +79,19 @@ public class StartExamBoundary extends Boundary {
     @FXML
     private TextField statusTf;
 
+    @FXML
+    private Text manualTimerText;
+
+    @FXML
+    private Button manualFinishBtn;
+
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
     public AnchorPane getAutoAp(){
         return autoAp;
     }
+
+    public AnchorPane getManualAp(){ return manualAp;}
 
     public int getTimeSeconds() {
         return timeSeconds.get();
@@ -109,6 +117,8 @@ public class StartExamBoundary extends Boundary {
         controller.finishExam(false);
     }
 
+    @FXML
+    void finishManExam(ActionEvent event) {controller.finishManualExam(false);}
 
     @FXML
     void uploadExam(ActionEvent event){
@@ -141,6 +151,10 @@ public class StartExamBoundary extends Boundary {
     void downloadExam(ActionEvent event)
     {
         controller.createWord();
+        uploadBtn.setVisible(true);
+        fileTf.setVisible(true);
+        statusTf.setVisible(true);
+        manualFinishBtn.setVisible(true);
     }
     @FXML
     void idEntered(ActionEvent event){
@@ -167,6 +181,11 @@ public class StartExamBoundary extends Boundary {
         manualAp.setDisable(false);
         manualAp.setVisible(true);
 
+        uploadBtn.setVisible(false);
+        fileTf.setVisible(false);
+        statusTf.setVisible(false);
+        manualFinishBtn.setVisible(false);
+
         return manualAp;
     }
 
@@ -176,6 +195,10 @@ public class StartExamBoundary extends Boundary {
         super.setController(controller);
 
         autoTimerText.textProperty().bind(Bindings.createStringBinding(
+                () -> formatTime(timeSeconds.get()),
+                timeSeconds));
+
+        manualTimerText.textProperty().bind(Bindings.createStringBinding(
                 () -> formatTime(timeSeconds.get()),
                 timeSeconds));
     }

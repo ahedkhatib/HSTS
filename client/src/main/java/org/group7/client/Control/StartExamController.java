@@ -57,6 +57,35 @@ public class StartExamController extends Controller {
         }
     }
 
+
+    public void startTimer_manual(){
+
+        timer = new Thread(() -> {
+
+            isTimerRunning = true;
+
+            try {
+                for (int i = durationSeconds; i >= 0; i--) {
+                    Thread.sleep(1000);
+                    if (!isTimerRunning) {
+                        return;
+                    }
+                    durationSeconds--;
+                    elapsedSeconds++;
+                    boundary.setTimeSeconds(i);
+                }
+
+                isTimerRunning = false;
+                finishManualExam(true);
+            } catch (InterruptedException e) {
+                System.out.println("Timer Interrupted!");
+            }
+        });
+
+        timer.setDaemon(true);
+        timer.start();
+    }
+
     public void startTimer() {
 
         timer = new Thread(() -> {
@@ -143,6 +172,8 @@ public class StartExamController extends Controller {
             } else {
                 pane = boundary.openManualExam();
                 exam = event.getExam();
+                durationSeconds = exam.getTime() * 60;
+                startTimer_manual();
             }
         }
     }
@@ -180,7 +211,7 @@ public class StartExamController extends Controller {
                     questionRun.addBreak();
                     answerCount++;
                 }
-                questionRun.setText("Answer: _____________________");
+                questionRun.setText("Answer: ________________________");
                 questionRun.addBreak();
                 questionRun.addBreak();
                 questionNumber++;
@@ -189,6 +220,22 @@ public class StartExamController extends Controller {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void finishManualExam(boolean flag) {
+
+        if (isTimerRunning && timer != null && timer.isAlive()) {
+            timer.interrupt();
+        }
+
+        double elapsed = elapsedSeconds / 60.0;
+        boundary.getManualAp().setDisable(true);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"finish exam"
+        );
+
+        alert.show();
+
     }
 
     public void finishExam(boolean flag) {
