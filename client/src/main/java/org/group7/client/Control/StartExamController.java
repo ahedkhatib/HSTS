@@ -13,9 +13,22 @@ import org.group7.client.Boundary.StartExamBoundary;
 import org.group7.client.Client;
 import org.group7.client.Events.StartExamEvent;
 import org.group7.entities.*;
-
+import com.sun.javafx.binding.StringFormatter;
 import java.io.IOException;
 import java.util.*;
+import javafx.stage.Stage;
+import org.apache.poi.xwpf.usermodel.*;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Objects;
+
+
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+
+import static java.lang.System.out;
 
 public class StartExamController extends Controller {
 
@@ -42,6 +55,35 @@ public class StartExamController extends Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void startTimer_manual(){
+
+        timer = new Thread(() -> {
+
+            isTimerRunning = true;
+
+            try {
+                for (int i = durationSeconds; i >= 0; i--) {
+                    Thread.sleep(1000);
+                    if (!isTimerRunning) {
+                        return;
+                    }
+                    durationSeconds--;
+                    elapsedSeconds++;
+                    boundary.setTimeSeconds(i);
+                }
+
+                isTimerRunning = false;
+                finishManualExam(true);
+            } catch (InterruptedException e) {
+                System.out.println("Timer Interrupted!");
+            }
+        });
+
+        timer.setDaemon(true);
+        timer.start();
     }
 
     public void startTimer() {
@@ -130,8 +172,70 @@ public class StartExamController extends Controller {
             } else {
                 pane = boundary.openManualExam();
                 exam = event.getExam();
+                durationSeconds = exam.getTime() * 60;
+                startTimer_manual();
             }
         }
+    }
+
+    public void createWord() {
+        Exam ex = exam.getExam();
+        List<Question> questionList = ex.getQuestionList();
+        XWPFDocument document = new XWPFDocument();
+
+        String fileName = ex.getExamName() + "-" + exam.getExamId() + ".docx";
+        try (FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            XWPFParagraph titleParagraph = document.createParagraph();
+            titleParagraph.setAlignment(ParagraphAlignment.CENTER);
+            XWPFRun titleRun = titleParagraph.createRun();
+
+            titleRun.setText(ex.getExamName());
+            titleRun.addBreak();
+            titleRun.addBreak();
+            titleRun.addBreak();
+            titleRun.addBreak();
+            titleRun.setFontSize(24);
+
+            int questionNumber = 1;
+            for (Question question : questionList ) {
+                XWPFParagraph questionParagraph = document.createParagraph();
+                questionParagraph.setAlignment(ParagraphAlignment.LEFT);
+                XWPFRun questionRun = questionParagraph.createRun();
+
+                questionRun.setText("Question " + questionNumber + ": " + question.getInstructions());
+                questionRun.addBreak();
+                String[] answers = question.getAnswerList();
+                int answerCount = 1;
+                for(String a : answers){
+                    questionRun.setText(answerCount + ". " + a);
+                    questionRun.addBreak();
+                    answerCount++;
+                }
+                questionRun.setText("Answer: ________________________");
+                questionRun.addBreak();
+                questionRun.addBreak();
+                questionNumber++;
+            }
+            document.write(fileOutputStream);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void finishManualExam(boolean flag) {
+
+        if (isTimerRunning && timer != null && timer.isAlive()) {
+            timer.interrupt();
+        }
+
+        double elapsed = elapsedSeconds / 60.0;
+        boundary.getManualAp().setDisable(true);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,"finish exam"
+        );
+
+        alert.show();
+
     }
 
     public void finishExam(boolean flag) {
