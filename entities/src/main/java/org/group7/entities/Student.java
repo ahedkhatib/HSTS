@@ -58,4 +58,5 @@ public class Student extends User implements Serializable {
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
     }
+
 }

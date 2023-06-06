@@ -123,4 +123,12 @@ public class Result implements Serializable {
     public void setTeacherNote(String teacherNote) {
         this.teacherNote = teacherNote;
     }
+
+    public String getFirstName() {
+        return student != null ? student.getFirstName() : null;
+    }
+
+    public String getLastName() {
+        return student != null ? student.getLastName() : null;
+    }
 }

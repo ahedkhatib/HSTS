@@ -1,7 +1,5 @@
 package org.group7.server;
 
-import com.mysql.cj.CoreSession;
-import com.mysql.cj.xdevapi.Client;
 import org.group7.entities.*;
 
 import org.group7.server.ocsf.AbstractServer;
@@ -18,8 +16,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.HashMap;
+
 
 
 public class Server extends AbstractServer {
@@ -97,6 +96,22 @@ public class Server extends AbstractServer {
                 case "#GetStudents" -> {
                     List<Student> students = getAll(Student.class);
                     client.sendToClient(new Message(students, "#GotStudents"));
+                }
+                case "#GetExams" -> {
+                    List<Exam> exams = getAll(Exam.class);
+                    client.sendToClient(new Message(exams, "#gotExams"));
+                }
+                case "#GetSubjects" -> {
+                    List<Subject> subjects = getAll(Subject.class);
+                    client.sendToClient(new Message(subjects, "#GotSubjects"));
+                }
+                case "#GetCourses" -> {
+                    List<Course> courses = getAll(Course.class);
+                    client.sendToClient(new Message(courses, "#getCourses"));
+                }
+                case "#GetTeachers" -> {
+                    List<Teacher> teachers = getAll(Teacher.class);
+                    client.sendToClient(new Message(teachers, "#getTeachers"));
                 }
                 case "#GetGrades" -> {
                     client.sendToClient(new Message(message.getObject(), "#GotGrades"));
@@ -499,6 +514,54 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } case "#getExecutableExam" -> {
+                    List<ExecutableExam> executable = getAll(ExecutableExam.class);
+                    client.sendToClient(new Message(executable, "#GotExecutableExam"));
+                }
+                case "#GetStudentResults" -> {
+
+                    try {
+                        session.beginTransaction();
+
+                        Student student = (Student) message.getObject();
+
+                        student = session.find(Student.class, student.getUsername());
+
+                        List<Result> results = student.getResultList();
+
+                        client.sendToClient(new Message(results, "#GotStudentResults"));
+
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#approveResult" -> {
+
+                    Object[] objects = (Object[]) message.getObject();
+
+                    try {
+                        session.beginTransaction();
+
+                        Result result = session.find(Result.class, ((Result) objects[0]).getResultId());
+                        ExecutableExam exam = session.find(ExecutableExam.class, result.getExam().getExamId());
+                        result.setStatus(true);
+                        result.setGrade((Integer) objects[2]);
+                        result.setTeacherNote((String) objects[3]);
+                        exam.setAverage((double) objects[4]);
+                        exam.setMedian((double) objects[5]);
+                        exam.setDistribution((int[]) objects[6]);
+
+                        session.save(result);
+                        session.save(exam);
+
+                        session.flush();
+                        session.getTransaction().commit();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         } catch (IOException e) {
@@ -538,6 +601,11 @@ public class Server extends AbstractServer {
         session.save(adan);
         session.flush();
 
+        List<Student> students = new ArrayList<>();
+        students.add(alaa);
+        students.add(ahed);
+
+
         // Add teachers
         Teacher shir = new Teacher("shir", "shirpass", "Shir", "Sneh");
         Teacher malki = new Teacher("malki", "malkipass", "Malki", "Grosman");
@@ -552,7 +620,7 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add subjects
-        Subject math = new Subject("Math");
+        Subject math = new Subject("Mathematics");
         Subject cs = new Subject("Computer Science");
         session.save(math);
         session.save(cs);
@@ -681,12 +749,25 @@ public class Server extends AbstractServer {
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
         List<Integer> points = List.of(new Integer[]{70, 30});
+<<<<<<< HEAD
         Exam algebraExam = new Exam("Algebra Exam moed a", 2, 2, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+=======
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+>>>>>>> 9ebf278eb79e1219fafaea416ccfff02c116f89a
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
+        session.flush();
+
+        Exam algebraExamB = new Exam("Algebra Exam moed b", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        or.getCreatedExams().add(algebraExamB);
+        algebra.getExamList().add(algebraExamB);
+        session.save(algebraExamB);
+        session.save(or);
+        session.save(algebra);
+        session.flush();
 
         // Add executables
         ExecutableExam executableAlgebra = new ExecutableExam("1000", algebraExam, or);
@@ -695,6 +776,67 @@ public class Server extends AbstractServer {
         session.save(or);
         session.flush();
 
+        ExecutableExam executableAlgebraB = new ExecutableExam("1001", algebraExamB, dan);
+        dan.getExamList().add(executableAlgebraB);
+        session.save(executableAlgebraB);
+        session.save(dan);
+        session.flush();
+
+        // Add results
+        HashMap<Question, Integer> answers = new HashMap<>();
+        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
+        answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
+
+        Result result1 = new Result(96, lana, "", executableAlgebra, 45, false, answers);
+        lana.getExamList().add(executableAlgebra);
+        lana.getResultList().add(result1);
+        executableAlgebra.getStudentList().add(lana);
+        session.save(result1);
+        session.save(lana);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result2 = new Result(84, alaa, "", executableAlgebra,50, false, answers);
+        alaa.getExamList().add(executableAlgebra);
+        alaa.getResultList().add(result2);
+        executableAlgebra.getStudentList().add(alaa);
+        session.save(result2);
+        session.save(alaa);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result3 = new Result(81, ahed, "", executableAlgebra,60, true, answers);
+        ahed.getExamList().add(executableAlgebra);
+        ahed.getResultList().add(result3);
+        executableAlgebra.getStudentList().add(ahed);
+        session.save(result3);
+        session.save(ahed);
+        session.save(executableAlgebra);
+        session.flush();
+
+        int[] distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 2, 1};
+        executableAlgebra.setDistribution(distribution);
+
+        double avg = (96 + 84 + 81) / 3;
+        executableAlgebra.setAverage(avg);
+
+        executableAlgebra.setMedian(84);
+
+        Result result4 = new Result(91, ebraheem, "", executableAlgebraB, 45, false, answers);
+        ebraheem.getExamList().add(executableAlgebraB);
+        ebraheem.getResultList().add(result4);
+        executableAlgebraB.getStudentList().add(ebraheem);
+        session.save(result4);
+        session.save(ebraheem);
+        session.save(executableAlgebraB);
+        session.flush();
+
+        distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+        executableAlgebraB.setDistribution(distribution);
+        executableAlgebraB.setMedian(91);
+        executableAlgebraB.setAverage(91);
+
         session.getTransaction().commit();
     }
 }
+

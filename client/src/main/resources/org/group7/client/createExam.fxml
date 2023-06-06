@@ -8,73 +8,91 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="screen" accessibleRole="LIST_VIEW" prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.CreateExamBoundary"> <!-- Specify the controller class here -->    <children>
-        <Text layoutX="521.0" layoutY="66.0" scaleX="11.0" scaleY="9.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create a new exam!" textAlignment="CENTER" wrappingWidth="73.38525390625">
+<AnchorPane fx:id="screen" accessibleRole="LIST_VIEW" prefHeight="693.0" prefWidth="1215.0"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.group7.client.Boundary.CreateExamBoundary"> <!-- Specify the controller class here -->
+    <children>
+        <Text layoutX="521.0" layoutY="66.0" scaleX="11.0" scaleY="9.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Create a new exam!" textAlignment="CENTER" wrappingWidth="73.38525390625">
             <font>
-                <Font size="5.0" />
+                <Font size="5.0"/>
             </font>
         </Text>
-      <Button fx:id="saveBtn" layoutX="957.0" layoutY="615.0" mnemonicParsing="false" onAction="#save" prefHeight="45.0" prefWidth="82.0" text="Save " textAlignment="CENTER">
-         <font>
-            <Font name="Calibri" size="21.0" />
-         </font>
-      </Button>
-      <ComboBox fx:id="subjectsComboBox" layoutX="22.0" layoutY="141.0" onAction="#selectSubject" prefHeight="46.0" prefWidth="155.0" promptText="Select subject:" />
-      <ComboBox fx:id="CoursesCombobox" layoutX="187.0" layoutY="141.0" onAction="#selectCourse" prefHeight="46.0" prefWidth="155.0" promptText="Select course:" />
-      <AnchorPane fx:id="selectQuestionAnchor" layoutX="342.0" layoutY="121.0" prefHeight="190.0" prefWidth="540.0">
-         <children>
-            <Text layoutX="20.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select questions:" wrappingWidth="155.19999999999993">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Text>
-            <ListView fx:id="questionsListView" layoutX="14.0" layoutY="30.0" onMouseClicked="#selectQuestions" prefHeight="194.0" prefWidth="541.0" />
-         </children>
-      </AnchorPane>
-      <ComboBox fx:id="examTypeComboBox" layoutX="22.0" layoutY="203.0" onAction="#selectType" prefHeight="46.0" prefWidth="155.0" promptText="Select exam type:" />
-      <AnchorPane layoutX="610.0" layoutY="489.0" prefHeight="95.0" prefWidth="302.0">
-         <children>
-            <TextField fx:id="durationText" alignment="TOP_LEFT" layoutX="14.0" layoutY="43.0" onAction="#setDurationText" prefHeight="46.0" prefWidth="183.0">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-            </TextField>
-            <Text layoutX="14.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duration: " textAlignment="CENTER" wrappingWidth="88.5367431640625">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="14.0" layoutY="347.0" prefHeight="158.0" prefWidth="549.0">
-         <children>
-            <TextField fx:id="notesForStudentsText" alignment="TOP_LEFT" layoutX="14.0" layoutY="40.0" onAction="#addNotesForStudents" prefHeight="103.0" prefWidth="486.0">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-            </TextField>
-            <Text layoutX="22.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes for Students: " wrappingWidth="183.20000000000005">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="22.0" layoutY="502.0" prefHeight="166.0" prefWidth="553.0">
-         <children>
-            <TextField fx:id="notesForTeachersText" alignment="TOP_LEFT" layoutX="14.0" layoutY="48.0" onAction="#addNotesForTeachers" prefHeight="103.0" prefWidth="486.0">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-            </TextField>
-            <Text layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes for teachers: " wrappingWidth="171.73672485351562">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Text>
-         </children>
-      </AnchorPane>
-      <TextField fx:id="examNameText" layoutX="54.0" layoutY="291.0" onAction="#examName" prefHeight="46.0" prefWidth="172.0" />
-      <Text layoutX="55.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exam name:" wrappingWidth="88.5367431640625" />
+        <Button fx:id="saveBtn" layoutX="957.0" layoutY="615.0" mnemonicParsing="false" onAction="#save"
+                prefHeight="45.0" prefWidth="82.0" text="Save" styleClass="login-button" textAlignment="CENTER">
+            <font>
+                <Font size="24.0"/>
+            </font>
+        </Button>
+        <ComboBox fx:id="subjectsComboBox" layoutX="22.0" layoutY="141.0" onAction="#selectSubject" prefHeight="46.0"
+                  prefWidth="155.0" promptText="Select subject:"/>
+        <ComboBox fx:id="CoursesCombobox" layoutX="187.0" layoutY="141.0" onAction="#selectCourse" prefHeight="46.0"
+                  prefWidth="155.0" promptText="Select course:"/>
+        <AnchorPane fx:id="selectQuestionAnchor" layoutX="342.0" layoutY="121.0" prefHeight="190.0" prefWidth="540.0">
+            <children>
+                <Text layoutX="20.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select questions:"
+                      wrappingWidth="155.19999999999993">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Text>
+                <ListView fx:id="questionsListView" layoutX="14.0" layoutY="30.0" onMouseClicked="#selectQuestions"
+                          prefHeight="194.0" prefWidth="541.0"/>
+            </children>
+        </AnchorPane>
+        <ComboBox fx:id="examTypeComboBox" layoutX="22.0" layoutY="203.0" onAction="#selectType" prefHeight="46.0"
+                  prefWidth="155.0" promptText="Select exam type:"/>
+        <AnchorPane layoutX="610.0" layoutY="489.0" prefHeight="95.0" prefWidth="302.0">
+            <children>
+                <TextField fx:id="durationText" alignment="TOP_LEFT" layoutX="14.0" layoutY="43.0"
+                           onAction="#setDurationText" prefHeight="46.0" prefWidth="183.0">
+                    <font>
+                        <Font name="Calibri" size="19.0"/>
+                    </font>
+                </TextField>
+                <Text layoutX="14.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duration: "
+                      textAlignment="CENTER" wrappingWidth="88.5367431640625">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="14.0" layoutY="347.0" prefHeight="158.0" prefWidth="549.0">
+            <children>
+                <TextField fx:id="notesForStudentsText" alignment="TOP_LEFT" layoutX="14.0" layoutY="40.0"
+                           onAction="#addNotesForStudents" prefHeight="103.0" prefWidth="486.0">
+                    <font>
+                        <Font name="Calibri" size="19.0"/>
+                    </font>
+                </TextField>
+                <Text layoutX="22.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes for Students: "
+                      wrappingWidth="183.20000000000005">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="22.0" layoutY="502.0" prefHeight="166.0" prefWidth="553.0">
+            <children>
+                <TextField fx:id="notesForTeachersText" alignment="TOP_LEFT" layoutX="14.0" layoutY="48.0"
+                           onAction="#addNotesForTeachers" prefHeight="103.0" prefWidth="486.0">
+                    <font>
+                        <Font name="Calibri" size="19.0"/>
+                    </font>
+                </TextField>
+                <Text layoutX="14.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notes for teachers: "
+                      wrappingWidth="171.73672485351562">
+                    <font>
+                        <Font size="19.0"/>
+                    </font>
+                </Text>
+            </children>
+        </AnchorPane>
+        <TextField fx:id="examNameText" layoutX="54.0" layoutY="291.0" onAction="#examName" prefHeight="46.0"
+                   prefWidth="172.0"/>
+        <Text layoutX="55.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Exam name:"
+              wrappingWidth="88.5367431640625"/>
     </children>
 </AnchorPane>

@@ -5,6 +5,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.group7.client.Events.*;
 import org.group7.entities.*;
 import org.group7.client.ocsf.AbstractClient;
+import org.group7.client.Events.ExecutableExamEvent;
+
 
 import java.util.List;
 
@@ -89,7 +91,27 @@ public class Client extends AbstractClient {
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });
-        } else if (post.startsWith("#PrepareQuestion_")) {
+        }else if (post.startsWith("#getCourses")) {
+            CoursesListEvent event = new CoursesListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#GotStudents")) {
+            StudentListEvent event = new StudentListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#gotExams")) {
+            ExamsListEvent event = new ExamsListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#getTeachers")) {
+            TeachersListEvent event = new TeachersListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#PrepareQuestion_")) {
             QuestionEvent event = new QuestionEvent(new Message(message.getObject(), post.substring(12)));
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
@@ -101,6 +123,16 @@ public class Client extends AbstractClient {
             });
         } else if(post.startsWith("#GotTeacherCourses")){
             CoursesEvent event = new CoursesEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        } else if(post.startsWith("#GotStudentResults")){
+            ResultListEvent event = new ResultListEvent(message);
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(event);
+            });
+        }else if (post.startsWith("#GotExecutableExam")) {
+            ExecutableExamEvent event = new ExecutableExamEvent(message);
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
             });

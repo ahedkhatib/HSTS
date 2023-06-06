@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import org.group7.client.Client;
 import org.group7.client.Control.CreateExamController;
 import org.group7.entities.*;
@@ -194,12 +196,14 @@ public class CreateExamBoundary extends Boundary {
                     if (cell == null) {
                         // Initialize the cell components
                         cell = new HBox();
+                        Region spacer = new Region();
+                        HBox.setHgrow(spacer, Priority.ALWAYS);
                         questionLabel = new Label();
                         gradeTextField = new TextField();
                         gradeTextField.setPromptText("Enter grade");
                         gradeTextField.setPrefWidth(100);
                         gradeTextField.setPrefHeight(15);
-                        cell.getChildren().addAll(questionLabel, gradeTextField);
+                        cell.getChildren().addAll(questionLabel, spacer, gradeTextField);
                     }
 
                     // Set the question text
@@ -287,7 +291,7 @@ public class CreateExamBoundary extends Boundary {
         List<Integer> sendGrades = new ArrayList<>();
         List<Question> sendQuestions = new ArrayList<>();
         for (String s : selectedQuestions) {
-            if (!(controller.isValidNumber(questionGrades.get(s)))) {
+            if (!(controller.isValidNumber(questionGrades.get(s))) || (Integer.parseInt(questionGrades.get(s)) < 0 || Integer.parseInt(questionGrades.get(s)) > 100)) {
                 alert("'" + questionGrades.get(s) + "' is not a valid question grade for ' " + s + " '");
                 return;
             }
@@ -306,11 +310,26 @@ public class CreateExamBoundary extends Boundary {
             sum += i;
         }
         if (sum != 100) {
-            alert("Exam points are not equall to 100!");
+            alert("Exam points are not equal to 100!");
             return;
         }
 
-        controller.save(examNameText.getText(), (manualExam) ? 1 : 2, durationText.getText(), (Teacher) Client.getClient().getUser(),
+
+        int duration = 0;
+
+        try {
+            duration = Integer.parseInt(durationText.getText());
+
+            if(duration <= 0 ){
+                alert("Durations has to be a positive integer!");
+                return;
+            }
+        } catch (Exception e) {
+            alert("Durations has to be an integer!");
+            return;
+        }
+
+        controller.save(examNameText.getText(), (manualExam) ? 1 : 2, duration, (Teacher) Client.getClient().getUser(),
                 notesForTeachersText.getText(), notesForStudentsText.getText(), selectedCourse, sendQuestions, sendGrades);
 
     }

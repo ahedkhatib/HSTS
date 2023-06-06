@@ -48,7 +48,10 @@
                             <VBox fx:id="teacherButtons" spacing="10.0" visible="false">
                                 <Button fx:id="newExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Exam" />
                                 <Button fx:id="setExecutableBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Create Executable" />
+                                <Button fx:id="editExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Edit Exam" />
+                                <Button fx:id="approveResultBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Approve Results" />
                                 <Button fx:id="newQuestionBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Question" />
+                                <Button fx:id="editQuestionBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Edit Question" />
                                 <Button fx:id="newTimeRequestBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Time Request" />
                                 <Button fx:id="teacherReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Reports" />
                             </VBox>

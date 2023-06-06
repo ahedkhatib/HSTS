@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="778.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinStudentReportsBoundary">
+   <children>
+      <ComboBox fx:id="studentsCB" layoutX="521.0" layoutY="54.0" onAction="#selectStudent" prefHeight="29.0" prefWidth="188.0" promptText="Select student:" />
+      <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="99.0" layoutX="197.0" layoutY="54.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
+      <Label fx:id="averageLabel" layoutX="207.0" layoutY="64.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="medianLabel" layoutX="207.0" layoutY="107.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
+         <font>
+            <Font name="System Bold Italic" size="14.0" />
+         </font>
+      </Label>
+      <BarChart fx:id="gradeChart" layoutX="120.0" layoutY="202.0" prefHeight="425.0" prefWidth="685.0">
+         <xAxis>
+            <CategoryAxis fx:id="gradeAxis" prefHeight="0.0" prefWidth="579.0" side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="countAxis" side="LEFT" />
+         </yAxis>
+      </BarChart>
+      <Label fx:id="reportTA" alignment="TOP_LEFT" layoutX="771.0" layoutY="54.0" prefHeight="99.0" prefWidth="232.0" text="Label">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
