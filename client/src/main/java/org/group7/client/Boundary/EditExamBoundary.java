@@ -72,7 +72,6 @@ public class EditExamBoundary extends Boundary {
 
     @FXML
     public void backToList(ActionEvent event) {
-
         controller.getExams();
 
         examAP.setDisable(true);

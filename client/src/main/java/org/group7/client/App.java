@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import jdk.jfr.Event;
 import org.greenrobot.eventbus.EventBus;
@@ -14,6 +15,7 @@ import org.group7.entities.Message;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class App extends Application {
 
@@ -31,7 +33,10 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("HSTS");
         stage.setResizable(false);
+        Image newIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/Images/grad-hat.png")));
         appStage = stage;
+        appStage.getIcons().clear();
+        appStage.getIcons().add(newIcon);
         appStage.show();
     }
 

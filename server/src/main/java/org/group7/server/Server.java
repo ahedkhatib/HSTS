@@ -425,33 +425,23 @@ public class Server extends AbstractServer {
                         Question question = (Question) message.getObject();
 
                         Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
-                        List<Question> subjectQuestions = subject.getQuestionList();
-                        List<Question> updatedSubQuestions = Stream.concat(subjectQuestions.stream(), Stream.of(question))
-                                .toList();
-                        subject.setQuestionList(updatedSubQuestions);
+                        subject.getQuestionList().add(question);
                         session.save(subject);
 
-
                         List<Course> courses = question.getCourseList();
-                        question.setCourseList(new ArrayList<>());
-                        for (Course course : courses) {
-                            course = session.find(Course.class, course.getCourseId());
-                            List<Question> courseQuestions = course.getQuestionList();
-                            List<Question> updatedCourseQuestions = Stream.concat(courseQuestions.stream(), Stream.of(question))
-                                    .toList();
-                            course.setQuestionList(updatedCourseQuestions);
+                        List<Course> updated = new ArrayList<>();
+                        for (Course t : courses) {
+                            Course course = session.find(Course.class, t.getCourseId());
+                            course.getQuestionList().add(question);
                             session.save(course);
-
-                            List<Course> questionCourses = question.getCourseList();
-                            List<Course> updatedQuestionCourses = Stream.concat(questionCourses.stream(), Stream.of(course))
-                                    .toList();
-                            question.setCourseList(updatedQuestionCourses);
+                            updated.add(course);
                         }
 
+                        question.setCourseList(updated);
                         session.save(question);
+
                         session.flush();
                         session.getTransaction().commit();
-
                         client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
 
                     } catch (Exception e) {
@@ -633,7 +623,7 @@ public class Server extends AbstractServer {
         session.save(calculus);
         session.flush();
 
-        math.setCourseList(List.of(new Course[]{algebra, calculus}));
+        math.setCourseList(new ArrayList<>(List.of(new Course[]{algebra, calculus})));
         session.save(math);
         session.flush();
 
@@ -647,32 +637,32 @@ public class Server extends AbstractServer {
         session.save(cv);
         session.flush();
 
-        cs.setCourseList(List.of(new Course[]{intro, algo, graphics, cv}));
+        cs.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, graphics, cv})));
         session.save(cs);
         session.flush();
 
         // Connect teachers to courses
-        intro.setTeacherList(List.of(new Teacher[]{hagit, dan, shir}));
-        algo.setTeacherList(List.of(new Teacher[]{malki, dan}));
-        graphics.setTeacherList(List.of(new Teacher[]{shir}));
-        cv.setTeacherList(List.of(new Teacher[]{hagit, or, malki}));
+        intro.setTeacherList(new ArrayList<>(List.of(new Teacher[]{hagit, dan, shir})));
+        algo.setTeacherList(new ArrayList<>(List.of(new Teacher[]{malki, dan})));
+        graphics.setTeacherList(new ArrayList<>(List.of(new Teacher[]{shir})));
+        cv.setTeacherList(new ArrayList<>(List.of(new Teacher[]{hagit, or, malki})));
         session.save(intro);
         session.save(algo);
         session.save(graphics);
         session.save(cv);
         session.flush();
 
-        algebra.setTeacherList(List.of(new Teacher[]{or, dan}));
-        calculus.setTeacherList(List.of(new Teacher[]{or}));
+        algebra.setTeacherList(new ArrayList<>(List.of(new Teacher[]{or, dan})));
+        calculus.setTeacherList(new ArrayList<>(List.of(new Teacher[]{or})));
         session.save(algebra);
         session.save(calculus);
         session.flush();
 
-        shir.setCourseList(List.of(new Course[]{intro, graphics}));
-        malki.setCourseList(List.of(new Course[]{algo, cv}));
-        dan.setCourseList(List.of(new Course[]{intro, algo, algebra}));
-        or.setCourseList(List.of(new Course[]{algebra, calculus, cv}));
-        hagit.setCourseList(List.of(new Course[]{intro, cv}));
+        shir.setCourseList(new ArrayList<>(List.of(new Course[]{intro, graphics})));
+        malki.setCourseList(new ArrayList<>(List.of(new Course[]{algo, cv})));
+        dan.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, algebra})));
+        or.setCourseList(new ArrayList<>(List.of(new Course[]{algebra, calculus, cv})));
+        hagit.setCourseList(new ArrayList<>(List.of(new Course[]{intro, cv})));
         session.save(shir);
         session.save(malki);
         session.save(dan);
@@ -681,13 +671,13 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add questions
-        Question mathQ1 = new Question("What is 5+2 ?", List.of(new Course[]{algebra, calculus}),
+        Question mathQ1 = new Question("What is 5+2 ?", new ArrayList<>(List.of(new Course[]{algebra, calculus})),
                 math, 0, (new String[]{"7", "3", "12", "0"}));
 
-        Question mathQ2 = new Question("What is 5-3 ?", List.of(new Course[]{algebra}),
+        Question mathQ2 = new Question("What is 5-3 ?", new ArrayList<>(List.of(new Course[]{algebra})),
                 math, 2, (new String[]{"4", "1", "2", "0"}));
 
-        Question mathQ3 = new Question("What is integral of x ?", List.of(new Course[]{calculus}),
+        Question mathQ3 = new Question("What is integral of x ?", new ArrayList<>(List.of(new Course[]{calculus})),
                 math, 1, (new String[]{"x", "x^2 / 2", "2x", "Doesn't have integral!"}));
 
         session.save(mathQ1);
@@ -696,21 +686,21 @@ public class Server extends AbstractServer {
         session.flush();
 
         Question csQ1 = new Question("What does this print: cout << \"Hi\" << endl; ?",
-                List.of(new Course[]{intro}), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
+                new ArrayList<>(List.of(new Course[]{intro})), cs, 0, (new String[]{"Hi", "Error!", "Null", "Hi!"}));
 
-        Question csQ2 = new Question("Who created FFT ?", List.of(new Course[]{graphics, cv, algo}),
+        Question csQ2 = new Question("Who created FFT ?", new ArrayList<>(List.of(new Course[]{graphics, cv, algo})),
                 cs, 3, (new String[]{"Dr. Shuly", "Lagrange", "ME!", "Fourier"}));
 
         Question csQ3 = new Question("How many image pyramids do we know ?",
-                List.of(new Course[]{cv}), cs, 1, (new String[]{"1", "2", "3", "None"}));
+                new ArrayList<>(List.of(new Course[]{cv})), cs, 1, (new String[]{"1", "2", "3", "None"}));
 
         Question csQ4 = new Question("How do we find shortest path in graph ?",
-                List.of(new Course[]{intro, algo}), cs, 2, (new String[]{"DFS", "BFS", "Daijkstra", "A + B"}));
+                new ArrayList<>(List.of(new Course[]{intro, algo})), cs, 2, (new String[]{"DFS", "BFS", "Daijkstra", "A + B"}));
 
-        Question csQ5 = new Question("How do we get edges of an image ?", List.of(new Course[]{cv, graphics}),
+        Question csQ5 = new Question("How do we get edges of an image ?", new ArrayList<>(List.of(new Course[]{cv, graphics})),
                 cs, 2, (new String[]{"Sobel", "Canny", "No way!", "A + B"}));
 
-        Question csQ6 = new Question("What is recursion ?", List.of(new Course[]{intro, algo}),
+        Question csQ6 = new Question("What is recursion ?", new ArrayList<>(List.of(new Course[]{intro, algo})),
                 cs, 1, (new String[]{"What is recursion ?", "Yes", "No", "Error"}));
 
         session.save(csQ1);
@@ -722,24 +712,24 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Connect questions with subjects and courses
-        math.setQuestionList(List.of(new Question[]{mathQ1, mathQ2, mathQ3}));
+        math.setQuestionList(new ArrayList<>(List.of(new Question[]{mathQ1, mathQ2, mathQ3})));
         session.save(math);
         session.flush();
 
-        algebra.setQuestionList(List.of(new Question[]{mathQ1, mathQ2}));
-        calculus.setQuestionList(List.of(new Question[]{mathQ1, mathQ3}));
+        algebra.setQuestionList(new ArrayList<>(List.of(new Question[]{mathQ1, mathQ2})));
+        calculus.setQuestionList(new ArrayList<>(List.of(new Question[]{mathQ1, mathQ3})));
         session.save(algebra);
         session.save(calculus);
         session.flush();
 
-        cs.setQuestionList(List.of(new Question[]{csQ1, csQ2, csQ3, csQ4, csQ5, csQ6}));
+        cs.setQuestionList(new ArrayList<>(List.of(new Question[]{csQ1, csQ2, csQ3, csQ4, csQ5, csQ6})));
         session.save(cs);
         session.flush();
 
-        intro.setQuestionList(List.of(new Question[]{csQ1, csQ4, csQ6}));
-        algo.setQuestionList(List.of(new Question[]{csQ2, csQ4, csQ6}));
-        cv.setQuestionList(List.of(new Question[]{csQ2, csQ3, csQ5}));
-        graphics.setQuestionList(List.of(new Question[]{csQ2, csQ5}));
+        intro.setQuestionList(new ArrayList<>(List.of(new Question[]{csQ1, csQ4, csQ6})));
+        algo.setQuestionList(new ArrayList<>(List.of(new Question[]{csQ2, csQ4, csQ6})));
+        cv.setQuestionList(new ArrayList<>(List.of(new Question[]{csQ2, csQ3, csQ5})));
+        graphics.setQuestionList(new ArrayList<>(List.of(new Question[]{csQ2, csQ5})));
         session.save(intro);
         session.save(algo);
         session.save(graphics);
@@ -748,8 +738,8 @@ public class Server extends AbstractServer {
 
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
-        List<Integer> points = List.of(new Integer[]{70, 30});
-        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        List<Integer> points = new ArrayList<>(List.of(new Integer[]{70, 30}));
+        Exam algebraExam = new Exam("Algebra Exam moed a", 1, 60, or, "No comment!", "No    !", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExam);
         algebra.getExamList().add(algebraExam);
         session.save(algebraExam);

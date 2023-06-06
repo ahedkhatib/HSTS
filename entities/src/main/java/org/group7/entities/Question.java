@@ -24,7 +24,7 @@ public class Question implements Serializable{
     @JoinTable(name = "question_course",
             joinColumns = @JoinColumn(name = "question_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private List<Course> courseList = new ArrayList<>();
+    private List<Course> courseList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")
@@ -42,12 +42,11 @@ public class Question implements Serializable{
 
     public Question(String instructions, List<Course> courseList, Subject subject, int correctAnswer, String[] answerList) {
         this.instructions = instructions;
-        this.courseList = courseList;
+        this.courseList = new ArrayList<>();
+        this.courseList.addAll(courseList);
         this.subject = subject;
         this.correctAnswer = correctAnswer;
         this.answerList = answerList;
-
-        this.questionId = subject.getSubjectId() * 1000 + this.questionId;
     }
 
     public int getQuestionId() {

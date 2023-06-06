@@ -15,7 +15,7 @@
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TeacherApprovalBoundary">
     <children>
         <AnchorPane fx:id="emptyAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
-            <Text fx:id="emptyText" layoutX="491.0" layoutY="367.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="No students to show!" textAlignment="CENTER">
+            <Text fx:id="emptyText" layoutX="372.0" layoutY="367.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="No students to show!" textAlignment="CENTER">
                 <font>
                     <Font size="50.0" />
                 </font>

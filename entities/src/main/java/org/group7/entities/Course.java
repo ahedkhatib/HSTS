@@ -34,7 +34,6 @@ public class Course implements Serializable{
     private List<Exam> examList;
 
     public Course(){
-
     }
 
     public Course(String courseName, Subject subject) {
