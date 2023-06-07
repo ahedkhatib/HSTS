@@ -144,25 +144,28 @@ public class HomepageBoundary extends Boundary {
         } else if (pressed == teacherReportsBtn) {
             loadPage("teacherReports");
             titleText.setText("Show Reports");
-        }else if (pressed == prinCourseReportsBtn) {
+        } else if (pressed == prinCourseReportsBtn) {
             loadPage("prinCourseReport");
             titleText.setText("Course Reports");
-        }else if (pressed == prinTeacherReportsBtn) {
+        } else if (pressed == prinTeacherReportsBtn) {
             loadPage("prinTeacherReport");
             titleText.setText("Teacher Reports");
-        }else if (pressed == prinExamReportsBtn) {
+        } else if (pressed == prinExamReportsBtn) {
             loadPage("prinExamReports");
             titleText.setText("Exam Reports");
-        }else if (pressed == prinStudentReportsBtn) {
+        } else if (pressed == prinStudentReportsBtn) {
             loadPage("prinStudentReports");
             titleText.setText("Student Reports");
-        }else if (pressed == editExamBtn) {
+        } else if (pressed == editExamBtn) {
             loadPage("editExam");
             titleText.setText("Edit Exam");
-        }else if (pressed == approveResultBtn) {
+        } else if (pressed == approveResultBtn) {
             loadPage("teacherApproval");
             titleText.setText("Results Approval");
-        }else {
+        } else if (pressed == editQuestionBtn) {
+            loadPage("editQuestion");
+            titleText.setText("Edit Question");
+        } else {
             loadPage("bye");
             titleText.setText("bye");
         }
@@ -194,6 +197,7 @@ public class HomepageBoundary extends Boundary {
             slide.play();
 
             sidePanel.setDisable(true);
+            mainPage.setDisable(false);
 
             transparentPane.setDisable(false);
             transparentPane.setVisible(false);
@@ -213,6 +217,8 @@ public class HomepageBoundary extends Boundary {
             slide.setToX(0.0);
 
             slide.play();
+
+            mainPage.setDisable(true);
 
             borderPane.setLeft(sidePanel);
             sidePanel.setVisible(true);

@@ -27,6 +27,7 @@ import org.group7.client.Control.StartExamController;
 import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
 import org.group7.entities.Question;
+import org.group7.entities.Teacher;
 
 public class StartExamBoundary extends Boundary {
 
@@ -87,11 +88,13 @@ public class StartExamBoundary extends Boundary {
 
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
-    public AnchorPane getAutoAp(){
+    public AnchorPane getAutoAp() {
         return autoAp;
     }
 
-    public AnchorPane getManualAp(){ return manualAp;}
+    public AnchorPane getManualAp() {
+        return manualAp;
+    }
 
     public int getTimeSeconds() {
         return timeSeconds.get();
@@ -105,7 +108,9 @@ public class StartExamBoundary extends Boundary {
         this.timeSeconds.set(timeSeconds);
     }
 
-    public List<ToggleGroup> getToggleGroups(){return toggleGroups;}
+    public List<ToggleGroup> getToggleGroups() {
+        return toggleGroups;
+    }
 
     @FXML
     void startExam(ActionEvent event) {
@@ -113,15 +118,17 @@ public class StartExamBoundary extends Boundary {
     }
 
     @FXML
-    void finishExam(ActionEvent event){
+    void finishExam(ActionEvent event) {
         controller.finishExam(false);
     }
 
     @FXML
-    void finishManExam(ActionEvent event) {controller.finishManualExam(false);}
+    void finishManExam(ActionEvent event) {
+        controller.finishManualExam(false, "");
+    }
 
     @FXML
-    void uploadExam(ActionEvent event){
+    void uploadExam(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Word Files", "*.docx")
@@ -133,11 +140,12 @@ public class StartExamBoundary extends Boundary {
         if (files != null && !files.isEmpty()) {
             File uploadedFile = files.get(0);
             try {
-                String uploadedAnswer = new String(Files.readAllBytes(Paths.get(uploadedFile.toURI())),
-                        StandardCharsets.UTF_8);
+                String uploadedAnswer = Files.readString(Paths.get(uploadedFile.toURI()));
                 fileTf.setText(uploadedFile.getPath());
                 statusTf.setText("Upload successful: " + uploadedFile.getName());
-                //Perform further logic with uploadedAnswer if needed
+
+                controller.finishManualExam(true, uploadedAnswer);
+
             } catch (IOException e) {
                 statusTf.setText("Error: " + e.getMessage());
             }
@@ -148,19 +156,19 @@ public class StartExamBoundary extends Boundary {
     }
 
     @FXML
-    void downloadExam(ActionEvent event)
-    {
+    void downloadExam(ActionEvent event) {
         controller.createWord();
         uploadBtn.setVisible(true);
         fileTf.setVisible(true);
         statusTf.setVisible(true);
         manualFinishBtn.setVisible(true);
     }
+
     @FXML
-    void idEntered(ActionEvent event){
+    void idEntered(ActionEvent event) {
         boolean flag = controller.checkId(idTf.getText());
 
-        if(flag)
+        if (flag)
             scrollPane.setDisable(false);
     }
 
@@ -209,7 +217,7 @@ public class StartExamBoundary extends Boundary {
         return String.format("%02d:%02d", minutes, remainingSeconds);
     }
 
-    public VBox questionCard(int questionNum, Question question){
+    public VBox questionCard(int questionNum, Question question) {
 
         VBox card = new VBox();
         card.setPrefWidth(600);
@@ -225,7 +233,7 @@ public class StartExamBoundary extends Boundary {
         ToggleGroup toggleGroup = new ToggleGroup();
         toggleGroups.add(toggleGroup);
 
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             HBox answer = new HBox();
             answer.setSpacing(25);
 
@@ -244,7 +252,7 @@ public class StartExamBoundary extends Boundary {
         return card;
     }
 
-    public void setQuestions(ExecutableExam executableExam){
+    public void setQuestions(ExecutableExam executableExam) {
 
         Exam exam = executableExam.getExam();
         List<Question> questions = exam.getQuestionList();
@@ -262,9 +270,28 @@ public class StartExamBoundary extends Boundary {
         content.setSpacing(50);
         content.setLayoutX(300);
 
-        for(Question q : questions){
-            VBox card = questionCard(count, q);
+        // Add teacher's notes
+        String examNote = executableExam.getExam().getStudentComments();
+
+        VBox card = new VBox();
+        card.setPrefWidth(scrollPane.getPrefWidth() / 2);
+        card.setPrefHeight(scrollPane.getPrefHeight() / 2);
+        card.setSpacing(35);
+        card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
+
+        Teacher creator = executableExam.getExam().getCreator();
+
+        Text noteText = new Text("Teacher " + creator.getFirstName() + " " + creator.getLastName() + " says: " + examNote);
+        noteText.setStyle("-fx-font-size: 20;");
+        card.getChildren().add(noteText);
+
+        if (examNote != null && !examNote.equals(""))
             content.getChildren().add(card);
+
+        // Add questions
+        for (Question q : questions) {
+            VBox questionCard = questionCard(count, q);
+            content.getChildren().add(questionCard);
             count++;
         }
 

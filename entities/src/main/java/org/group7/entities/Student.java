@@ -23,16 +23,40 @@ public class Student extends User implements Serializable {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Result> resultList;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ManualResult> manualResultList;
+
+    @Column(name = "student_id_number")
+    private String studentIdNum;
+
     public Student() {
         super();
         super.setType(1);
     }
 
-    public Student(String username, String password, String firstname, String lastname) {
+    public Student(String username, String password, String firstname, String lastname, String studentIdNum) {
         super(username, password, firstname, lastname, 1);
+        this.studentIdNum = studentIdNum;
         this.resultList = new ArrayList<>();
         this.examList = new ArrayList<>();
         this.courseList = new ArrayList<>();
+        this.manualResultList = new ArrayList<>();
+    }
+
+    public List<ManualResult> getManualResultList() {
+        return manualResultList;
+    }
+
+    public void setManualResultList(List<ManualResult> manualResultList) {
+        this.manualResultList = manualResultList;
+    }
+
+    public String getStudentIdNum() {
+        return studentIdNum;
+    }
+
+    public void setStudentIdNum(String studentIdNum) {
+        this.studentIdNum = studentIdNum;
     }
 
     public List<Result> getResultList() {

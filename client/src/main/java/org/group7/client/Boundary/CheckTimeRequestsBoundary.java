@@ -1,5 +1,6 @@
 package org.group7.client.Boundary;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -151,18 +152,20 @@ public class CheckTimeRequestsBoundary extends Boundary {
                 if (selected && !isEmpty()) {
                     activeReq = getItem();
 
-                    controller.getExam(activeReq.getExamId());
+                    activeExam = activeReq.getExam();
 
-                    requestAP.setDisable(false);
-                    requestAP.setVisible(true);
+                    Platform.runLater(()->{
+                        requestAP.setDisable(false);
+                        requestAP.setVisible(true);
 
-                    listAP.setDisable(true);
-                    listAP.setVisible(false);
+                        listAP.setDisable(true);
+                        listAP.setVisible(false);
 
-                    titleText.setText("Request for exam: " + activeExam.getExam().getExamName() + "\nId: "
-                            + activeReq.getExamId() + ", Time: " + activeReq.getExtra());
+                        titleText.setText("Request for exam: " + activeExam.getExam().getExamName() + "\nId: "
+                                + activeExam.getExamId() + ", Time: " + activeReq.getExtra());
 
-                    commentText.setText(activeReq.getTeacherMessage());
+                        commentText.setText(activeReq.getTeacherMessage());
+                    });
                 }
             }
         });

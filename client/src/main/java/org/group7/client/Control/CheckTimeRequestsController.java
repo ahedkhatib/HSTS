@@ -52,19 +52,6 @@ public class CheckTimeRequestsController extends Controller {
         }
     }
 
-    public void getExam(String examId){
-        try {
-            Client.getClient().sendToServer(new Message(examId, "#TimeRequestGetExam"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Subscribe
-    public void setActiveExam(ExecutableExam exam){
-        boundary.setExam(exam);
-    }
-
     @Subscribe
     public void setRequestListItems(List<ExtraTime> reqList) {
 

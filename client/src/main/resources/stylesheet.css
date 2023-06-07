@@ -53,3 +53,22 @@
     -fx-background-color: C06C84;
     -fx-cursor: hand;
 }
+
+/* ListView */
+.list-view-item {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: black;
+    -fx-alignment: center-left;
+    -fx-padding: 0 5 0 5;
+    -fx-background-color: transparent;
+}
+
+.list-view-item-selected {
+    -fx-border-width: 0;
+    -fx-background-color: F5EFE7;
+}
+
+.list-view-item:hover {
+    -fx-background-color: F5EFE7;
+    -fx-cursor: hand;
+}

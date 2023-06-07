@@ -13,72 +13,104 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="778.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.HomepageBoundary">
+<AnchorPane prefHeight="778.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.group7.client.Boundary.HomepageBoundary">
     <children>
         <BorderPane fx:id="borderPane" layoutY="1.0" prefHeight="778.0" prefWidth="1215.0">
             <top>
                 <AnchorPane prefHeight="85.0" prefWidth="1215.0" BorderPane.alignment="CENTER">
                     <children>
-                        <Button fx:id="menuBtn" layoutX="14.0" layoutY="10.0" mnemonicParsing="false" onAction="#toggleMenu" prefHeight="62.0" prefWidth="94.0" style="-fx-background-color: transparent; -fx-cursor: hand;">
+                        <Button fx:id="menuBtn" layoutX="14.0" layoutY="10.0" mnemonicParsing="false"
+                                onAction="#toggleMenu" prefHeight="62.0" prefWidth="94.0"
+                                style="-fx-background-color: transparent; -fx-cursor: hand;">
                             <graphic>
-                                <ImageView fitHeight="57.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                <ImageView fitHeight="57.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true"
+                                           style="-fx-cursor: hand;">
                                     <image>
-                                        <Image url="@../../../Images/menu.png" />
+                                        <Image url="@../../../Images/menu.png"/>
                                     </image>
                                 </ImageView>
                             </graphic>
                         </Button>
-                  <Text fx:id="titleText" layoutX="533.0" layoutY="44.0" scaleX="5.0" scaleY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="193.73788833618164">
-                     <font>
-                        <Font name="Arial" size="8.0" />
-                     </font>
-                  </Text>
+                        <Text fx:id="titleText" layoutX="533.0" layoutY="44.0" scaleX="5.0" scaleY="5.0"
+                              strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER"
+                              wrappingWidth="193.73788833618164">
+                            <font>
+                                <Font name="Arial" size="8.0"/>
+                            </font>
+                        </Text>
                     </children>
                 </AnchorPane>
             </top>
             <left>
-                <AnchorPane fx:id="sidePanel" prefHeight="733.0" prefWidth="219.0" style="-fx-background-color: D6E6F2;" BorderPane.alignment="CENTER">
+                <AnchorPane fx:id="sidePanel" prefHeight="733.0" prefWidth="219.0" style="-fx-background-color: D6E6F2;"
+                            BorderPane.alignment="CENTER">
                     <BorderPane.margin>
-                        <Insets />
+                        <Insets/>
                     </BorderPane.margin>
                     <children>
-                        <Button fx:id="logoutBtn" layoutY="622.0" mnemonicParsing="false" onAction="#logout" prefHeight="71.0" prefWidth="219.0" styleClass="menu-logout-button" text="Logout" />
-
-                        <StackPane fx:id="buttonContainer" prefHeight="391.0" prefWidth="218.0">
-                            <VBox fx:id="teacherButtons" spacing="10.0" visible="false">
-                                <Button fx:id="newExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Exam" />
-                                <Button fx:id="setExecutableBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Create Executable" />
-                                <Button fx:id="editExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Edit Exam" />
-                                <Button fx:id="approveResultBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Approve Results" />
-                                <Button fx:id="newQuestionBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="New Question" />
-                                <Button fx:id="editQuestionBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Edit Question" />
-                                <Button fx:id="newTimeRequestBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Time Request" />
-                                <Button fx:id="teacherReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Reports" />
+                        <Button fx:id="logoutBtn" layoutY="622.0" mnemonicParsing="false" onAction="#logout"
+                                prefHeight="71.0" prefWidth="219.0" styleClass="menu-logout-button" text="Logout"/>
+                        <StackPane fx:id="buttonContainer" prefHeight="621.0" prefWidth="218.0">
+                            <VBox fx:id="teacherButtons" visible="false">
+                                <Button fx:id="newExamBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="New Exam"/>
+                                <Button fx:id="setExecutableBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Create Executable"/>
+                                <Button fx:id="editExamBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Edit Exam"/>
+                                <Button fx:id="approveResultBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Approve Results"/>
+                                <Button fx:id="newQuestionBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="New Question"/>
+                                <Button fx:id="editQuestionBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Edit Question"/>
+                                <Button fx:id="newTimeRequestBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Time Request"/>
+                                <Button fx:id="teacherReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Reports"/>
                             </VBox>
-                            <VBox fx:id="studentButtons" spacing="10.0" visible="false">
-                                <Button fx:id="startExamBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Start Exam" />
-                                <Button fx:id="studentReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Reports" />
+                            <VBox fx:id="studentButtons" visible="false">
+                                <Button fx:id="startExamBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Start Exam"/>
+                                <Button fx:id="studentReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Reports"/>
                             </VBox>
-                            <VBox fx:id="prinButtons" spacing="10.0" visible="false">
-                                <Button fx:id="prinExamReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Exam Reports" />
-                                <Button fx:id="prinTeacherReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Teacher Reports" />
-                                <Button fx:id="prinStudentReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Student Reports" />
-                                <Button fx:id="prinCourseReportsBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Course Reports" />
-                                <Button fx:id="principalReqBtn" mnemonicParsing="false" onAction="#goToPage" prefHeight="71.0" prefWidth="217.0" styleClass="menu-button" text="Requests" />
+                            <VBox fx:id="prinButtons" visible="false">
+                                <Button fx:id="prinExamReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Exam Reports"/>
+                                <Button fx:id="prinTeacherReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Teacher Reports"/>
+                                <Button fx:id="prinStudentReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Student Reports"/>
+                                <Button fx:id="prinCourseReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
+                                        text="Course Reports"/>
+                                <Button fx:id="principalReqBtn" mnemonicParsing="false" onAction="#goToPage"
+                                        prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Requests"/>
                             </VBox>
                         </StackPane>
                     </children>
                 </AnchorPane>
             </left>
-         <center>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <AnchorPane fx:id="mainPage"/>
-                  <Pane fx:id="transparentPane" style="-fx-background-color: transparent;" />
-                  <Rectangle fx:id="maskRectangle" fill="rgba(0, 0, 0, 0.3)" visible="false"/>
-               </children>
-            </StackPane>
-         </center>
+            <center>
+                <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <AnchorPane fx:id="mainPage"/>
+                        <Pane fx:id="transparentPane" style="-fx-background-color: transparent;"/>
+                        <Rectangle fx:id="maskRectangle" fill="rgba(0, 0, 0, 0.3)" visible="false"/>
+                    </children>
+                </StackPane>
+            </center>
         </BorderPane>
     </children>
 </AnchorPane>

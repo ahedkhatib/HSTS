@@ -78,6 +78,12 @@ public class TeacherApprovalBoundary extends Boundary {
 
     @FXML
     void backToList(ActionEvent event) {
+
+        activeResult = null;
+
+        nonApprovedListView.getSelectionModel().clearSelection();
+        nonApprovedListView.refresh();
+
         resultsAP.setDisable(true);
         resultsAP.setVisible(false);
 
@@ -93,7 +99,6 @@ public class TeacherApprovalBoundary extends Boundary {
         optinalNoteForStudentsText.setVisible(true);
         optNoteDescribion.setVisible(true);
     }
-
 
     @FXML
     public void initialize() {
@@ -171,7 +176,6 @@ public class TeacherApprovalBoundary extends Boundary {
                             + activeResult.getGrade() + ", Time: " + decimalPart);
 
                     setQuestions(activeResult);
-
                 }
             }
 
@@ -320,8 +324,8 @@ public class TeacherApprovalBoundary extends Boundary {
         }else {
             controller.save(activeResult, false, "", optinalNoteForStudentsText.getText(), activeResult.getExam().getAverage(), activeResult.getExam().getMedian(), activeResult.getExam().getDistribution());
         }
-        nonApprovedListView.getItems().remove(activeResult);
 
+        nonApprovedListView.getItems().remove(activeResult);
 
         resultsAP.setDisable(true);
         resultsAP.setVisible(false);
