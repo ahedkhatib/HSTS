@@ -329,7 +329,7 @@ public class CreateExamBoundary extends Boundary {
             return;
         }
 
-        controller.save(examNameText.getText(), (manualExam) ? 1 : 2, duration, (Teacher) Client.getClient().getUser(),
+        controller.save(examNameText.getText(), (manualExam) ? 2 : 1, duration, (Teacher) Client.getClient().getUser(),
                 notesForTeachersText.getText(), notesForStudentsText.getText(), selectedCourse, sendQuestions, sendGrades);
 
     }

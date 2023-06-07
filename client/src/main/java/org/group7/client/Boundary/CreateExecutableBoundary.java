@@ -14,7 +14,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Control.CreateExecutableController;
 import org.group7.entities.Exam;
+import org.group7.entities.ExecutableExam;
 import org.group7.entities.Student;
+
+import java.util.List;
 
 public class CreateExecutableBoundary extends Boundary {
 
@@ -28,7 +31,6 @@ public class CreateExecutableBoundary extends Boundary {
 
     @FXML
     private Button saveBtn;
-
 
     public TextField getExamCodeTF() {
         return examCodeTF;
@@ -78,6 +80,19 @@ public class CreateExecutableBoundary extends Boundary {
             }
 
         });
+
+        examsCombo.setButtonCell(new ListCell<Exam>() {
+            @Override
+            protected void updateItem(Exam exam, boolean empty) {
+                super.updateItem(exam, empty);
+                if (exam == null || empty) {
+                    setText(null);
+                } else {
+                    setText(exam.getExamName());
+                }
+            }
+        });
+
     }
 
 }

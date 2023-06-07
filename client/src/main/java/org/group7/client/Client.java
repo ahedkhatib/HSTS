@@ -62,9 +62,9 @@ public class Client extends AbstractClient {
                 EventBus.getDefault().post(reqs);
             });
         } else if (post.startsWith("#GotTeacherExams")) {
-            List<Exam> exams = (List<Exam>) message.getObject();
+            CreateExecutableEvent event = new CreateExecutableEvent(message);
             Platform.runLater(() -> {
-                EventBus.getDefault().post(exams);
+                EventBus.getDefault().post(event);
             });
         } else if (post.startsWith("#StartExam_")) {
             StartExamEvent event = new StartExamEvent((ExecutableExam) message.getObject(), post.substring(11));
@@ -75,11 +75,6 @@ public class Client extends AbstractClient {
             ExtraTime extraTime = (ExtraTime) message.getObject();
             Platform.runLater(() -> {
                 EventBus.getDefault().post(extraTime);
-            });
-        } else if (post.startsWith("#GotTimeRequestExam")) {
-            ExecutableExam exam = (ExecutableExam) message.getObject();
-            Platform.runLater(() -> {
-                EventBus.getDefault().post(exam);
             });
         } else if (post.startsWith("#ExamFinished")) {
             String s = "Exam Finished!";

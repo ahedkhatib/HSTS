@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import org.group7.client.Control.StudentReportsController;
 import org.group7.entities.Question;
 import org.group7.entities.Result;
+import org.group7.entities.Teacher;
 
 import java.util.HashMap;
 import java.util.List;
@@ -247,7 +248,9 @@ public class StudentReportsBoundary extends Boundary {
         card.setSpacing(35);
         card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
 
-        Text noteText = new Text(examNote);
+        Teacher creator = result.getExam().getExam().getCreator();
+
+        Text noteText = new Text("Teacher " + creator.getFirstName() + " " + creator.getLastName() + " says: " + examNote);
         noteText.setStyle("-fx-font-size: 20;");
         card.getChildren().add(noteText);
 

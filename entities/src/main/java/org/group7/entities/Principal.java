@@ -9,10 +9,6 @@ import java.util.*;
 public class Principal extends User implements Serializable{
 
     @Transient
-    @Column(name = "report_list")
-    private List<Report> reportList;
-
-    @Transient
     @Column(name = "request_list")
     private List<ExtraTime> requestList;
 
@@ -23,7 +19,6 @@ public class Principal extends User implements Serializable{
 
     public Principal(String username, String password, String firstname, String lastname) {
         super(username, password, firstname, lastname, 3);
-        this.reportList = new ArrayList<>();
         this.requestList = new ArrayList<>();
     }
 
@@ -33,13 +28,5 @@ public class Principal extends User implements Serializable{
 
     public void setRequestList(List<ExtraTime> requestList) {
         this.requestList = requestList;
-    }
-
-    public List<Report> getReportList() {
-        return reportList;
-    }
-
-    public void setReportList(List<Report> reportList) {
-        this.reportList = reportList;
     }
 }

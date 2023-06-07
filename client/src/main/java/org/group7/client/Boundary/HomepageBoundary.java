@@ -197,6 +197,7 @@ public class HomepageBoundary extends Boundary {
             slide.play();
 
             sidePanel.setDisable(true);
+            mainPage.setDisable(false);
 
             transparentPane.setDisable(false);
             transparentPane.setVisible(false);
@@ -216,6 +217,8 @@ public class HomepageBoundary extends Boundary {
             slide.setToX(0.0);
 
             slide.play();
+
+            mainPage.setDisable(true);
 
             borderPane.setLeft(sidePanel);
             sidePanel.setVisible(true);

@@ -36,7 +36,15 @@ public class StudentReportsController extends Controller {
     @Subscribe
     public void setResults(ResultListEvent event){
 
-        List<Result> results = event.getResults();
+        List<Result> allResults = event.getResults();
+
+        List<Result> results = new ArrayList<>();
+
+        for(Result result : allResults){
+            if(result.isStatus()){
+                results.add(result);
+            }
+        }
 
         if(results.size() == 0){
             boundary.getEmptyAP().setVisible(true);

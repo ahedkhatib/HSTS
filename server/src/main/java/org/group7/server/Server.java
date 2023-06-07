@@ -16,7 +16,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Stream;
 import java.util.HashMap;
 
 
@@ -50,7 +49,7 @@ public class Server extends AbstractServer {
         configuration.addAnnotatedClass(Subject.class);
         configuration.addAnnotatedClass(Teacher.class);
         configuration.addAnnotatedClass(User.class);
-        configuration.addAnnotatedClass(Report.class);
+        configuration.addAnnotatedClass(ManualResult.class);
 
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(
                 configuration.getProperties()).build();
@@ -211,7 +210,7 @@ public class Server extends AbstractServer {
 
                             int time = (int) obj[2];
 
-                            ExtraTime et = new ExtraTime(exam.getExamId(), (String) obj[1], time);
+                            ExtraTime et = new ExtraTime(exam, (String) obj[1], time);
 
                             session.save(et);
                             session.flush();
@@ -251,22 +250,6 @@ public class Server extends AbstractServer {
                         e.printStackTrace();
                     }
                 }
-                case "#TimeRequestGetExam" -> {
-                    try {
-                        session.beginTransaction();
-
-                        String examId = (String) message.getObject();
-
-                        ExecutableExam exam = session.find(ExecutableExam.class, examId);
-
-                        client.sendToClient(new Message(exam, "#GotTimeRequestExam"));
-
-                        session.getTransaction().commit();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 case "#ApproveTimeRequest" -> {
 
                     try {
@@ -277,7 +260,8 @@ public class Server extends AbstractServer {
                         request.setStatus(true);
                         session.save(request);
                         session.flush();
-                        ExecutableExam exam = session.find(ExecutableExam.class, request.getExamId());
+
+                        ExecutableExam exam = session.find(ExecutableExam.class, request.getExam().getExamId());
                         exam.setTime(exam.getTime() + request.getExtra());
                         session.save(exam);
                         session.flush();
@@ -335,7 +319,11 @@ public class Server extends AbstractServer {
                             }
                         }
 
-                        client.sendToClient(new Message(exams, "#GotTeacherExams"));
+                        List<ExecutableExam> executableExams = getAll(ExecutableExam.class);
+
+                        Object[] obj = {exams, executableExams};
+
+                        client.sendToClient(new Message(obj, "#GotTeacherExams"));
 
                         session.getTransaction().commit();
 
@@ -475,12 +463,37 @@ public class Server extends AbstractServer {
                         session.save(student);
 
                         exam.getStudentList().add(student);
-                        session.save(student);
+                        session.save(exam);
                         session.flush();
 
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(null, "#ExamFinished"));
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                case "#FinishManExam" -> {
+                    try {
+                        session.beginTransaction();
+
+                        ManualResult result = (ManualResult) message.getObject();
+
+                        Student student = result.getStudent();
+                        student = session.find(Student.class, student.getUsername());
+                        student.getManualResultList().add(result);
+                        session.save(student);
+
+                        ExecutableExam exam = result.getExam();
+                        exam = session.find(ExecutableExam.class, exam.getExamId());
+                        exam.getStudentList().add(student);
+                        session.save(exam);
+
+                        session.save(result);
+                        session.flush();
+
+                        session.getTransaction().commit();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -577,12 +590,12 @@ public class Server extends AbstractServer {
         session.flush();
 
         // Add students
-        Student alaa = new Student("alaakhamis", "123", "Alaa", "Khamis");
-        Student ahed = new Student("ahedkhatib", "321", "Ahed", "Khatib");
-        Student lana = new Student("lanaasadi", "123", "Lana", "Asadi");
-        Student ebraheem = new Student("ebraheem", "321", "Ebraheem", "Ebraheem");
-        Student zinab = new Student("zinabdahle", "123", "Zinab", "Dahle");
-        Student adan = new Student("adanhammoud", "321", "Adan", "Hammoud");
+        Student alaa = new Student("alaakhamis", "123", "Alaa", "Khamis", "123456789");
+        Student ahed = new Student("ahedkhatib", "321", "Ahed", "Khatib", "123123123");
+        Student lana = new Student("lanaasadi", "123", "Lana", "Asadi", "123456789");
+        Student ebraheem = new Student("ebraheem", "321", "Ebraheem", "Ebraheem", "987564321");
+        Student zinab = new Student("zinabdahle", "123", "Zinab", "Dahle", "123456321");
+        Student adan = new Student("adanhammoud", "321", "Adan", "Hammoud", "456123789");
         session.save(alaa);
         session.save(ahed);
         session.save(lana);

@@ -14,11 +14,14 @@ import org.group7.client.Client;
 import org.group7.client.Events.StartExamEvent;
 import org.group7.entities.*;
 import com.sun.javafx.binding.StringFormatter;
+
 import java.io.IOException;
 import java.util.*;
+
 import javafx.stage.Stage;
 import org.apache.poi.xwpf.usermodel.*;
 import javafx.stage.FileChooser;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -27,6 +30,8 @@ import java.util.Objects;
 
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+
+import javax.crypto.Cipher;
 
 import static java.lang.System.out;
 
@@ -58,7 +63,7 @@ public class StartExamController extends Controller {
     }
 
 
-    public void startTimer_manual(){
+    public void startTimer_manual() {
 
         timer = new Thread(() -> {
 
@@ -76,7 +81,7 @@ public class StartExamController extends Controller {
                 }
 
                 isTimerRunning = false;
-                finishManualExam(true);
+                finishManualExam(true, "");
             } catch (InterruptedException e) {
                 System.out.println("Timer Interrupted!");
             }
@@ -117,7 +122,7 @@ public class StartExamController extends Controller {
 
     @Subscribe
     public void updateTimer(ExtraTime request) {
-        if (Objects.equals(request.getExamId(), exam.getExamId())) {
+        if (Objects.equals(request.getExam().getExamId(), exam.getExamId())) {
             durationSeconds += (request.getExtra() * 60);
 
             if (isTimerRunning) {
@@ -141,6 +146,16 @@ public class StartExamController extends Controller {
             );
             alert.setTitle("Error!");
             alert.setHeaderText("Error: Incorrect Input");
+            alert.show();
+
+            return false;
+        }
+        if(!Objects.equals(((Student) Client.getClient().getUser()).getStudentIdNum(), id)){
+            Alert alert = new Alert(Alert.AlertType.ERROR,
+                    "Incorrect Id!"
+            );
+            alert.setTitle("Error!");
+            alert.setHeaderText("Error: Id doesn't match");
             alert.show();
 
             return false;
@@ -197,7 +212,7 @@ public class StartExamController extends Controller {
             titleRun.setFontSize(24);
 
             int questionNumber = 1;
-            for (Question question : questionList ) {
+            for (Question question : questionList) {
                 XWPFParagraph questionParagraph = document.createParagraph();
                 questionParagraph.setAlignment(ParagraphAlignment.LEFT);
                 XWPFRun questionRun = questionParagraph.createRun();
@@ -206,7 +221,7 @@ public class StartExamController extends Controller {
                 questionRun.addBreak();
                 String[] answers = question.getAnswerList();
                 int answerCount = 1;
-                for(String a : answers){
+                for (String a : answers) {
                     questionRun.setText(answerCount + ". " + a);
                     questionRun.addBreak();
                     answerCount++;
@@ -217,29 +232,38 @@ public class StartExamController extends Controller {
                 questionNumber++;
             }
             document.write(fileOutputStream);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void finishManualExam(boolean flag) {
+    public void finishManualExam(boolean flag, String sol) {
 
         if (isTimerRunning && timer != null && timer.isAlive()) {
             timer.interrupt();
         }
 
+        boundary.getManualAp().setDisable(true);
+
         double elapsed = elapsedSeconds / 60.0;
         boundary.getManualAp().setDisable(true);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION,"finish exam"
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Exam Finished!"
         );
 
         alert.show();
 
+        ManualResult result = new ManualResult(sol, exam, (Student) Client.getClient().getUser());
+
+        try {
+            Client.getClient().sendToServer(new Message(result, "#FinishManExam"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void finishExam(boolean flag) {
-
         if (isTimerRunning && timer != null && timer.isAlive()) {
             timer.interrupt();
         }
@@ -268,7 +292,7 @@ public class StartExamController extends Controller {
         int n = exam.getStudentList().size();
         double avg = exam.getAverage();
 
-        avg = (avg * n + grade)/ (n + 1);
+        avg = (avg * n + grade) / (n + 1);
 
         Result result = new Result(grade, (Student) Client.getClient().getUser(), "", exam, elapsed, flag, answers);
 
@@ -276,14 +300,14 @@ public class StartExamController extends Controller {
         List<Student> students = exam.getStudentList();
         List<Result> results = new ArrayList<>();
 
-        for(Student student : students){
+        for (Student student : students) {
             results.addAll(student.getResultList());
         }
 
         results.add(result);
 
         List<Integer> grades = new ArrayList<>();
-        for(Result r : results){
+        for (Result r : results) {
             grades.add(r.getGrade());
         }
 
@@ -292,12 +316,12 @@ public class StartExamController extends Controller {
 
         n++;
 
-        if(n % 2 == 0){
+        if (n % 2 == 0) {
             int midIndex = n / 2;
             median = (grades.get(midIndex - 1) + grades.get(midIndex)) / 2.0;
         } else {
             int midIndex = n / 2;
-            median = (grades.get(midIndex ));
+            median = (grades.get(midIndex));
         }
 
         //update distribution
@@ -323,7 +347,7 @@ public class StartExamController extends Controller {
     }
 
     @Subscribe
-    public void examEndedMessage(String message){
+    public void examEndedMessage(String message) {
 
         boundary.getAutoAp().setDisable(true);
 

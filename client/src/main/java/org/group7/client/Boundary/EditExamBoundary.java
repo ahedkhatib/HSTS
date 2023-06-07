@@ -62,6 +62,9 @@ public class EditExamBoundary extends Boundary {
     @FXML
     private ListView<Exam> examListView;
 
+    @FXML
+    private ComboBox<String> typeCombo;
+
     private EditExamController controller;
 
     private Exam activeExam;
@@ -104,7 +107,10 @@ public class EditExamBoundary extends Boundary {
 
     @FXML
     void save(ActionEvent event) {
-        controller.save(examNameTF.getText(), activeExam.getType(), durationTF.getText(), (Teacher) Client.getClient().getUser(),
+
+        boolean typeFlag = typeCombo.getSelectionModel().getSelectedItem().equals("Manual exam");
+
+        controller.save(examNameTF.getText(), (typeFlag) ? 2 : 1, durationTF.getText(), (Teacher) Client.getClient().getUser(),
                 teacherNoteTA.getText(), studentNoteTA.getText(), activeExam.getCourse(), selectedQuestions, points);
     }
 
@@ -112,6 +118,9 @@ public class EditExamBoundary extends Boundary {
     public void initialize() {
         controller = new EditExamController(this);
         super.setController(controller);
+
+        typeCombo.getItems().add("Manual exam");
+        typeCombo.getItems().add("Automated exam");
 
         examListView.setCellFactory(param -> new ListCell<Exam>() {
             @Override
@@ -181,6 +190,12 @@ public class EditExamBoundary extends Boundary {
                     teacherNoteTA.setText(activeExam.getTeacherComments());
                     studentNoteTA.setText(activeExam.getStudentComments());
                     durationTF.setText(Integer.toString(activeExam.getDuration()));
+
+                    if(activeExam.getType() == 1){
+                        typeCombo.getSelectionModel().select(1);
+                    } else {
+                        typeCombo.getSelectionModel().select(0);
+                    }
                 }
             }
         });

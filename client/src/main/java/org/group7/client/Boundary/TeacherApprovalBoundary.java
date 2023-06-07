@@ -324,8 +324,8 @@ public class TeacherApprovalBoundary extends Boundary {
         }else {
             controller.save(activeResult, false, "", optinalNoteForStudentsText.getText(), activeResult.getExam().getAverage(), activeResult.getExam().getMedian(), activeResult.getExam().getDistribution());
         }
-        nonApprovedListView.getItems().remove(activeResult);
 
+        nonApprovedListView.getItems().remove(activeResult);
 
         resultsAP.setDisable(true);
         resultsAP.setVisible(false);
