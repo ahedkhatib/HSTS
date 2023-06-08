@@ -67,35 +67,6 @@ public class StartExamController extends Controller {
         }
     }
 
-
-    public void startTimer_manual() {
-
-        timer = new Thread(() -> {
-
-            isTimerRunning = true;
-
-            try {
-                for (int i = durationSeconds; i >= 0; i--) {
-                    Thread.sleep(1000);
-                    if (!isTimerRunning) {
-                        return;
-                    }
-                    durationSeconds--;
-                    elapsedSeconds++;
-                    boundary.setTimeSeconds(i);
-                }
-
-                isTimerRunning = false;
-                finishManualExam(true, "");
-            } catch (InterruptedException e) {
-                System.out.println("Timer Interrupted!");
-            }
-        });
-
-        timer.setDaemon(true);
-        timer.start();
-    }
-
     public void startTimer() {
 
         timer = new Thread(() -> {
@@ -193,7 +164,6 @@ public class StartExamController extends Controller {
                 pane = boundary.openManualExam();
                 exam = event.getExam();
                 durationSeconds = exam.getTime() * 60;
-                startTimer_manual();
             }
         }
     }
@@ -242,32 +212,6 @@ public class StartExamController extends Controller {
         }
     }
 
-    public void finishManualExam(boolean flag, String sol) {
-
-        if (isTimerRunning && timer != null && timer.isAlive()) {
-            timer.interrupt();
-        }
-
-        boundary.getManualAp().setDisable(true);
-
-        double elapsed = elapsedSeconds / 60.0;
-        boundary.getManualAp().setDisable(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Exam Finished!"
-        );
-
-        alert.show();
-
-        ManualResult result = new ManualResult(sol, exam, (Student) Client.getClient().getUser());
-
-        try {
-            Client.getClient().sendToServer(new Message(result, "#FinishManExam"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     public void finishExam(boolean flag) {
         if (isTimerRunning && timer != null && timer.isAlive()) {
             timer.interrupt();
@@ -275,79 +219,98 @@ public class StartExamController extends Controller {
 
         double elapsed = elapsedSeconds / 60.0;
 
-        List<ToggleGroup> answersToggle = boundary.getToggleGroups();
+        if(exam.getExam().getType() == 1){
+            List<ToggleGroup> answersToggle = boundary.getToggleGroups();
 
-        List<Integer> points = exam.getExam().getQuestionPoints();
-        List<Question> questions = exam.getExam().getQuestionList();
+            List<Integer> points = exam.getExam().getQuestionPoints();
+            List<Question> questions = exam.getExam().getQuestionList();
 
-        HashMap<Question, Integer> answers = new HashMap<>();
+            HashMap<Question, Integer> answers = new HashMap<>();
 
-        int grade = 0;
+            int grade = 0;
 
-        for (int i = 0; i < questions.size(); i++) {
-            if (answersToggle.get(i).getSelectedToggle() != null && questions.get(i).getCorrectAnswer() == answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle())) {
-                grade += points.get(i);
+            for (int i = 0; i < questions.size(); i++) {
+                if (answersToggle.get(i).getSelectedToggle() != null && questions.get(i).getCorrectAnswer() == answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle())) {
+                    grade += points.get(i);
+                } else {
+                    answers.put(questions.get(i), -1);
+                }
                 answers.put(questions.get(i), answersToggle.get(i).getToggles().indexOf(answersToggle.get(i).getSelectedToggle()));
+            }
+
+            //update average
+            int n = exam.getStudentList().size();
+            double avg = exam.getAverage();
+
+            avg = (avg * n + grade) / (n + 1);
+
+            Result result = new Result(grade, (Student) Client.getClient().getUser(), "", exam, elapsed, flag, answers);
+
+            //update median
+            List<Student> students = exam.getStudentList();
+            List<Result> results = new ArrayList<>();
+
+            for (Student student : students) {
+                results.addAll(student.getResultList());
+            }
+
+            results.add(result);
+
+            List<Integer> grades = new ArrayList<>();
+            for (Result r : results) {
+                grades.add(r.getGrade());
+            }
+
+            Collections.sort(grades);
+            double median = 0;
+
+            n++;
+
+            if (n % 2 == 0) {
+                int midIndex = n / 2;
+                median = (grades.get(midIndex - 1) + grades.get(midIndex)) / 2.0;
             } else {
-                answers.put(questions.get(i), -1);
+                int midIndex = n / 2;
+                median = (grades.get(midIndex));
             }
-        }
 
-        //update average
-        int n = exam.getStudentList().size();
-        double avg = exam.getAverage();
+            //update distribution
+            int[] updatedDistribution = exam.getDistribution().clone();
+            int[] gradeRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
-        avg = (avg * n + grade) / (n + 1);
+            for (int i = 0; i < gradeRanges.length - 1; i++) {
+                if (grade >= gradeRanges[i] && grade < gradeRanges[i + 1]) {
+                    updatedDistribution[i]++;
+                    break;
+                }
+            }
 
-        Result result = new Result(grade, (Student) Client.getClient().getUser(), "", exam, elapsed, flag, answers);
+            //Send to server
+            double[] arr = {avg, median};
+            Object[] objects = {result, Client.getClient().getUser(), exam, arr, updatedDistribution};
 
-        //update median
-        List<Student> students = exam.getStudentList();
-        List<Result> results = new ArrayList<>();
-
-        for (Student student : students) {
-            results.addAll(student.getResultList());
-        }
-
-        results.add(result);
-
-        List<Integer> grades = new ArrayList<>();
-        for (Result r : results) {
-            grades.add(r.getGrade());
-        }
-
-        Collections.sort(grades);
-        double median = 0;
-
-        n++;
-
-        if (n % 2 == 0) {
-            int midIndex = n / 2;
-            median = (grades.get(midIndex - 1) + grades.get(midIndex)) / 2.0;
+            try {
+                Client.getClient().sendToServer(new Message(objects, "#FinishExam"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            int midIndex = n / 2;
-            median = (grades.get(midIndex));
-        }
 
-        //update distribution
-        int[] updatedDistribution = exam.getDistribution().clone();
-        int[] gradeRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+            boundary.getManualAp().setDisable(true);
+            boundary.getManualAp().setDisable(true);
 
-        for (int i = 0; i < gradeRanges.length - 1; i++) {
-            if (grade >= gradeRanges[i] && grade < gradeRanges[i + 1]) {
-                updatedDistribution[i]++;
-                break;
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Exam Finished!"
+            );
+
+            alert.show();
+
+            ManualResult result = new ManualResult(boundary.getManualSolution(), exam, (Student) Client.getClient().getUser());
+
+            try {
+                Client.getClient().sendToServer(new Message(result, "#FinishManExam"));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-
-        //Send to server
-        double[] arr = {avg, median};
-        Object[] objects = {result, Client.getClient().getUser(), exam, arr, updatedDistribution};
-
-        try {
-            Client.getClient().sendToServer(new Message(objects, "#FinishExam"));
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

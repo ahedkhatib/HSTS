@@ -519,6 +519,8 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
+                        client.sendToClient(new Message(null, "#ExamFinished"));
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -730,7 +732,7 @@ public class Server extends AbstractServer {
                 new ArrayList<>(List.of(new Course[]{intro, algo})), cs, 2, (new String[]{"DFS", "BFS", "Daijkstra", "A + B"}));
 
         Question csQ5 = new Question("How do we get edges of an image ?", new ArrayList<>(List.of(new Course[]{cv, graphics})),
-                cs, 2, (new String[]{"Sobel", "Canny", "No way!", "A + B"}));
+                cs, 3, (new String[]{"Sobel", "Canny", "No way!", "A + B"}));
 
         Question csQ6 = new Question("What is recursion ?", new ArrayList<>(List.of(new Course[]{intro, algo})),
                 cs, 1, (new String[]{"What is recursion ?", "Yes", "No", "Error"}));
@@ -861,6 +863,8 @@ public class Server extends AbstractServer {
         executableAlgebraB.setDistribution(distribution);
         executableAlgebraB.setMedian(91);
         executableAlgebraB.setAverage(91);
+        session.save(executableAlgebraB);
+        session.flush();
 
         session.getTransaction().commit();
     }

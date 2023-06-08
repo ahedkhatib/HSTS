@@ -57,7 +57,6 @@ public class Exam implements Serializable {
         this.questionList.addAll(questionList);
         this.questionPoints = questionPoints;
         this.course = course;
-
     }
 
     public String getExamName() {
@@ -85,7 +84,7 @@ public class Exam implements Serializable {
     }
 
     public int getExamId() {
-        return examId;
+        return course.getSubject().getSubjectId() * 10000 + course.getCourseId() * 100 + examId;
     }
 
     public void setExamId(int examId) {
