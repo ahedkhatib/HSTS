@@ -2,7 +2,7 @@ package org.group7.client.Control;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.group7.client.Boundary.PrinExamReportsBoundary;
+import org.group7.client.Boundary.PrinShowDataBoundary;
 import org.group7.client.Client;
 import org.group7.client.Events.ExamsListEvent;
 import org.group7.client.Events.StudentListEvent;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PrinExamReportsController extends Controller {
+public class PrinShowDataController extends Controller {
 
-    PrinExamReportsBoundary boundary;
+    PrinShowDataBoundary boundary;
 
-    public PrinExamReportsController(PrinExamReportsBoundary boundary) {
+    public PrinShowDataController(PrinShowDataBoundary boundary) {
         this.boundary = boundary;
 
         EventBus.getDefault().register(this);

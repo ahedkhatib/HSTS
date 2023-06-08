@@ -13,10 +13,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Client;
 import org.group7.client.Control.EditExamController;
-import org.group7.entities.Exam;
-import org.group7.entities.Question;
-import org.group7.entities.Subject;
-import org.group7.entities.Teacher;
+import org.group7.entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,8 +107,15 @@ public class EditExamBoundary extends Boundary {
 
         boolean typeFlag = typeCombo.getSelectionModel().getSelectedItem().equals("Manual exam");
 
+        List<String> selectedPoints = new ArrayList<>();
+        for(int i = 0; i < questionListView.getItems().size(); i++){
+            if(selectedQuestions.contains(questionListView.getItems().get(i))){
+                selectedPoints.add(points.get(i));
+            }
+        }
+
         controller.save(examNameTF.getText(), (typeFlag) ? 2 : 1, durationTF.getText(), (Teacher) Client.getClient().getUser(),
-                teacherNoteTA.getText(), studentNoteTA.getText(), activeExam.getCourse(), selectedQuestions, points);
+                teacherNoteTA.getText(), studentNoteTA.getText(), activeExam.getCourse(), selectedQuestions, selectedPoints);
     }
 
     @FXML
@@ -139,7 +143,7 @@ public class EditExamBoundary extends Boundary {
 
                     hbox.setPrefHeight(50);
                     hbox.setAlignment(Pos.CENTER_LEFT);
-                    hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black;");
+                    hbox.getStyleClass().add("list-view-item");
 
                     String examName = exam.getExamName();
 
@@ -174,18 +178,21 @@ public class EditExamBoundary extends Boundary {
                     titleText.setText(" - Course: " + activeExam.getCourse().getCourseName() + "\n - Subject: " + activeExam.getCourse().getSubject().getSubjectName());
 
                     selectedQuestions = new ArrayList<>();
-
                     selectedQuestions.addAll(activeExam.getQuestionList());
 
+                    Course course = activeExam.getCourse();
+                    questionListView.setItems(FXCollections.observableArrayList(course.getQuestionList()));
+
                     points = new ArrayList<>();
-
-                    for (Integer q : activeExam.getQuestionPoints()) {
-                        points.add(Integer.toString(q));
+                    int counter = 0;
+                    for(Question question : course.getQuestionList()){
+                        if(selectedQuestions.contains(question)){
+                            points.add(Integer.toString(activeExam.getQuestionPoints().get(counter)));
+                            counter++;
+                        } else {
+                            points.add("0");
+                        }
                     }
-
-                    Subject subject = activeExam.getCourse().getSubject();
-
-                    questionListView.setItems(FXCollections.observableArrayList(subject.getQuestionList()));
 
                     teacherNoteTA.setText(activeExam.getTeacherComments());
                     studentNoteTA.setText(activeExam.getStudentComments());
@@ -219,7 +226,6 @@ public class EditExamBoundary extends Boundary {
                     hbox.setPrefHeight(25);
                     hbox.setAlignment(Pos.CENTER_LEFT);
 
-
                     String instructions = question.getInstructions();
 
                     Text instructionText = new Text(instructions);
@@ -227,15 +233,14 @@ public class EditExamBoundary extends Boundary {
 
                     if (selectedQuestions.contains(question)) {
 
-                        hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black; -fx-background-color: lightgray;");
+                        hbox.getStyleClass().add("list-view-item-selected");
+                        getStyleClass().add("list-view-item-selected");
 
-                        int grade = questionGrade(getItem());
-
-                        TextField gradeTf = new TextField(grade + "");
+                        TextField gradeTf = new TextField(points.get(getIndex()));
                         gradeTf.setFont(Font.font("Arial", 18));
 
                         gradeTf.textProperty().addListener((observable, oldValue, newValue) -> {
-                            points.set(selectedQuestions.indexOf(question), newValue);
+                            points.set(getIndex(), newValue);
                         });
 
                         Region spacer = new Region();
@@ -244,7 +249,7 @@ public class EditExamBoundary extends Boundary {
                         hbox.getChildren().addAll(instructionText, spacer, gradeTf);
 
                     } else {
-                        hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black;");
+                        hbox.getStyleClass().add("list-view-item");
                         hbox.getChildren().addAll(instructionText);
                     }
 
@@ -259,14 +264,9 @@ public class EditExamBoundary extends Boundary {
 
             if (selectedQ != null) {
                 if (selectedQuestions.contains(selectedQ)) {
-                    points.remove(selectedQuestions.indexOf(selectedQ));
                     selectedQuestions.remove(selectedQ);
                 } else {
                     selectedQuestions.add(selectedQ);
-
-                    int grade = questionGrade(selectedQ);
-
-                    points.add(Integer.toString(grade));
                 }
 
                 // Update the item appearance
@@ -276,15 +276,6 @@ public class EditExamBoundary extends Boundary {
         });
 
         controller.getExams();
-    }
-
-    public int questionGrade(Question question){
-        for(Question q : activeExam.getQuestionList()){
-            if(question.getQuestionId() == q.getQuestionId()){
-                return activeExam.getQuestionPoints().get(activeExam.getQuestionList().indexOf(question));
-            }
-        }
-        return 0;
     }
 
 }

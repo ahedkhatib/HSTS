@@ -342,6 +342,7 @@ public class Server extends AbstractServer {
 
                         ExecutableExam exam = new ExecutableExam((String) obj[1], (Exam) obj[0], teacher);
                         teacher.getExamList().add(exam);
+
                         session.save(exam);
                         session.save(teacher);
                         session.flush();
@@ -383,15 +384,32 @@ public class Server extends AbstractServer {
                         session.beginTransaction();
 
                         Exam exam = (Exam) message.getObject();
-                        session.save(exam);
+
+                        List<Question> questions = exam.getQuestionList();
+                        List<Question> temp = new ArrayList<>();
+                        for (Question t : questions) {
+                            Question question = session.find(Question.class, t.getQuestionId());
+                            temp.add(question);
+                        }
+                        exam.setQuestionList(temp);
 
                         Teacher teacher = session.find(Teacher.class, exam.getCreator().getUsername());
+                        exam.setCreator(teacher);
                         teacher.getCreatedExams().add(exam);
-                        session.save(teacher);
 
                         Course course = session.find(Course.class, exam.getCourse().getCourseId());
+                        exam.setCourse(course);
                         course.getExamList().add(exam);
+
+                        session.save(exam);
+                        session.save(teacher);
                         session.save(course);
+
+                        for (Question t : temp) {
+                            Question question = session.find(Question.class, t.getQuestionId());
+                            question.getExamList().add(exam);
+                            session.save(course);
+                        }
 
                         session.flush();
                         session.getTransaction().commit();
@@ -412,21 +430,27 @@ public class Server extends AbstractServer {
 
                         Question question = (Question) message.getObject();
 
-                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
-                        subject.getQuestionList().add(question);
-                        session.save(subject);
-
                         List<Course> courses = question.getCourseList();
-                        List<Course> updated = new ArrayList<>();
+                        List<Course> temp = new ArrayList<>();
                         for (Course t : courses) {
+                            Course course = session.find(Course.class, t.getCourseId());
+                            temp.add(course);
+                        }
+
+                        question.setCourseList(temp);
+
+                        Subject subject = session.find(Subject.class, question.getSubject().getSubjectId());
+                        question.setSubject(subject);
+                        subject.getQuestionList().add(question);
+
+                        session.save(subject);
+                        session.save(question);
+
+                        for (Course t : temp) {
                             Course course = session.find(Course.class, t.getCourseId());
                             course.getQuestionList().add(question);
                             session.save(course);
-                            updated.add(course);
                         }
-
-                        question.setCourseList(updated);
-                        session.save(question);
 
                         session.flush();
                         session.getTransaction().commit();
@@ -604,11 +628,6 @@ public class Server extends AbstractServer {
         session.save(adan);
         session.flush();
 
-        List<Student> students = new ArrayList<>();
-        students.add(alaa);
-        students.add(ahed);
-
-
         // Add teachers
         Teacher shir = new Teacher("shir", "shirpass", "Shir", "Sneh");
         Teacher malki = new Teacher("malki", "malkipass", "Malki", "Grosman");
@@ -758,6 +777,10 @@ public class Server extends AbstractServer {
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
+        for(Question q : algebraQuestions){
+            q.getExamList().add(algebraExam);
+            session.save(q);
+        }
         session.flush();
 
         Exam algebraExamB = new Exam("Algebra Exam moed b", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
@@ -766,6 +789,10 @@ public class Server extends AbstractServer {
         session.save(algebraExamB);
         session.save(or);
         session.save(algebra);
+        for(Question q : algebraQuestions){
+            q.getExamList().add(algebraExamB);
+            session.save(q);
+        }
         session.flush();
 
         // Add executables

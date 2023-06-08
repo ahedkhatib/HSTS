@@ -19,7 +19,7 @@
     <children>
         <BorderPane fx:id="borderPane" layoutY="1.0" prefHeight="778.0" prefWidth="1215.0">
             <top>
-                <AnchorPane prefHeight="85.0" prefWidth="1215.0" BorderPane.alignment="CENTER">
+                <AnchorPane prefHeight="85.0" prefWidth="1215.0" BorderPane.alignment="CENTER" fx:id="topPane">
                     <children>
                         <Button fx:id="menuBtn" layoutX="14.0" layoutY="10.0" mnemonicParsing="false"
                                 onAction="#toggleMenu" prefHeight="62.0" prefWidth="94.0"
@@ -44,7 +44,7 @@
                 </AnchorPane>
             </top>
             <left>
-                <AnchorPane fx:id="sidePanel" prefHeight="733.0" prefWidth="219.0" style="-fx-background-color: D6E6F2;"
+                <AnchorPane fx:id="sidePanel" prefHeight="733.0" prefWidth="219.0" style="-fx-background-color: D2E9E9;"
                             BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets/>
@@ -83,9 +83,9 @@
                                         prefHeight="50.0" prefWidth="217.0" styleClass="menu-button" text="Reports"/>
                             </VBox>
                             <VBox fx:id="prinButtons" visible="false">
-                                <Button fx:id="prinExamReportsBtn" mnemonicParsing="false" onAction="#goToPage"
+                                <Button fx:id="prinShowData" mnemonicParsing="false" onAction="#goToPage"
                                         prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
-                                        text="Exam Reports"/>
+                                        text="Show HSTS Data"/>
                                 <Button fx:id="prinTeacherReportsBtn" mnemonicParsing="false" onAction="#goToPage"
                                         prefHeight="50.0" prefWidth="217.0" styleClass="menu-button"
                                         text="Teacher Reports"/>

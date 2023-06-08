@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinShowDataBoundary">
+    <children>
+        <TextArea fx:id="examTF" layoutX="251.0" layoutY="221.0" prefHeight="417.0" prefWidth="713.0">
+         <font>
+            <Font size="20.0" />
+         </font></TextArea>
+      <HBox alignment="CENTER" layoutX="275.0" layoutY="130.0" prefHeight="45.0" prefWidth="665.0" spacing="20.0">
+         <children>
+              <ComboBox fx:id="examsComboBox" onAction="#selectExam" prefHeight="30.0" prefWidth="250.0" promptText="Select exam:" />
+              <ComboBox fx:id="subjectsCB" onAction="#selectSubject" prefHeight="30.0" prefWidth="250.0" promptText="Select subject: " />
+              <ComboBox fx:id="studentsCB" onAction="#selectStudent" prefHeight="30.0" prefWidth="250.0" promptText="Select student" />
+         </children>
+      </HBox>
+    </children>
+</AnchorPane>

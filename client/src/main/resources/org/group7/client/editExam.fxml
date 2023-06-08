@@ -25,7 +25,7 @@
         <AnchorPane fx:id="listAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
             <ListView fx:id="examListView" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0" />
         </AnchorPane>
-        <AnchorPane fx:id="examAP" prefHeight="693.0" prefWidth="1215.0">
+        <AnchorPane fx:id="examAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
             <children>
                 <Button fx:id="backBtn" layoutX="58.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToList" prefHeight="70.0" prefWidth="87.0" style="-fx-background-color: transparent;">
                     <cursor>
@@ -47,7 +47,7 @@
                         <Font size="25.0" />
                     </font>
                 </TextField>
-                <Text fx:id="titleText" layoutX="616.0" layoutY="70.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="439.13671875">
+                <Text fx:id="titleText" layoutX="617.0" layoutY="62.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="439.13671875">
                     <font>
                         <Font size="25.0" />
                     </font>
@@ -57,7 +57,7 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Teacher's Note: ">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="20.0" />
                             </font>
                         </Text>
                         <TextArea fx:id="teacherNoteTA" prefHeight="198.0" prefWidth="357.0">
@@ -71,7 +71,7 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Student's Note: ">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="20.0" />
                             </font>
                         </Text>
                         <TextArea fx:id="studentNoteTA" prefHeight="198.0" prefWidth="357.0">
@@ -81,7 +81,7 @@
                         </TextArea>
                     </children>
                 </HBox>
-                <Button fx:id="saveBtn" layoutX="996.0" layoutY="501.0" mnemonicParsing="false" onAction="#save" prefHeight="103.0" prefWidth="179.0" styleClass="login-button" text="Save">
+                <Button fx:id="saveBtn" layoutX="1001.0" layoutY="525.0" mnemonicParsing="false" onAction="#save" prefHeight="103.0" prefWidth="179.0" styleClass="login-button" text="Save">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -90,7 +90,7 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Duration: ">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="20.0" />
                             </font>
                         </Text>
                         <TextField fx:id="durationTF" prefHeight="108.0" prefWidth="234.0">
@@ -100,14 +100,14 @@
                         </TextField>
                     </children>
                 </HBox>
-            <HBox alignment="CENTER_LEFT" layoutX="597.0" layoutY="451.0" prefHeight="75.0" prefWidth="261.0" style="-fx-alignment: center_left;">
+            <HBox alignment="CENTER_LEFT" layoutX="597.0" layoutY="453.0" prefHeight="75.0" prefWidth="298.0" style="-fx-alignment: center_left;">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exam Type: ">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="20.0" />
                      </font>
                   </Text>
-                  <ComboBox fx:id="typeCombo" prefHeight="30.0" prefWidth="132.0" />
+                  <ComboBox fx:id="typeCombo" prefHeight="31.0" prefWidth="184.0" />
                </children>
             </HBox>
             </children>

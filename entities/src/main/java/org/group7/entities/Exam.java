@@ -33,8 +33,7 @@ public class Exam implements Serializable {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @Transient
-    @Column(name = "question_list")
+    @ManyToMany(mappedBy = "examList", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Question> questionList;
 
     @Transient
@@ -54,7 +53,8 @@ public class Exam implements Serializable {
         this.type = type;
         this.teacherComments = teacherComments;
         this.studentComments = studentComments;
-        this.questionList = questionList;
+        this.questionList = new ArrayList<>();
+        this.questionList.addAll(questionList);
         this.questionPoints = questionPoints;
         this.course = course;
 

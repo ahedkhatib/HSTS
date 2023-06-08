@@ -40,16 +40,25 @@ public class EditExamController extends Controller{
 
         List<Exam> exams = new ArrayList<>();
         List<Course> courses = event.getCourses();
+        List<Subject> subjects = new ArrayList<>();
 
         for(Course course : courses){
-            for(Exam ex : course.getExamList()){
-                if(!exams.contains(ex))
-                    exams.add(ex);
+            if(!subjects.contains(course.getSubject())){
+                subjects.add(course.getSubject());
+            }
+        }
+
+        for(Subject subject : subjects){
+            for(Course course : subject.getCourseList()){
+                for(Exam ex : course.getExamList()){
+                    if(!exams.contains(ex)){
+                        exams.add(ex);
+                    }
+                }
             }
         }
 
         if(exams.size() == 0) {
-
             boundary.getEmptyAP().setVisible(true);
             boundary.getListAP().setVisible(false);
             boundary.getListAP().setDisable(true);
