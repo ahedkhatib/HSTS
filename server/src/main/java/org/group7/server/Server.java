@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.HashMap;
 
-
-
 public class Server extends AbstractServer {
 
     public static Session session;
