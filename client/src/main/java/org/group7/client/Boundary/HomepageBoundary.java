@@ -4,16 +4,12 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.group7.client.App;
-import org.group7.client.Client;
 import org.group7.client.Control.Controller;
 import org.group7.client.Control.HomepageController;
 import org.group7.entities.User;
@@ -61,7 +57,7 @@ public class HomepageBoundary extends Boundary {
     private Button prinCourseReportsBtn;
 
     @FXML
-    private Button prinExamReportsBtn;
+    private Button prinShowData;
 
     @FXML
     private Button prinStudentReportsBtn;
@@ -105,6 +101,9 @@ public class HomepageBoundary extends Boundary {
     @FXML
     private VBox prinButtons;
 
+    @FXML
+    private AnchorPane topPane;
+
     private FXMLLoader fxmlLoader;
 
     @FXML
@@ -136,7 +135,7 @@ public class HomepageBoundary extends Boundary {
             loadPage("createExam");
             titleText.setText("New Exam");
         } else if (pressed == newQuestionBtn) {
-            loadPage("prepareQuestion");
+            loadPage("newQuestion");
             titleText.setText("Add Question");
         } else if (pressed == studentReportsBtn) {
             loadPage("studentReports");
@@ -150,9 +149,9 @@ public class HomepageBoundary extends Boundary {
         } else if (pressed == prinTeacherReportsBtn) {
             loadPage("prinTeacherReport");
             titleText.setText("Teacher Reports");
-        } else if (pressed == prinExamReportsBtn) {
-            loadPage("prinExamReports");
-            titleText.setText("Exam Reports");
+        } else if (pressed == prinShowData) {
+            loadPage("prinShowData");
+            titleText.setText("HSTS Data");
         } else if (pressed == prinStudentReportsBtn) {
             loadPage("prinStudentReports");
             titleText.setText("Student Reports");

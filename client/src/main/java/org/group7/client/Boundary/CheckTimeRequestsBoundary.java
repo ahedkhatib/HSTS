@@ -113,13 +113,12 @@ public class CheckTimeRequestsBoundary extends Boundary {
                 super.updateItem(req, empty);
 
                 if (empty || req == null) {
+                    setStyle("-fx-background-color: transparent;");
                     setText(null);
                     setGraphic(null);
                 } else {
 
                     setPrefWidth(USE_COMPUTED_SIZE);
-
-                    setHeight(35);
 
                     HBox hbox = new HBox();
 
@@ -131,12 +130,17 @@ public class CheckTimeRequestsBoundary extends Boundary {
                     Text arrow = new Text(">");
                     arrow.setFont(Font.font("Arial", 24));
 
+                    hbox.setPrefHeight(50);
+                    hbox.getStyleClass().add("list-view-item");
+
                     Region spacer = new Region();
                     HBox.setHgrow(spacer, Priority.ALWAYS);
 
                     hbox.getChildren().addAll(reqText, spacer, arrow);
 
                     if (req.isStatus()) {
+                        hbox.getStyleClass().add("list-view-item-selected");
+                        getStyleClass().add("list-view-item-selected");
                         setDisable(true);
                         reqText.setStrikethrough(true);
                     }

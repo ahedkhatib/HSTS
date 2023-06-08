@@ -213,7 +213,6 @@ public class TeacherReportsBoundary extends Boundary{
         });
 
 
-
         gradeAxis.setLabel("Grades");
         countAxis.setLabel("Count");
         countAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(countAxis) {

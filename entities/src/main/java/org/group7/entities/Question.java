@@ -26,6 +26,12 @@ public class Question implements Serializable{
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private List<Course> courseList;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "question_exam",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "exam_id"))
+    private List<Exam> examList;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subject_id")
     private Subject subject;
@@ -44,9 +50,18 @@ public class Question implements Serializable{
         this.instructions = instructions;
         this.courseList = new ArrayList<>();
         this.courseList.addAll(courseList);
+        this.examList = new ArrayList<>();
         this.subject = subject;
         this.correctAnswer = correctAnswer;
         this.answerList = answerList;
+    }
+
+    public List<Exam> getExamList() {
+        return examList;
+    }
+
+    public void setExamList(List<Exam> examList) {
+        this.examList = examList;
     }
 
     public int getQuestionId() {

@@ -12,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 import org.group7.client.Client;
 import org.group7.client.Control.CreateExamController;
 import org.group7.entities.*;
@@ -149,6 +150,8 @@ public class CreateExamBoundary extends Boundary {
         questionsListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         selectedQuestions = new ArrayList<>();
 
+        updateListView();
+
     }
 
     public void updateSubjectsComboBox() {
@@ -196,13 +199,16 @@ public class CreateExamBoundary extends Boundary {
                     if (cell == null) {
                         // Initialize the cell components
                         cell = new HBox();
+                        cell.setPrefHeight(30);
                         Region spacer = new Region();
                         HBox.setHgrow(spacer, Priority.ALWAYS);
                         questionLabel = new Label();
+                        questionLabel.setStyle("-fx-text-fill: black;");
                         gradeTextField = new TextField();
                         gradeTextField.setPromptText("Enter grade");
                         gradeTextField.setPrefWidth(100);
                         gradeTextField.setPrefHeight(15);
+                        questionLabel.setFont(Font.font("Arial", 20));
                         cell.getChildren().addAll(questionLabel, spacer, gradeTextField);
                     }
 
@@ -211,7 +217,8 @@ public class CreateExamBoundary extends Boundary {
 
                     if (selectedQuestions.contains(item)) {
                         // Apply selected style
-                        cell.setStyle("-fx-background-color: lightgray;");
+                        cell.getStyleClass().add("list-view-item-selected");
+                        getStyleClass().add("list-view-item-selected");
                         // Show and enable the grade TextField
                         gradeTextField.setVisible(true);
                         gradeTextField.setDisable(false);
@@ -224,7 +231,7 @@ public class CreateExamBoundary extends Boundary {
                         }
                     } else {
                         // Clear style
-                        cell.setStyle("");
+                        cell.getStyleClass().add("list-view-item");
                         // Hide and disable the grade TextField
                         gradeTextField.setVisible(false);
                         gradeTextField.setDisable(true);
@@ -239,6 +246,7 @@ public class CreateExamBoundary extends Boundary {
                 } else {
                     // Clear the cell components
                     setGraphic(null);
+                    setStyle("-fx-background-color: transparent;");
                     cell = null;
                     questionLabel = null;
                     gradeTextField = null;

@@ -12,17 +12,17 @@
 
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.CheckTimeRequestsBoundary">
    <children>
-      <AnchorPane fx:id="emptyAP" prefHeight="693.0" prefWidth="1215.0" visible="false">
-         <Text fx:id="emptyText" layoutX="150.0" layoutY="300.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="No Requests!" textAlignment="CENTER">
+      <AnchorPane fx:id="emptyAP" disable="true" prefHeight="693.0" prefWidth="1215.0">
+         <Text fx:id="emptyText" layoutX="461.0" layoutY="367.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="No Requests!" textAlignment="CENTER">
             <font>
                <Font size="50.0" />
             </font>
          </Text>
       </AnchorPane>
-      <AnchorPane fx:id="listAP" prefHeight="693.0" prefWidth="1215.0">
+      <AnchorPane fx:id="listAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
           <ListView fx:id="requestList" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0" />
       </AnchorPane>
-      <AnchorPane fx:id="requestAP" prefHeight="693.0" prefWidth="1215.0">
+      <AnchorPane fx:id="requestAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
          <children>
             <Button fx:id="backBtn" layoutX="55.0" layoutY="51.0" mnemonicParsing="false" onAction="#backToList" prefHeight="70.0" prefWidth="87.0" style="-fx-background-color: transparent;">
                <graphic>

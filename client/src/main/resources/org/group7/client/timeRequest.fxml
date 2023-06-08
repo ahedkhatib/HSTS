@@ -11,7 +11,7 @@
 <AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TimeRequestBoundary">
     <children>
-        <HBox layoutX="307.0" layoutY="128.0" alignment="CENTER" spacing="50.0">
+        <HBox alignment="CENTER" layoutX="239.0" layoutY="132.0" spacing="50.0">
             <children>
                 <HBox alignment="CENTER" spacing="8.0">
                     <children>
@@ -43,7 +43,7 @@
                 </HBox>
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="307.0" layoutY="247.0" prefHeight="200.0" prefWidth="647.0" spacing="30.0">
+        <HBox alignment="CENTER" layoutX="239.0" layoutY="247.0" prefHeight="200.0" prefWidth="647.0" spacing="30.0">
             <children>
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Notes: ">
                     <font>
@@ -57,8 +57,8 @@
                 </TextArea>
             </children>
         </HBox>
-        <Button fx:id="sendReqBtn" layoutX="474.0" layoutY="530.0" mnemonicParsing="false" onAction="#sendRequest"
-                prefHeight="81.0" prefWidth="197.0" text="Send Request">
+        <Button fx:id="sendReqBtn" layoutX="509.0" layoutY="512.0" mnemonicParsing="false" onAction="#sendRequest"
+                prefHeight="81.0" prefWidth="197.0" text="Send Request" styleClass="login-button">
             <font>
                 <Font size="22.0"/>
             </font>

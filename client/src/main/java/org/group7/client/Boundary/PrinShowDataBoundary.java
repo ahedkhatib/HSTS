@@ -5,15 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.*;
-import org.group7.client.Control.PrinExamReportsController;
+import org.group7.client.Control.PrinShowDataController;
 import org.group7.entities.Subject;
 import org.group7.entities.*;
 
 import java.util.List;
 
-public class PrinExamReportsBoundary extends Boundary{
+public class PrinShowDataBoundary extends Boundary{
 
-    PrinExamReportsController controller;
+    PrinShowDataController controller;
 
     public List<Exam> exams;
 
@@ -36,7 +36,7 @@ public class PrinExamReportsBoundary extends Boundary{
 
     @FXML
     public void initialize() {
-        controller = new PrinExamReportsController(this);
+        controller = new PrinShowDataController(this);
         super.setController(controller);
         examTF.setVisible(false);
         examTF.setEditable(false);

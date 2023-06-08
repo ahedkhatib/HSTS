@@ -118,7 +118,7 @@ public class StudentReportsBoundary extends Boundary {
 
                     hbox.setPrefHeight(50);
                     hbox.setAlignment(Pos.CENTER_LEFT);
-                    hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black;");
+                    hbox.getStyleClass().add("list-view-item");
 
                     String examName = result.getExam().getExam().getExamName();
 
@@ -203,13 +203,13 @@ public class StudentReportsBoundary extends Boundary {
                 radioButton.setSelected(true);
 
                 if (correctIndex != i) {
-                    answerText.setStyle("-fx-text-fill: white;");
+                    answerText.setStyle("-fx-text-fill: white; -fx-font-size: 20;");
                     answer.setStyle("-fx-background-color: F67280; ");
                 }
             }
 
             if (correctIndex == i) {
-                answerText.setStyle("-fx-text-fill: white;");
+                answerText.setStyle("-fx-text-fill: white; -fx-font-size: 20;");
                 answer.setStyle("-fx-background-color: #91c79c; ");
             }
 

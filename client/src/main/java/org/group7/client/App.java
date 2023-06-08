@@ -55,7 +55,7 @@ public class App extends Application {
     public static void switchScreen(String screenName) {
         switch (screenName) {
             case "homepage" -> Platform.runLater(() -> {
-                setWindowTitle("Homepage");
+                setWindowTitle("HSTS");
             });
             case "login" -> Platform.runLater(() -> {
                 setWindowTitle("Login");

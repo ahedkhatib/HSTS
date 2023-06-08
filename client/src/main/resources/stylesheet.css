@@ -38,7 +38,7 @@
 }
 
 .menu-button:hover {
-    -fx-background-color: EEF1FF;
+    -fx-background-color: E3F4F4;
     -fx-cursor: hand;
 }
 
@@ -59,16 +59,48 @@
     -fx-border-width: 0 0 1 0;
     -fx-border-color: black;
     -fx-alignment: center-left;
-    -fx-padding: 0 5 0 5;
+    -fx-padding: 5px;
     -fx-background-color: transparent;
 }
 
 .list-view-item-selected {
-    -fx-border-width: 0;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: transparent;
+    -fx-alignment: center-left;
+    -fx-padding: 5px;
     -fx-background-color: F5EFE7;
+}
+
+.list-view-item-selected {
+    -fx-cursor: hand;
 }
 
 .list-view-item:hover {
     -fx-background-color: F5EFE7;
+    -fx-cursor: hand;
+}
+
+/* combo box */
+.combo-box {
+    -fx-alignment: center-left;
+    -fx-background-radius: 30;
+    -fx-padding: 0 5 0 5;
+    -fx-font-size: 15;
+    -fx-background-color: D2E9E9;
+}
+
+/* app-button */
+.app-button {
+    -fx-background-radius: 30;
+    -fx-border-width: 2;
+    -fx-border-radius: 30;
+    -fx-border-color: black;
+    -fx-background-color: C4DFDF;
+    -fx-padding: 10px;
+    -fx-font-size: 20;
+}
+
+.app-button:hover {
+    -fx-background-color: E3F4F4;
     -fx-cursor: hand;
 }

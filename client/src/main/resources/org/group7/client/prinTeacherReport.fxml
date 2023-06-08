@@ -9,22 +9,22 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1050.0" prefWidth="778.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinTeacherReportsBoundary">
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinTeacherReportsBoundary">
     <children>
-        <ComboBox fx:id="teachersComboBox" layoutX="530.0" layoutY="62.0" onAction="#selectTeacher" prefHeight="29.0" prefWidth="188.0" promptText="Select teacher:" />
-        <ComboBox fx:id="examsCB" layoutX="530.0" layoutY="130.0" onAction="#selectExam" prefHeight="29.0" prefWidth="188.0" promptText="Select executed exam:" />
-        <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="99.0" layoutX="201.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
-        <Label fx:id="averageLabel" layoutX="211.0" layoutY="72.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
+        <ComboBox fx:id="teachersComboBox" layoutX="530.0" layoutY="62.0" onAction="#selectTeacher" prefHeight="29.0" prefWidth="232.0" promptText="Select teacher:" />
+        <ComboBox fx:id="examsCB" layoutX="530.0" layoutY="130.0" onAction="#selectExam" prefHeight="29.0" prefWidth="232.0" promptText="Select executed exam:" />
+        <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="99.0" layoutX="116.0" layoutY="66.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
+        <Label fx:id="averageLabel" layoutX="126.0" layoutY="76.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
             <font>
                 <Font name="System Bold Italic" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="medianLabel" layoutX="211.0" layoutY="115.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
+        <Label fx:id="medianLabel" layoutX="126.0" layoutY="119.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
             <font>
                 <Font name="System Bold Italic" size="14.0" />
             </font>
         </Label>
-        <BarChart fx:id="gradeChart" layoutX="124.0" layoutY="210.0" prefHeight="425.0" prefWidth="685.0">
+        <BarChart fx:id="gradeChart" layoutX="272.0" layoutY="219.0" prefHeight="425.0" prefWidth="685.0">
             <xAxis>
                 <CategoryAxis fx:id="gradeAxis" prefHeight="0.0" prefWidth="579.0" side="BOTTOM" />
             </xAxis>
@@ -32,7 +32,7 @@
                 <NumberAxis fx:id="countAxis" side="LEFT" />
             </yAxis>
         </BarChart>
-        <Label fx:id="examsInfo" alignment="TOP_LEFT" layoutX="736.0" layoutY="62.0" prefHeight="99.0" prefWidth="232.0" text="Label">
+        <Label fx:id="examsInfo" alignment="TOP_LEFT" layoutX="872.0" layoutY="66.0" prefHeight="99.0" prefWidth="232.0" text="Label">
             <font>
                 <Font size="14.0" />
             </font>

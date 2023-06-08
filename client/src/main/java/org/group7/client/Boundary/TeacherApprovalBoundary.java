@@ -14,9 +14,6 @@ import org.group7.entities.*;
 
 import java.util.*;
 
-
-import javax.persistence.criteria.CriteriaBuilder;
-
 public class TeacherApprovalBoundary extends Boundary {
 
     private TeacherApprovalController controller;
@@ -55,7 +52,7 @@ public class TeacherApprovalBoundary extends Boundary {
     private Button saveButton;
 
     @FXML
-    private AnchorPane changeGradeAP;
+    private VBox changeGradeVbox;
 
     @FXML
     private TextField newGradeText;
@@ -93,7 +90,7 @@ public class TeacherApprovalBoundary extends Boundary {
         teacherExamsComboBox.setVisible(true);
         newGradeText.clear();
         newGradeNoteText.clear();
-        changeGradeAP.setVisible(false);
+        changeGradeVbox.setVisible(false);
 
         optinalNoteForStudentsText.clear();
         optinalNoteForStudentsText.setVisible(true);
@@ -127,7 +124,7 @@ public class TeacherApprovalBoundary extends Boundary {
 
                     hbox.setPrefHeight(50);
                     hbox.setAlignment(Pos.CENTER_LEFT);
-                    hbox.setStyle("-fx-border-width: 0 0 1 0; -fx-border-color:black;");
+                    hbox.getStyleClass().add("list-view-item");
 
                     String studentResult = result.getFirstName() + " " + result.getLastName();
 
@@ -159,7 +156,7 @@ public class TeacherApprovalBoundary extends Boundary {
                     listAP.setVisible(false);
 
                     teacherExamsComboBox.setVisible(false);
-                    changeGradeAP.setVisible(false);
+                    changeGradeVbox.setVisible(false);
 
                     String timeString = Double.toString(activeResult.getElapsed());
                     int decimalIndex = timeString.indexOf('.');
@@ -199,7 +196,9 @@ public class TeacherApprovalBoundary extends Boundary {
                             if(!student.getResultList().isEmpty()) {
                                 for (Result res : student.getResultList()) {
                                     if((res.getExam() == e) && (!res.isStatus())){
-                                        nonApprovedListView.getItems().add(res);
+                                        if(!nonApprovedListView.getItems().contains(res)) {
+                                            nonApprovedListView.getItems().add(res);
+                                        }
                                     }
                                 }
                             }
@@ -225,7 +224,7 @@ public class TeacherApprovalBoundary extends Boundary {
     @FXML
     void changeGrade(ActionEvent event) {
         changeGradePressed = true;
-        changeGradeAP.setVisible(true);
+        changeGradeVbox.setVisible(true);
         optinalNoteForStudentsText.clear();
         optinalNoteForStudentsText.setVisible(false);
         optNoteDescribion.setVisible(false);
@@ -334,7 +333,7 @@ public class TeacherApprovalBoundary extends Boundary {
         listAP.setVisible(true);
 
         teacherExamsComboBox.setVisible(true);
-        changeGradeAP.setVisible(false);
+        changeGradeVbox.setVisible(false);
 
         optinalNoteForStudentsText.clear();
         optinalNoteForStudentsText.setVisible(true);
@@ -386,13 +385,13 @@ public class TeacherApprovalBoundary extends Boundary {
                 radioButton.setSelected(true);
 
                 if (correctIndex != i) {
-                    answerText.setStyle("-fx-text-fill: white;");
+                    answerText.setStyle("-fx-text-fill: white; -fx-font-size: 20;");
                     answer.setStyle("-fx-background-color: F67280; ");
                 }
             }
 
             if (correctIndex == i) {
-                answerText.setStyle("-fx-text-fill: white;");
+                answerText.setStyle("-fx-text-fill: white; -fx-font-size: 20;");
                 answer.setStyle("-fx-background-color: #91c79c; ");
             }
 
