@@ -72,6 +72,10 @@ public class TeacherReportsBoundary extends Boundary{
     @FXML
     private Label passedLabel;
 
+    @Override
+    public TeacherReportsController getController() {
+        return controller;
+    }
 
     @FXML
     void selectExam(ActionEvent event) {

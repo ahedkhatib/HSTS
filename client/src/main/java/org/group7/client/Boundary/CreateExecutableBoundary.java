@@ -12,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import org.group7.client.Control.CreateExamController;
 import org.group7.client.Control.CreateExecutableController;
 import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
@@ -59,6 +60,11 @@ public class CreateExecutableBoundary extends Boundary {
     @FXML
     public void saveExecutable(ActionEvent event){
         controller.saveExecutable(examsCombo.getSelectionModel().getSelectedItem(), examCodeTF.getText());
+    }
+
+    @Override
+    public CreateExecutableController getController() {
+        return controller;
     }
 
     @FXML

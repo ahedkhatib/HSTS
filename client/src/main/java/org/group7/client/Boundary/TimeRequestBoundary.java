@@ -29,6 +29,11 @@ public class TimeRequestBoundary extends Boundary{
         controller.sendRequest(examIdTF.getText(), teachersNotesTA.getText(), extraTime.getText());
     }
 
+    @Override
+    public TimeRequestController getController() {
+        return controller;
+    }
+
     @FXML
     public void initialize(){
         controller = new TimeRequestController(this);

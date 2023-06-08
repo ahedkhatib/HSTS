@@ -26,6 +26,11 @@ public class LoginBoundary extends Boundary {
         controller.login(usernameTF.getText(), passwordTF.getText());
     }
 
+    @Override
+    public LoginController getController(){
+        return controller;
+    }
+
     @FXML
     public void initialize(){
         controller = new LoginController(this);

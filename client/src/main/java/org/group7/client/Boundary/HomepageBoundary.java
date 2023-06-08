@@ -170,6 +170,11 @@ public class HomepageBoundary extends Boundary {
         }
     }
 
+    @Override
+    public HomepageController getController(){
+        return controller;
+    }
+
     @FXML
     void logout(ActionEvent event) {
 

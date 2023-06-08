@@ -79,6 +79,10 @@ public class CreateExamBoundary extends Boundary {
 
     private ObservableMap<String, String> questionGrades = FXCollections.observableHashMap();
 
+    @Override
+    public CreateExamController getController(){
+        return controller;
+    }
 
     @FXML
     public void initialize() {
