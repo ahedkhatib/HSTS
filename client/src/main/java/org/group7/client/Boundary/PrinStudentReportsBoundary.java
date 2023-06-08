@@ -38,6 +38,10 @@ public class PrinStudentReportsBoundary extends Boundary {
     @FXML
     private ComboBox<String> studentsCB;
 
+    @Override
+    public PrinStudentReportsController getController() {
+        return controller;
+    }
 
     @FXML
     public void initialize() {

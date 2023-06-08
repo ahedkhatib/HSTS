@@ -88,6 +88,11 @@ public class StartExamBoundary extends Boundary {
 
     private List<ToggleGroup> toggleGroups = new ArrayList<>();
 
+    @Override
+    public StartExamController getController() {
+        return controller;
+    }
+
     public AnchorPane getAutoAp() {
         return autoAp;
     }

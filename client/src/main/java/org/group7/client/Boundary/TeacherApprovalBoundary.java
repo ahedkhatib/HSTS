@@ -17,7 +17,7 @@ import java.util.*;
 public class TeacherApprovalBoundary extends Boundary {
 
     private TeacherApprovalController controller;
-    
+
     @FXML
     private Button backBtn;
 
@@ -65,7 +65,7 @@ public class TeacherApprovalBoundary extends Boundary {
 
     @FXML
     private Text optNoteDescribion;
-    
+
     private Result activeResult;
 
     public List<ExecutableExam> executableExams;
@@ -103,7 +103,7 @@ public class TeacherApprovalBoundary extends Boundary {
         super.setController(controller);
         controller.GetResult();
 
-        for (ExecutableExam exam : ((Teacher) Client.getClient().getUser()).getExamList()){
+        for (ExecutableExam exam : ((Teacher) Client.getClient().getUser()).getExamList()) {
             teacherExamsComboBox.getItems().add(exam.getExam().getExamName());
         }
 
@@ -188,15 +188,15 @@ public class TeacherApprovalBoundary extends Boundary {
 
         nonApprovedListView.getItems().clear();
 
-        if(!executableExams.isEmpty()) {
+        if (!executableExams.isEmpty()) {
             for (ExecutableExam e : executableExams) {
-                if(e.getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
-                    if(!e.getStudentList().isEmpty()) {
+                if (e.getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
+                    if (!e.getStudentList().isEmpty()) {
                         for (Student student : e.getStudentList()) {
-                            if(!student.getResultList().isEmpty()) {
+                            if (!student.getResultList().isEmpty()) {
                                 for (Result res : student.getResultList()) {
-                                    if((res.getExam() == e) && (!res.isStatus())){
-                                        if(!nonApprovedListView.getItems().contains(res)) {
+                                    if ((res.getExam() == e) && (!res.isStatus())) {
+                                        if (!nonApprovedListView.getItems().contains(res)) {
                                             nonApprovedListView.getItems().add(res);
                                         }
                                     }
@@ -210,10 +210,10 @@ public class TeacherApprovalBoundary extends Boundary {
     }
 
     public void updateExecutableExamsCombo() {
-        if(!executableExams.isEmpty()) {
+        if (!executableExams.isEmpty()) {
             for (ExecutableExam e : executableExams) {
-                if(e.getExam().getCreator().getFirstName().equals(Client.getClient().getUser().getFirstName())) {
-                    if(!(teacherExamsComboBox.getItems().contains(e.getExam().getExamName()))) {
+                if (e.getExam().getCreator().getFirstName().equals(Client.getClient().getUser().getFirstName())) {
+                    if (!(teacherExamsComboBox.getItems().contains(e.getExam().getExamName()))) {
                         teacherExamsComboBox.getItems().add(e.getExam().getExamName());
                     }
                 }
@@ -238,7 +238,7 @@ public class TeacherApprovalBoundary extends Boundary {
         int[] distribution = new int[10];
 
 
-        if(changeGradePressed) {
+        if (changeGradePressed) {
             if (newGradeNoteText.getText().equals("")) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Please provide a note!");
                 alert.show();
@@ -274,11 +274,11 @@ public class TeacherApprovalBoundary extends Boundary {
 
             //update median
             List<Student> examstudents = activeResult.getExam().getStudentList();
-            if(!examstudents.isEmpty()) {
+            if (!examstudents.isEmpty()) {
                 for (Student s : examstudents) {
-                    if(!s.getResultList().isEmpty()) {
+                    if (!s.getResultList().isEmpty()) {
                         for (Result r : s.getResultList()) {
-                            if(r.getExam().getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())){
+                            if (r.getExam().getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
                                 grades.add(r.getGrade());
                             }
                         }
@@ -307,8 +307,8 @@ public class TeacherApprovalBoundary extends Boundary {
 
             //update distribution
             int[] gradeRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-            for(int i = 0; i < grades.size(); i++){
-                for(int j = 0; j < gradeRanges.length -1; j++){
+            for (int i = 0; i < grades.size(); i++) {
+                for (int j = 0; j < gradeRanges.length - 1; j++) {
                     if (grades.get(i) > gradeRanges[j] && grades.get(i) <= gradeRanges[j + 1]) {
                         distribution[j]++;
                     }
@@ -320,7 +320,7 @@ public class TeacherApprovalBoundary extends Boundary {
             newGradeText.clear();
             newGradeNoteText.clear();
 
-        }else {
+        } else {
             controller.save(activeResult, false, "", optinalNoteForStudentsText.getText(), activeResult.getExam().getAverage(), activeResult.getExam().getMedian(), activeResult.getExam().getDistribution());
         }
 
@@ -353,6 +353,11 @@ public class TeacherApprovalBoundary extends Boundary {
     @FXML
     void optinalNote(ActionEvent event) {
 
+    }
+
+    @Override
+    public TeacherApprovalController getController() {
+        return controller;
     }
 
     public VBox questionCard(int questionNum, Question question, int correctIndex, int toggleIndex) {

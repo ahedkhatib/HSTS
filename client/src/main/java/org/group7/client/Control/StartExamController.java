@@ -54,6 +54,11 @@ public class StartExamController extends Controller {
         EventBus.getDefault().register(this);
     }
 
+    @Override
+    public void unregisterController(){
+        EventBus.getDefault().unregister(this);
+    }
+
     public void getExam(String examId) {
         try {
             Client.getClient().sendToServer(new Message(examId, "#StartExam"));

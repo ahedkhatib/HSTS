@@ -15,29 +15,28 @@ import java.util.List;
 public class TeacherApprovalController extends Controller {
     private TeacherApprovalBoundary boundary;
 
-
-
     public TeacherApprovalController(TeacherApprovalBoundary boundary) {
         this.boundary = boundary;
         EventBus.getDefault().register(this);
     }
 
     @Override
-    public void unregisterController() {EventBus.getDefault().unregister(this);
+    public void unregisterController() {
+        EventBus.getDefault().unregister(this);
     }
 
-    public void GetResult(){
-        try{
+    public void GetResult() {
+        try {
             Client.getClient().sendToServer(new Message(null, "#getExecutableExam"));
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Subscribe
-    public void update_execExam( ExecutableExamEvent event){
+    public void update_execExam(ExecutableExamEvent event) {
         List<ExecutableExam> executable = event.getExecutableExam();
-        boundary.executableExams= executable;
+        boundary.executableExams = executable;
         boundary.updateExecutableExamsCombo();
     }
 
@@ -50,9 +49,9 @@ public class TeacherApprovalController extends Controller {
         }
     }
 
-    public void save(Result result, boolean gradeChanged, String theNewGrade, String theNewGradeNote, double avg, double median, int[] distribution){
+    public void save(Result result, boolean gradeChanged, String theNewGrade, String theNewGradeNote, double avg, double median, int[] distribution) {
         int grade = result.getGrade();
-        if(!theNewGrade.equals("")) {
+        if (!theNewGrade.equals("")) {
             grade = Integer.parseInt(theNewGrade);
         }
 

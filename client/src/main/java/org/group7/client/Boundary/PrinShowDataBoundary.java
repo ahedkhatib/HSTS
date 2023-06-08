@@ -34,6 +34,11 @@ public class PrinShowDataBoundary extends Boundary{
     @FXML
     private ComboBox<String> studentsCB;
 
+    @Override
+    public PrinShowDataController getController() {
+        return controller;
+    }
+
     @FXML
     public void initialize() {
         controller = new PrinShowDataController(this);
