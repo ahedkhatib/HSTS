@@ -4,12 +4,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/16" style="-fx-background-color: red;">
-   <children>
-      <Text layoutX="567.0" layoutY="349.0" scaleX="11.0" scaleY="9.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome User!" wrappingWidth="73.38525390625">
-         <font>
-            <Font size="11.0" />
-         </font>
-      </Text>
-   </children>
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/16">
+    <children>
+        <Text layoutX="567.0" layoutY="349.0" scaleX="11.0" scaleY="9.0" strokeType="OUTSIDE" strokeWidth="0.0"
+              text="Welcome To Oxford!" wrappingWidth="73.38525390625">
+            <font>
+                <Font size="11.0"/>
+            </font>
+        </Text>
+    </children>
 </AnchorPane>

@@ -66,6 +66,9 @@ public class TeacherApprovalBoundary extends Boundary {
     @FXML
     private Text optNoteDescribion;
 
+    @FXML
+    private VBox optionalNoteVbox;
+
     private Result activeResult;
 
     public List<ExecutableExam> executableExams;
@@ -81,6 +84,15 @@ public class TeacherApprovalBoundary extends Boundary {
         nonApprovedListView.getSelectionModel().clearSelection();
         nonApprovedListView.refresh();
 
+        newGradeText.clear();
+        newGradeNoteText.clear();
+        changeGradeVbox.setVisible(false);
+        changeGradeVbox.setDisable(true);
+
+        optinalNoteForStudentsText.clear();
+        optionalNoteVbox.setVisible(true);
+        optionalNoteVbox.setDisable(false);
+
         resultsAP.setDisable(true);
         resultsAP.setVisible(false);
 
@@ -88,13 +100,7 @@ public class TeacherApprovalBoundary extends Boundary {
         listAP.setVisible(true);
 
         teacherExamsComboBox.setVisible(true);
-        newGradeText.clear();
-        newGradeNoteText.clear();
-        changeGradeVbox.setVisible(false);
-
-        optinalNoteForStudentsText.clear();
-        optinalNoteForStudentsText.setVisible(true);
-        optNoteDescribion.setVisible(true);
+        teacherExamsComboBox.setDisable(false);
     }
 
     @FXML
@@ -156,7 +162,7 @@ public class TeacherApprovalBoundary extends Boundary {
                     listAP.setVisible(false);
 
                     teacherExamsComboBox.setVisible(false);
-                    changeGradeVbox.setVisible(false);
+                    teacherExamsComboBox.setDisable(true);
 
                     String timeString = Double.toString(activeResult.getElapsed());
                     int decimalIndex = timeString.indexOf('.');
@@ -224,10 +230,12 @@ public class TeacherApprovalBoundary extends Boundary {
     @FXML
     void changeGrade(ActionEvent event) {
         changeGradePressed = true;
+
         changeGradeVbox.setVisible(true);
-        optinalNoteForStudentsText.clear();
-        optinalNoteForStudentsText.setVisible(false);
-        optNoteDescribion.setVisible(false);
+        changeGradeVbox.setDisable(false);
+
+        optionalNoteVbox.setVisible(false);
+        optionalNoteVbox.setDisable(true);
     }
 
     @FXML
@@ -333,11 +341,13 @@ public class TeacherApprovalBoundary extends Boundary {
         listAP.setVisible(true);
 
         teacherExamsComboBox.setVisible(true);
+        teacherExamsComboBox.setDisable(false);
         changeGradeVbox.setVisible(false);
+        changeGradeVbox.setDisable(true);
 
         optinalNoteForStudentsText.clear();
-        optinalNoteForStudentsText.setVisible(true);
-        optNoteDescribion.setVisible(true);
+        optionalNoteVbox.setVisible(false);
+        optionalNoteVbox.setDisable(true);
     }
 
     @FXML
@@ -361,6 +371,8 @@ public class TeacherApprovalBoundary extends Boundary {
     }
 
     public VBox questionCard(int questionNum, Question question, int correctIndex, int toggleIndex) {
+
+        System.out.println(toggleIndex);
 
         VBox card = new VBox();
         card.setPrefWidth(scrollPane.getPrefWidth() / 2);
@@ -427,7 +439,7 @@ public class TeacherApprovalBoundary extends Boundary {
         content.setLayoutX(scrollPane.getPrefWidth() / 4);
 
         // Add teacher's notes
-        String examNote = result.getExam().getExam().getStudentComments();
+        String examNote = result.getExam().getExam().getTeacherComments();
 
         VBox card = new VBox();
         card.setPrefWidth(scrollPane.getPrefWidth() / 2);
@@ -435,6 +447,14 @@ public class TeacherApprovalBoundary extends Boundary {
         card.setSpacing(35);
         card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
 
+        Teacher creator = activeResult.getExam().getExam().getCreator();
+
+        Text noteText = new Text("Teacher " + creator.getFirstName() + " " + creator.getLastName() + " says: " + examNote);
+        noteText.setStyle("-fx-font-size: 20;");
+        card.getChildren().add(noteText);
+
+        if (examNote != null && !examNote.equals(""))
+            content.getChildren().add(card);
 
         // Add Questions
         HashMap<Question, Integer> map = result.getAnswers();

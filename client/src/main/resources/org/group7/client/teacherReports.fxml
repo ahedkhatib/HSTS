@@ -13,12 +13,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="778.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TeacherReportsBoundary">
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TeacherReportsBoundary">
     <children>
       <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="190.0" layoutX="39.0" layoutY="85.0" stroke="BLACK" strokeType="INSIDE" width="285.0" />
         <ComboBox fx:id="executableExamsComboBox" layoutX="334.0" layoutY="103.0" onAction="#selectExam" prefHeight="46.0" prefWidth="313.0" promptText="Select executed exam:" />
         <ComboBox fx:id="executalbeExamTeacherComboBox" layoutX="334.0" layoutY="162.0" onAction="#selectExecutableExamTeacher" prefHeight="46.0" prefWidth="313.0" promptText="Select teacher:" />
-        <AnchorPane layoutX="662.0" layoutY="294.0" prefHeight="411.0" prefWidth="538.0">
+        <AnchorPane layoutX="663.0" layoutY="252.0" prefHeight="411.0" prefWidth="538.0">
             <children>
                 <TableView fx:id="statisticInfoTable" layoutX="38.0" layoutY="48.0" prefHeight="338.0" prefWidth="490.0">
                     <columns>
@@ -47,7 +47,7 @@
                 </Text>
             </children>
         </AnchorPane>
-      <BarChart fx:id="gradeChart" layoutX="14.0" layoutY="366.0" prefHeight="338.0" prefWidth="650.0">
+      <BarChart fx:id="gradeChart" layoutX="32.0" layoutY="325.0" prefHeight="338.0" prefWidth="650.0">
         <xAxis>
           <CategoryAxis fx:id="gradeAxis" side="BOTTOM" />
         </xAxis>

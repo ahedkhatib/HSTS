@@ -1,6 +1,5 @@
 package org.group7.client.Boundary;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.group7.client.Control.NewQuestionController;
 import org.group7.entities.Course;
-import org.group7.entities.Exam;
 import org.group7.entities.Subject;
 
 import java.util.ArrayList;
@@ -196,5 +194,4 @@ public class NewQuestionBoundary extends Boundary {
     public void done(){
         screen.setDisable(true);
     }
-
 }

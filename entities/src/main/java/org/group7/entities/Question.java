@@ -65,7 +65,7 @@ public class Question implements Serializable{
     }
 
     public int getQuestionId() {
-        return questionId;
+        return subject.getSubjectId() * 1000 + questionId;
     }
 
     public void setQuestionId(int questionId) {

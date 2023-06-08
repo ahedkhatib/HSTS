@@ -72,6 +72,8 @@ public class TeacherReportsBoundary extends Boundary{
     @FXML
     private Label passedLabel;
 
+    private ObservableList<Result> resultList;
+
     @Override
     public TeacherReportsController getController() {
         return controller;
@@ -137,7 +139,7 @@ public class TeacherReportsBoundary extends Boundary{
 
 
         if (selectedExamName != null && selectedTeacherName != null) {
-            ObservableList<Result> resultList = FXCollections.observableArrayList();
+            resultList = FXCollections.observableArrayList();
             for (ExecutableExam exam : executableExams) {
                 if (selectedExamName.equals(exam.getExam().getExamName()) &&
                         selectedTeacherName.equals(exam.getExamId() + " - " + exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName())) {
@@ -160,6 +162,7 @@ public class TeacherReportsBoundary extends Boundary{
 
                         }
                     }
+
                     double passed = ((double) passedStudents / exam.getStudentList().size()) * 100;
                     averageLabel.setText("Average: " + String.format("%.2f", exam.getAverage()));
                     medianLabel.setText("Median: " + String.format("%.2f", exam.getMedian()));
@@ -176,7 +179,8 @@ public class TeacherReportsBoundary extends Boundary{
     // Helper method to find the corresponding Result object for a student and exam
     private Result findStudentResult(Student student) {
         for (Result result : student.getResultList()) {
-            if (result.getExam().getExam().getExamName().equals(executableExamsComboBox.getSelectionModel().getSelectedItem())) {
+            if (result.getExam().getExam().getExamName().equals(executableExamsComboBox.getSelectionModel().getSelectedItem())
+            && !resultList.contains(result)) {
                 return result;
             }
         }

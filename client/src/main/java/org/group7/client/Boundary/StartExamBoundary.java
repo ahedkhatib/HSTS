@@ -1,7 +1,9 @@
 package org.group7.client.Boundary;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,6 +25,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.group7.client.Control.StartExamController;
 import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
@@ -129,7 +133,24 @@ public class StartExamBoundary extends Boundary {
 
     @FXML
     void finishManExam(ActionEvent event) {
-        controller.finishManualExam(false, "");
+        controller.finishExam(false);
+    }
+
+    @FXML
+    public String getManualSolution(){
+        return manualSolution;
+    }
+
+    public String manualSolution;
+
+    private String readWordFile(File file) throws IOException {
+        try (FileInputStream fis = new FileInputStream(file);
+             XWPFDocument document = new XWPFDocument(fis);
+             StringWriter sw = new StringWriter()) {
+            XWPFWordExtractor extractor = new XWPFWordExtractor(document);
+            sw.write(extractor.getText());
+            return sw.toString();
+        }
     }
 
     @FXML
@@ -145,11 +166,13 @@ public class StartExamBoundary extends Boundary {
         if (files != null && !files.isEmpty()) {
             File uploadedFile = files.get(0);
             try {
-                String uploadedAnswer = Files.readString(Paths.get(uploadedFile.toURI()));
-                fileTf.setText(uploadedFile.getPath());
+                String uploadedAnswer = readWordFile(uploadedFile);
+                fileTf.setText(uploadedFile.getName());
                 statusTf.setText("Upload successful: " + uploadedFile.getName());
 
-                controller.finishManualExam(true, uploadedAnswer);
+                manualSolution = uploadedAnswer;
+
+                controller.finishExam(false);
 
             } catch (IOException e) {
                 statusTf.setText("Error: " + e.getMessage());
@@ -163,10 +186,14 @@ public class StartExamBoundary extends Boundary {
     @FXML
     void downloadExam(ActionEvent event) {
         controller.createWord();
+
         uploadBtn.setVisible(true);
         fileTf.setVisible(true);
         statusTf.setVisible(true);
         manualFinishBtn.setVisible(true);
+
+        downloadBtn.setDisable(true);
+        downloadBtn.setVisible(false);
     }
 
     @FXML
@@ -236,7 +263,6 @@ public class StartExamBoundary extends Boundary {
         answersBox.setSpacing(15);
 
         ToggleGroup toggleGroup = new ToggleGroup();
-        toggleGroups.add(toggleGroup);
 
         for (int i = 0; i < 4; i++) {
             HBox answer = new HBox();
@@ -251,6 +277,8 @@ public class StartExamBoundary extends Boundary {
             answer.getChildren().addAll(radioButton, answerText);
             answersBox.getChildren().add(answer);
         }
+
+        toggleGroups.add(toggleGroup);
 
         card.getChildren().addAll(questionText, answersBox);
 

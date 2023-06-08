@@ -14,90 +14,109 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="693.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.TeacherApprovalBoundary">
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" stylesheets="@../../../stylesheet.css"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.group7.client.Boundary.TeacherApprovalBoundary">
     <children>
         <AnchorPane fx:id="emptyAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
-            <Text fx:id="emptyText" layoutX="372.0" layoutY="367.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="No students to show!" textAlignment="CENTER">
+            <Text fx:id="emptyText" layoutX="372.0" layoutY="367.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE"
+                  strokeWidth="0.0" text="No students to show!" textAlignment="CENTER">
                 <font>
-                    <Font size="50.0" />
+                    <Font size="50.0"/>
                 </font>
             </Text>
         </AnchorPane>
         <AnchorPane fx:id="listAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
-            <ListView fx:id="nonApprovedListView" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0" />
+            <ListView fx:id="nonApprovedListView" layoutX="150.0" layoutY="97.0" prefHeight="500.0" prefWidth="915.0"/>
         </AnchorPane>
         <AnchorPane fx:id="resultsAP" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
             <children>
-            <VBox fx:id="changeGradeVbox" layoutX="352.0" layoutY="566.0" prefHeight="108.0" prefWidth="525.0">
-               <children>
-                  <HBox prefHeight="51.0" prefWidth="463.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New grade:" wrappingWidth="155.953125">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="newGradeText" onAction="#setNewGrade" prefHeight="44.0" prefWidth="122.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="42.0" prefWidth="234.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please add note:" wrappingWidth="152.75311279296875">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <TextField fx:id="newGradeNoteText" onAction="#newGradeNote" prefHeight="25.0" prefWidth="360.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </TextField>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <Button fx:id="changeGradeButton" layoutX="29.0" layoutY="309.0" mnemonicParsing="false" onAction="#changeGrade" prefHeight="54.0" prefWidth="156.0" styleClass="app-button" text="Change grade" />
-                <Button fx:id="backBtn" layoutX="58.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToList" prefHeight="70.0" prefWidth="87.0" style="-fx-background-color: transparent;">
+                <VBox fx:id="changeGradeVbox" layoutX="352.0" layoutY="566.0" prefHeight="108.0" prefWidth="525.0"
+                      disable="true" visible="false">
+                    <children>
+                        <HBox prefHeight="51.0" prefWidth="463.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New grade:"
+                                      wrappingWidth="155.953125">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Text>
+                                <TextField fx:id="newGradeText" onAction="#setNewGrade" prefHeight="44.0"
+                                           prefWidth="122.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="42.0" prefWidth="234.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please add note:"
+                                      wrappingWidth="152.75311279296875">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </Text>
+                                <TextField fx:id="newGradeNoteText" onAction="#newGradeNote" prefHeight="25.0"
+                                           prefWidth="360.0">
+                                    <font>
+                                        <Font size="20.0"/>
+                                    </font>
+                                </TextField>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <Button fx:id="changeGradeButton" layoutX="29.0" layoutY="309.0" mnemonicParsing="false"
+                        onAction="#changeGrade" prefHeight="54.0" prefWidth="156.0" styleClass="app-button"
+                        text="Change grade"/>
+                <Button fx:id="backBtn" layoutX="58.0" layoutY="23.0" mnemonicParsing="false" onAction="#backToList"
+                        prefHeight="70.0" prefWidth="87.0" style="-fx-background-color: transparent;">
                     <cursor>
-                        <Cursor fx:constant="HAND" />
+                        <Cursor fx:constant="HAND"/>
                     </cursor>
                     <graphic>
                         <ImageView fitHeight="81.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../../../Images/arrow-left.png" />
+                                <Image url="@../../../Images/arrow-left.png"/>
                             </image>
                             <cursor>
-                                <Cursor fx:constant="HAND" />
+                                <Cursor fx:constant="HAND"/>
                             </cursor>
                         </ImageView>
                     </graphic>
                 </Button>
-                <Text fx:id="titleText" layoutX="259.0" layoutY="61.0" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="696.13671875">
+                <Text fx:id="titleText" layoutX="259.0" layoutY="61.0" nodeOrientation="LEFT_TO_RIGHT"
+                      strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER"
+                      wrappingWidth="696.13671875">
                     <font>
-                        <Font size="25.0" />
+                        <Font size="25.0"/>
                     </font>
                 </Text>
-                <ScrollPane fx:id="scrollPane" layoutX="201.0" layoutY="121.0" prefHeight="429.0" prefWidth="813.0" />
-            <Button fx:id="saveButton" layoutX="913.0" layoutY="586.0" mnemonicParsing="false" onAction="#saveAndApprove" prefHeight="75.0" prefWidth="246.0" styleClass="app-button" text="Save and approve!">
-               <font>
-                  <Font size="20.0" />
-               </font></Button>
-            <VBox layoutX="386.0" layoutY="586.0" prefHeight="67.0" prefWidth="457.0">
-               <children>
-                  <Text fx:id="optNoteDescribion" strokeType="OUTSIDE" strokeWidth="0.0" text="You can add note for the student and approve:" wrappingWidth="442.73681640625">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="optinalNoteForStudentsText" onAction="#optinalNote" prefHeight="33.0" prefWidth="354.0" />
-               </children>
-            </VBox>
+                <ScrollPane fx:id="scrollPane" layoutX="201.0" layoutY="121.0" prefHeight="429.0" prefWidth="813.0"/>
+                <Button fx:id="saveButton" layoutX="913.0" layoutY="586.0" mnemonicParsing="false"
+                        onAction="#saveAndApprove" prefHeight="75.0" prefWidth="246.0" styleClass="app-button"
+                        text="Save and approve!">
+                    <font>
+                        <Font size="20.0"/>
+                    </font>
+                </Button>
+                <VBox fx:id="optionalNoteVbox" layoutX="386.0" layoutY="586.0" prefHeight="67.0" prefWidth="457.0">
+                    <children>
+                        <Text fx:id="optNoteDescribion" strokeType="OUTSIDE" strokeWidth="0.0"
+                              text="You can add note for the student and approve:" wrappingWidth="442.73681640625">
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </Text>
+                        <TextField fx:id="optinalNoteForStudentsText" onAction="#optinalNote" prefHeight="33.0"
+                                   prefWidth="354.0"/>
+                    </children>
+                </VBox>
             </children>
         </AnchorPane>
-      <ComboBox fx:id="teacherExamsComboBox" layoutX="150.0" layoutY="43.0" onAction="#selectExam" prefHeight="42.0" prefWidth="354.0" promptText="Select Exam" />
+        <ComboBox fx:id="teacherExamsComboBox" layoutX="150.0" layoutY="43.0" onAction="#selectExam" prefHeight="42.0"
+                  prefWidth="354.0" promptText="Select Exam"/>
     </children>
 </AnchorPane>
