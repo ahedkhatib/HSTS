@@ -12,7 +12,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="screen" prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.NewQuestionBoundary">
+<AnchorPane fx:id="screen" prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.NewQuestionBoundary">
     <children>
         <VBox layoutX="609.0" layoutY="221.0" prefHeight="238.0" prefWidth="588.0" spacing="25.0">
             <children>
@@ -20,76 +21,88 @@
                     <children>
                         <Label fx:id="labelQ" alignment="CENTER" prefHeight="30.0" prefWidth="120.0" text="Question:">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Label>
                         <TextField fx:id="question" prefHeight="26.0" prefWidth="362.0">
-                     <font>
-                        <Font size="20.0" />
-                     </font></TextField>
+                            <font>
+                                <Font size="20.0"/>
+                            </font>
+                        </TextField>
                     </children>
                 </HBox>
                 <VBox prefHeight="149.0" prefWidth="465.0" spacing="15.0">
                     <HBox spacing="15.0" style="-fx-alignment: center;">
                         <RadioButton fx:id="radio1" mnemonicParsing="false" text="Answer 1">
-                     <font>
-                        <Font size="15.0" />
-                     </font></RadioButton>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </RadioButton>
                         <TextField fx:id="solution1" prefHeight="26.0" prefWidth="362.0">
-                     <font>
-                        <Font size="15.0" />
-                     </font></TextField>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </TextField>
                     </HBox>
                     <HBox spacing="15.0" style="-fx-alignment: center;">
                         <RadioButton fx:id="radio2" mnemonicParsing="false" text="Answer 2">
-                     <font>
-                        <Font size="15.0" />
-                     </font></RadioButton>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </RadioButton>
                         <TextField fx:id="solution2" prefHeight="26.0" prefWidth="362.0">
-                     <font>
-                        <Font size="15.0" />
-                     </font></TextField>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </TextField>
                     </HBox>
                     <HBox spacing="15.0" style="-fx-alignment: center;">
                         <RadioButton fx:id="radio3" mnemonicParsing="false" text="Answer 3">
-                     <font>
-                        <Font size="15.0" />
-                     </font></RadioButton>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </RadioButton>
                         <TextField fx:id="solution3" prefHeight="26.0" prefWidth="362.0">
-                     <font>
-                        <Font size="15.0" />
-                     </font></TextField>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </TextField>
                     </HBox>
                     <HBox alignment="center" spacing="15.0" style="-fx-alignment: center;">
                         <RadioButton fx:id="radio4" mnemonicParsing="false" text="Answer 4">
-                     <font>
-                        <Font size="15.0" />
-                     </font></RadioButton>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </RadioButton>
                         <TextField fx:id="solution4" prefHeight="26.0" prefWidth="362.0">
-                     <font>
-                        <Font size="15.0" />
-                     </font></TextField>
+                            <font>
+                                <Font size="15.0"/>
+                            </font>
+                        </TextField>
                     </HBox>
                 </VBox>
             </children>
         </VBox>
-        <Button fx:id="saveBtn" layoutX="512.0" layoutY="545.0" mnemonicParsing="false" onAction="#save" prefHeight="88.0" prefWidth="193.0" text="save">
+        <Button fx:id="saveBtn" layoutX="512.0" layoutY="545.0" mnemonicParsing="false" onAction="#save"
+                prefHeight="88.0" prefWidth="193.0" text="save"  styleClass="login-button">
             <font>
-                <Font name="Arial" size="24.0" />
+                <Font name="Arial" size="24.0"/>
             </font>
         </Button>
-        <ComboBox fx:id="subjectCombo" layoutX="511.0" layoutY="105.0" prefHeight="26.0" prefWidth="193.0" />
-        <Accordion />
-        <ListView fx:id="coursesListView" layoutX="58.0" layoutY="196.0" prefHeight="287.0" prefWidth="505.0" />
-        <Label fx:id="subjectLabel" alignment="CENTER" graphicTextGap="5.0" layoutX="511.0" layoutY="65.0" prefHeight="17.0" prefWidth="193.0" text="Select Subject" wrapText="true">
+        <ComboBox fx:id="subjectCombo" layoutX="511.0" layoutY="105.0" prefHeight="26.0" prefWidth="193.0"/>
+        <Accordion/>
+        <ListView fx:id="coursesListView" layoutX="58.0" layoutY="196.0" prefHeight="287.0" prefWidth="505.0"/>
+        <Label fx:id="subjectLabel" alignment="CENTER" graphicTextGap="5.0" layoutX="511.0" layoutY="65.0"
+               prefHeight="17.0" prefWidth="193.0" text="Select Subject" wrapText="true">
             <font>
-                <Font size="20.0" />
+                <Font size="20.0"/>
             </font>
         </Label>
-      <Label fx:id="subjectLabel1" alignment="CENTER" graphicTextGap="5.0" layoutX="215.0" layoutY="155.0" prefHeight="17.0" prefWidth="193.0" text="Select Courses" wrapText="true">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+        <Label fx:id="subjectLabel1" alignment="CENTER" graphicTextGap="5.0" layoutX="215.0" layoutY="155.0"
+               prefHeight="17.0" prefWidth="193.0" text="Select Courses" wrapText="true">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

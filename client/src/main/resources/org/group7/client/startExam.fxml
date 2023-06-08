@@ -8,16 +8,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary">
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.StartExamBoundary">
     <children>
         <AnchorPane fx:id="introAp" layoutX="439.0" layoutY="219.0">
             <children>
                 <TextField fx:id="examNumber" prefHeight="71.0" prefWidth="289.0" promptText="ExamNum">
                     <font>
-                        <Font size="22.0" />
+                        <Font size="22.0"/>
                     </font>
                 </TextField>
-                <Button fx:id="startButton" layoutX="37.0" layoutY="188.0" mnemonicParsing="false" onAction="#startExam" prefHeight="90.0" prefWidth="216.0" text="start" textAlignment="CENTER" />
+                <Button fx:id="startButton" layoutX="37.0" layoutY="188.0" mnemonicParsing="false" onAction="#startExam"
+                        prefHeight="90.0" prefWidth="216.0" text="start" textAlignment="CENTER" styleClass="app-button"/>
             </children>
         </AnchorPane>
         <AnchorPane fx:id="autoAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
@@ -26,30 +28,32 @@
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Student Id: ">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="24.0"/>
                             </font>
                         </Text>
                         <TextField fx:id="idTf" prefHeight="51.0" prefWidth="246.0">
                             <font>
-                                <Font size="24.0" />
+                                <Font size="24.0"/>
                             </font>
                         </TextField>
-                        <Button fx:id="idBtn" mnemonicParsing="false" onAction="#idEntered" text="Start">
+                        <Button fx:id="idBtn" mnemonicParsing="false" onAction="#idEntered" text="Start"  styleClass="app-button">
                             <font>
-                                <Font size="20.0" />
+                                <Font size="20.0"/>
                             </font>
                         </Button>
-                        <Text fx:id="autoTimerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="151.583984375">
+                        <Text fx:id="autoTimerText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
+                              textAlignment="CENTER" wrappingWidth="151.583984375">
                             <font>
-                                <Font size="28.0" />
+                                <Font size="28.0"/>
                             </font>
                         </Text>
                     </children>
                 </HBox>
-                <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="105.0" prefHeight="500.0" prefWidth="1215.0" />
-                <Button fx:id="autoFinishBtn" layoutX="562.0" layoutY="621.0" mnemonicParsing="false" onAction="#finishExam" prefHeight="51.0" prefWidth="109.0" text="Finish">
+                <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="105.0" prefHeight="500.0" prefWidth="1215.0"/>
+                <Button fx:id="autoFinishBtn" layoutX="562.0" layoutY="621.0" mnemonicParsing="false"
+                        onAction="#finishExam" prefHeight="51.0" prefWidth="109.0" text="Finish"  styleClass="app-button">
                     <font>
-                        <Font size="21.0" />
+                        <Font size="21.0"/>
                     </font>
                 </Button>
             </children>
@@ -57,18 +61,24 @@
 
         <AnchorPane fx:id="manualAp" disable="true" prefHeight="693.0" prefWidth="1215.0" visible="false">
             <children>
-                <TextField fx:id="fileTf" layoutX="124.0" layoutY="152.0" prefHeight="26.0" prefWidth="189.0" promptText="File path" />
-                <Button fx:id="uploadBtn" layoutX="400.0" layoutY="100.0" mnemonicParsing="false" onAction="#uploadExam" prefHeight="51.0" prefWidth="246.0" text="Upload" textAlignment="CENTER" />
-                <TextField fx:id="statusTf" layoutX="124.0" layoutY="178.0" prefHeight="26.0" prefWidth="190.0" promptText="status upload" />
-                <Button fx:id="downloadBtn" layoutX="390.0" layoutY="31.0" mnemonicParsing="false" onAction="#downloadExam" prefHeight="51.0" prefWidth="246.0" text="Download" />
-                <Text fx:id="manualTimerText" layoutX="51.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="151.583984375">
+                <TextField fx:id="fileTf" layoutX="124.0" layoutY="152.0" prefHeight="26.0" prefWidth="189.0"
+                           promptText="File path"/>
+                <Button fx:id="uploadBtn" layoutX="400.0" layoutY="100.0" mnemonicParsing="false" onAction="#uploadExam"
+                        prefHeight="51.0" prefWidth="246.0" text="Upload" textAlignment="CENTER" styleClass="app-button"/>
+                <TextField fx:id="statusTf" layoutX="124.0" layoutY="178.0" prefHeight="26.0" prefWidth="190.0"
+                           promptText="status upload"/>
+                <Button fx:id="downloadBtn" layoutX="390.0" layoutY="31.0" mnemonicParsing="false"
+                        onAction="#downloadExam" prefHeight="51.0" prefWidth="246.0" text="Download"  styleClass="app-button"/>
+                <Text fx:id="manualTimerText" layoutX="51.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="Text" textAlignment="CENTER" wrappingWidth="151.583984375">
                     <font>
-                        <Font size="28.0" />
+                        <Font size="28.0"/>
                     </font>
                 </Text>
-                <Button fx:id="manualFinishBtn" layoutX="562.0" layoutY="621.0" mnemonicParsing="false" onAction="#finishManExam" prefHeight="51.0" prefWidth="109.0" text="Finish">
+                <Button fx:id="manualFinishBtn" layoutX="562.0" layoutY="621.0" mnemonicParsing="false"
+                        onAction="#finishManExam" prefHeight="51.0" prefWidth="109.0" text="Finish"  styleClass="app-button">
                     <font>
-                        <Font size="21.0" />
+                        <Font size="21.0"/>
                     </font>
                 </Button>
             </children>
