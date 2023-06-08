@@ -91,7 +91,7 @@ public class TeacherReportsBoundary extends Boundary{
 
         for(ExecutableExam exam: executableExams){
             if(executableExamsComboBox.getSelectionModel().getSelectedItem().equals(exam.getExam().getExamName())){
-                executalbeExamTeacherComboBox.getItems().add(exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
+                executalbeExamTeacherComboBox.getItems().add(exam.getExamId() + " - " + exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
             }
         }
     }
@@ -140,7 +140,7 @@ public class TeacherReportsBoundary extends Boundary{
             ObservableList<Result> resultList = FXCollections.observableArrayList();
             for (ExecutableExam exam : executableExams) {
                 if (selectedExamName.equals(exam.getExam().getExamName()) &&
-                        selectedTeacherName.equals(exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName())) {
+                        selectedTeacherName.equals(exam.getExamId() + " - " + exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName())) {
 
                     updateGradeChart(exam.getDistribution());
 
