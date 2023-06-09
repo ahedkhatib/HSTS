@@ -22,6 +22,13 @@ public class PrinShowDataController extends Controller {
         this.boundary = boundary;
 
         EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void getData(String req){
+
+        if(!req.equals("#GetData"))
+            return;
 
         try {
             Client.getClient().sendToServer(new Message(null, "#GetExams"));

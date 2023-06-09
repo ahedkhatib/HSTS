@@ -24,7 +24,12 @@ public class StudentReportsController extends Controller {
     public void unregisterController() {EventBus.getDefault().unregister(this);
     }
 
-    public void getResults() {
+    @Subscribe
+    public void getResults(String req) {
+
+        if(!req.equals("#GetStudentResults"))
+            return;
+
         Message message = new Message(Client.getClient().getUser(), "#GetStudentResults");
         try {
             Client.getClient().sendToServer(message);

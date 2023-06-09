@@ -12,42 +12,53 @@ import org.group7.entities.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateExamController extends Controller{
+public class CreateExamController extends Controller {
 
     CreateExamBoundary boundary;
 
-    public CreateExamController(CreateExamBoundary boundary){
+    public CreateExamController(CreateExamBoundary boundary) {
         this.boundary = boundary;
         EventBus.getDefault().register(this);
+
+    }
+
+    @Subscribe
+    public void getTeacherCourses(String req) {
+
+        if(!req.equals("#GetTeacherCourses")){
+            return;
+        }
 
         Message message = new Message(Client.getClient().getUser(), "#GetTeacherCourses");
         try {
             Client.getClient().sendToServer(message);
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
-    public void unregisterController(){
+    public void unregisterController() {
         EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
-    public void setData(CoursesEvent event){
+    public void setData(CoursesEvent event) {
 
         List<Course> courses = event.getCourses();
 
         List<Subject> subjects = new ArrayList<>();
 
-        for(Course course : courses){
-            if(!subjects.contains(course.getSubject())){
+        for (Course course : courses) {
+            if (!subjects.contains(course.getSubject())) {
                 subjects.add(course.getSubject());
             }
         }
 
         List<String> names = new ArrayList<>();
-        for(Subject s : subjects){
+        for (Subject s : subjects) {
             names.add(s.getSubjectName());
         }
 
@@ -65,9 +76,9 @@ public class CreateExamController extends Controller{
         }
     }
 
-    public void save(String name, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints){
+    public void save(String name, int type, int duration, Teacher creator, String teacherComments, String studentComments, Course course, List<Question> questionList, List<Integer> questionPoints) {
 
-        Exam exam = new Exam(name, type, duration, creator, teacherComments, studentComments, course, questionList, questionPoints );
+        Exam exam = new Exam(name, type, duration, creator, teacherComments, studentComments, course, questionList, questionPoints);
         Object obj = exam;
 
         try {
@@ -78,7 +89,7 @@ public class CreateExamController extends Controller{
     }
 
     @Subscribe
-    public void examSaved(MessageEvent event){
+    public void examSaved(MessageEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Exam Saved!"
         );

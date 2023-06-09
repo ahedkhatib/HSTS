@@ -22,7 +22,12 @@ public class EditExamController extends Controller{
         EventBus.getDefault().register(this);
     }
 
-    public void getExams(){
+    @Subscribe
+    public void getExams(String req){
+
+        if(!req.equals("#GetTeacherCourses"))
+            return;
+
         try {
             Client.getClient().sendToServer(new Message(Client.getClient().getUser(),"#GetTeacherCourses"));
         } catch (Exception e){

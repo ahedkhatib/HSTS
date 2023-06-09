@@ -98,6 +98,8 @@ public class CreateExamBoundary extends Boundary {
         selectQuestionAnchor.setVisible(false);
 
         questionsListView.setVisible(false);
+
+        controller.getTeacherCourses("#GetTeacherCourses");
     }
 
     @FXML

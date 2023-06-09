@@ -148,6 +148,8 @@ public class StartExamController extends Controller {
 
         AnchorPane pane = null;
 
+        out.println(event.isExists());
+
         if (!event.isExists()) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Exam Doesn't Exist!"
@@ -312,6 +314,9 @@ public class StartExamController extends Controller {
 
     @Subscribe
     public void examEndedMessage(String message) {
+
+        if(!message.startsWith("Exam"))
+            return;
 
         boundary.getAutoAp().setDisable(true);
 

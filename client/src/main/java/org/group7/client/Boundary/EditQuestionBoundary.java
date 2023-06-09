@@ -117,7 +117,7 @@ public class EditQuestionBoundary extends Boundary {
 
     @FXML
     public void backToList(ActionEvent event) {
-        controller.getQuestions();
+        controller.getQuestions("#GetTeacherCourses");
 
         questionAP.setDisable(true);
         questionAP.setVisible(false);
@@ -263,6 +263,6 @@ public class EditQuestionBoundary extends Boundary {
 
         });
 
-        controller.getQuestions();
+        controller.getQuestions("#GetTeacherCourses");
     }
 }

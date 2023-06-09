@@ -25,6 +25,14 @@ public class CreateExecutableController extends Controller {
         executablesIds = new ArrayList<>();
 
         EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void getTeacherExams(String req){
+
+        if(!req.equals("#GetTeacherExams")){
+            return;
+        }
 
         try {
             Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTeacherExams"));
@@ -32,6 +40,8 @@ public class CreateExecutableController extends Controller {
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void unregisterController() {

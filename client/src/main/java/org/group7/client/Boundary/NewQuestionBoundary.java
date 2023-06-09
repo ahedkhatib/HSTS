@@ -186,8 +186,11 @@ public class NewQuestionBoundary extends Boundary {
 
         subjectCombo.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedCourses = new ArrayList<>();
-            coursesListView.setItems(FXCollections.observableList(newValue.getCourseList()));
+            if(newValue != null)
+                coursesListView.setItems(FXCollections.observableList(newValue.getCourseList()));
         });
+
+        controller.getQuestions("#GetTeacherCourses");
 
     }
 

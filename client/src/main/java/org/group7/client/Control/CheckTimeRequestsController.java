@@ -27,11 +27,14 @@ public class CheckTimeRequestsController extends Controller {
     public void unregisterController() {EventBus.getDefault().unregister(this);
     }
 
-    public void getAllRequests() {
-        try {
-            Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTimeRequests"));
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Subscribe
+    public void getAllRequests(String req) {
+        if(req.equals("#GetAllTimeRequests")) {
+            try {
+                Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTimeRequests"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

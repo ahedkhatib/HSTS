@@ -67,6 +67,7 @@ public class Client extends AbstractClient {
                 EventBus.getDefault().post(event);
             });
         } else if (post.startsWith("#StartExam_")) {
+            System.out.println(post);
             StartExamEvent event = new StartExamEvent((ExecutableExam) message.getObject(), post.substring(11));
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
@@ -130,6 +131,10 @@ public class Client extends AbstractClient {
             ExecutableExamEvent event = new ExecutableExamEvent(message);
             Platform.runLater(() -> {
                 EventBus.getDefault().post(event);
+            });
+        } else {
+            Platform.runLater(() -> {
+                EventBus.getDefault().post(message.getMessage());
             });
         }
     }

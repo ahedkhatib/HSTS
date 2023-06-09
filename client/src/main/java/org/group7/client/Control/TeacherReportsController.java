@@ -25,7 +25,13 @@ public class TeacherReportsController extends Controller{
 
         EventBus.getDefault().register(this);
     }
-    public void GetResult(){
+
+    @Subscribe
+    public void GetResult(String req) {
+
+        if(!req.equals("#getExecutableExam"))
+            return;
+
         try{
             Client.getClient().sendToServer(new Message(null, "#getExecutableExam"));
         } catch (Exception e){

@@ -74,7 +74,7 @@ public class CheckTimeRequestsBoundary extends Boundary {
     @FXML
     public void backToList(ActionEvent event) {
 
-        controller.getAllRequests();
+        controller.getAllRequests("#GetAllTimeRequests");
 
         requestAP.setDisable(true);
         requestAP.setVisible(false);
@@ -174,7 +174,7 @@ public class CheckTimeRequestsBoundary extends Boundary {
             }
         });
 
-        controller.getAllRequests();
+        controller.getAllRequests("#GetAllTimeRequests");
     }
 
     public void setExam(ExecutableExam exam) {

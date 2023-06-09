@@ -99,6 +99,8 @@ public class CreateExecutableBoundary extends Boundary {
             }
         });
 
+        controller.getTeacherExams("#GetTeacherExams");
+
     }
 
 }

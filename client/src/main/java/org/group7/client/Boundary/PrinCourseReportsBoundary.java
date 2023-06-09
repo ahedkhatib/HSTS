@@ -16,7 +16,7 @@ import org.group7.entities.Teacher;
 import java.util.List;
 import java.util.ArrayList;
 
-public class PrinCourseReportsBoundary extends Boundary{
+public class PrinCourseReportsBoundary extends Boundary {
     PrinCourseReportsController controller;
     public List<Teacher> teachers;
     public List<ExecutableExam> exams;
@@ -25,6 +25,7 @@ public class PrinCourseReportsBoundary extends Boundary{
     public List<String> examsNames;
     public List<Course> courses;
     public List<String> coursesNames;
+
     @FXML
     private ComboBox<String> coursesCB;
     @FXML
@@ -32,6 +33,7 @@ public class PrinCourseReportsBoundary extends Boundary{
 
     @FXML
     private NumberAxis countAxis;
+
     @FXML
     private ComboBox<String> examsCB;
 
@@ -63,7 +65,9 @@ public class PrinCourseReportsBoundary extends Boundary{
         examsCB.setVisible(false);
         teachersCB.setVisible(false);
 
+        controller.getCourses("#GetCourses");
     }
+
     @FXML
     void selectCourse(ActionEvent event) {
         Course selectedCourse = new Course();
@@ -81,7 +85,7 @@ public class PrinCourseReportsBoundary extends Boundary{
 
         if (selectedCourse.getTeacherList().isEmpty()) {
             coursesInfo.setVisible(true);
-            coursesInfo.setText("There is no teachers belong"+ "\n" + "to"+ coursesCB.getSelectionModel().getSelectedItem()+ "course");
+            coursesInfo.setText("There is no teachers belong" + "\n" + "to" + coursesCB.getSelectionModel().getSelectedItem() + "course");
             examsCB.setVisible(false);
             teachersCB.setVisible(false);
         } else {
@@ -98,6 +102,7 @@ public class PrinCourseReportsBoundary extends Boundary{
         }
 
     }
+
     @FXML
     void selectTeacher(ActionEvent event) {
         Teacher selectedTeacher = new Teacher();
@@ -107,15 +112,15 @@ public class PrinCourseReportsBoundary extends Boundary{
         averageLabel.setText("Average: ");
         medianLabel.setText("Median: ");
         for (Teacher t : teachers) {
-            if(teachersCB.getSelectionModel().getSelectedItem() != null) {
+            if (teachersCB.getSelectionModel().getSelectedItem() != null) {
                 if (teachersCB.getSelectionModel().getSelectedItem().equals(t.getFirstName() + " " + t.getLastName())) {
                     selectedTeacher = t;
                 }
             }
         }
         List<ExecutableExam> exams = new ArrayList<>();
-        if(selectedTeacher != null && selectedTeacher.getExamList() != null) {
-            if (selectedTeacher.getExamList().isEmpty() ) {
+        if (selectedTeacher != null && selectedTeacher.getExamList() != null) {
+            if (selectedTeacher.getExamList().isEmpty()) {
                 coursesInfo.setVisible(true);
                 coursesInfo.setText("There is no exams belong" + "\n" + teachersCB.getSelectionModel().getSelectedItem() + " teacher");
                 examsCB.setVisible(false);
@@ -143,6 +148,7 @@ public class PrinCourseReportsBoundary extends Boundary{
             }
         }
     }
+
     @FXML
     void selectExam(ActionEvent event) {
         ExecutableExam selectedExam = new ExecutableExam();
@@ -150,39 +156,43 @@ public class PrinCourseReportsBoundary extends Boundary{
         medianLabel.setText("Median: ");
         updateGradeChart(new int[10]); // reInitialize to 0's
         for (ExecutableExam e : exams) {
-            if(examsCB.getSelectionModel().getSelectedItem() != null) {
+            if (examsCB.getSelectionModel().getSelectedItem() != null) {
                 if (examsCB.getSelectionModel().getSelectedItem().equals(e.getExamId() + " " + e.getExam().getExamName())) {
                     selectedExam = e;
                 }
             }
         }
-        if(selectedExam != null && selectedExam.getDistribution() != null) {
+        if (selectedExam != null && selectedExam.getDistribution() != null) {
             updateGradeChart(selectedExam.getDistribution());
             averageLabel.setText("Average: " + selectedExam.getAverage());
             medianLabel.setText("Median: " + selectedExam.getMedian());
         }
     }
+
     public void updateTeachersComboBox() {
-        if(!teachersNames.isEmpty()) {
+        if (!teachersNames.isEmpty()) {
             for (String s : teachersNames) {
                 teachersCB.getItems().add(s);
             }
         }
     }
+
     public void updateExamsComboBox() {
-        if(!examsNames.isEmpty()) {
+        if (!examsNames.isEmpty()) {
             for (String s : examsNames) {
                 examsCB.getItems().add(s);
             }
         }
     }
+
     public void updateCoursesComboBox() {
-        if(!coursesNames.isEmpty()) {
+        if (!coursesNames.isEmpty()) {
             for (String s : coursesNames) {
                 coursesCB.getItems().add(s);
             }
         }
     }
+
     private void updateGradeChart(int[] distribution) {
         XYChart.Series<String, Integer> series = new XYChart.Series<>();
         series.setName("Grade Range");
