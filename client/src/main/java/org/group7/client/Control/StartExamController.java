@@ -210,6 +210,7 @@ public class StartExamController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        startTimer();
     }
 
     public void finishExam(boolean flag) {
@@ -298,11 +299,6 @@ public class StartExamController extends Controller {
 
             boundary.getManualAp().setDisable(true);
             boundary.getManualAp().setDisable(true);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Exam Finished!"
-            );
-
-            alert.show();
 
             ManualResult result = new ManualResult(boundary.getManualSolution(), exam, (Student) Client.getClient().getUser());
 
