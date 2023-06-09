@@ -89,6 +89,12 @@ public class StudentReportsBoundary extends Boundary {
 
         listAP.setDisable(false);
         listAP.setVisible(true);
+
+        activeResult = null;
+    }
+
+    public Result getActiveResult() {
+        return activeResult;
     }
 
     @Override

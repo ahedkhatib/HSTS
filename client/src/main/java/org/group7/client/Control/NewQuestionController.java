@@ -69,7 +69,7 @@ public class NewQuestionController extends Controller{
     }
 
     @Subscribe
-    public void examSaved(QuestionEvent event){
+    public void questionSaved(QuestionEvent event){
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Question Saved!"
         );

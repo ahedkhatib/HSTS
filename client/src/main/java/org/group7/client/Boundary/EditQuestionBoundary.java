@@ -124,6 +124,12 @@ public class EditQuestionBoundary extends Boundary {
 
         listAP.setDisable(false);
         listAP.setVisible(true);
+
+        activeQuestion = null;
+    }
+
+    public Question getActiveQuestion() {
+        return activeQuestion;
     }
 
     @FXML
@@ -200,9 +206,6 @@ public class EditQuestionBoundary extends Boundary {
                     selectedCourses = new ArrayList<>();
                     selectedCourses.addAll(activeQuestion.getCourseList());
 
-                    for(Course course : selectedCourses){
-                        System.out.println(course.getCourseName());
-                    }
                     coursesListView.setItems(FXCollections.observableList(activeQuestion.getSubject().getCourseList()));
                     Platform.runLater(() -> {
                         coursesListView.refresh();

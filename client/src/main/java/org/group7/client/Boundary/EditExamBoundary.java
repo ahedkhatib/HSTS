@@ -79,6 +79,12 @@ public class EditExamBoundary extends Boundary {
 
         listAP.setDisable(false);
         listAP.setVisible(true);
+
+        activeExam = null;
+    }
+
+    public Exam getActiveExam() {
+        return activeExam;
     }
 
     public ListView<Exam> getExamListView() {

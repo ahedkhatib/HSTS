@@ -59,7 +59,7 @@ public class PrinTeacherReportsBoundary extends Boundary {
         examsInfo.setVisible(false);
         examsCB.setVisible(false);
 
-        controller.getTeachers("#GetTeachers");
+        controller.getTeachers("#GetData");
 
     }
 

@@ -28,7 +28,7 @@ public class PrinStudentReportsController extends Controller {
     @Subscribe
     public void getStudents(String req){
 
-        if(!req.equals("#GetStudents"))
+        if(!req.equals("#GetData"))
             return;
 
         try {

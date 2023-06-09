@@ -114,8 +114,11 @@ public class EditQuestionController extends Controller{
         } else {
 
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveQuestion() == null) {
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             this.boundary.getQuestionListView().setItems(FXCollections.observableArrayList(questions));
             this.boundary.getQuestionListView().refresh();

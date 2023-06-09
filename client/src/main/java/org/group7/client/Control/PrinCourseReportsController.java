@@ -23,7 +23,7 @@ public class PrinCourseReportsController extends Controller {
     @Subscribe
     public void getCourses(String req){
 
-        if(!req.equals("#GetCourses"))
+        if(!req.equals("#GetData"))
             return;
 
         try {

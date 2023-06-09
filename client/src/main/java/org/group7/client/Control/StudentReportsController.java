@@ -60,8 +60,11 @@ public class StudentReportsController extends Controller {
             boundary.setResultList(results);
 
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveResult() == null){
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             boundary.getResultListView().setItems(FXCollections.observableList(results));
             boundary.getResultListView().refresh();

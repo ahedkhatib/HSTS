@@ -68,8 +68,10 @@ public class Server extends AbstractServer {
         try {
             for (SubscribedClient subscribedClient : SubscribersList) {
 
-                if (subscribedClient.getClient() == client)
+                if (subscribedClient.getClient() == client) {
+                    System.out.println("skipped");
                     continue;
+                }
 
                 subscribedClient.getClient().sendToClient(message);
                 System.out.println(subscribedClient.getClient().getId());
@@ -198,6 +200,7 @@ public class Server extends AbstractServer {
                             }
 
                             client.sendToClient(new Message(null, "#ExtraTime_Success"));
+
                             sendToAllClients(new Message(null, "#GetAllTimeRequests"));
                         }
 
@@ -325,6 +328,10 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#getExecutableExam"));
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -391,10 +398,10 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(null, "#ExamSaved"));
+
                         sendToAllClients(new Message(null, "#GetTeacherCourses"));
                         sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#GetExams"));
-                        sendToAllClients(new Message(null, "#GetCourses"));
+                        sendToAllClients(new Message(null, "#GetData"));
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -402,7 +409,6 @@ public class Server extends AbstractServer {
                 }
 
                 case "#SaveQuestion" -> {
-
                     try {
 
                         session.beginTransaction();
@@ -435,7 +441,11 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
+
                         sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -474,8 +484,11 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(null, "#ExamFinished"));
-                        sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#GetExams"));
+
+                        sendToAllClients(new Message(null, "#GetStudentResults"));
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -526,7 +539,8 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } case "#getExecutableExam" -> {
+                }
+                case "#getExecutableExam" -> {
                     List<ExecutableExam> executable = getAll(ExecutableExam.class);
                     client.sendToClient(new Message(executable, "#GotExecutableExam"));
                 }
@@ -570,6 +584,12 @@ public class Server extends AbstractServer {
 
                         session.flush();
                         session.getTransaction().commit();
+
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#GetStudentResults"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -762,7 +782,7 @@ public class Server extends AbstractServer {
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
-        for(Question q : algebraQuestions){
+        for (Question q : algebraQuestions) {
             q.getExamList().add(algebraExam);
             session.save(q);
         }
@@ -774,7 +794,7 @@ public class Server extends AbstractServer {
         session.save(algebraExamB);
         session.save(or);
         session.save(algebra);
-        for(Question q : algebraQuestions){
+        for (Question q : algebraQuestions) {
             q.getExamList().add(algebraExamB);
             session.save(q);
         }
@@ -807,7 +827,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result2 = new Result(84, alaa, "", executableAlgebra,50, false, answers);
+        Result result2 = new Result(84, alaa, "", executableAlgebra, 50, false, answers);
         alaa.getExamList().add(executableAlgebra);
         alaa.getResultList().add(result2);
         executableAlgebra.getStudentList().add(alaa);
@@ -816,7 +836,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result3 = new Result(81, ahed, "", executableAlgebra,60, true, answers);
+        Result result3 = new Result(81, ahed, "", executableAlgebra, 60, true, answers);
         ahed.getExamList().add(executableAlgebra);
         ahed.getResultList().add(result3);
         executableAlgebra.getStudentList().add(ahed);

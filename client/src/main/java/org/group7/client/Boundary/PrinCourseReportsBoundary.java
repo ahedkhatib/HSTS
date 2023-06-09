@@ -65,7 +65,7 @@ public class PrinCourseReportsBoundary extends Boundary {
         examsCB.setVisible(false);
         teachersCB.setVisible(false);
 
-        controller.getCourses("#GetCourses");
+        controller.getCourses("#GetData");
     }
 
     @FXML

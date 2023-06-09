@@ -49,7 +49,7 @@ public class PrinStudentReportsBoundary extends Boundary {
         super.setController(controller);
         reportTA.setVisible(false);
 
-        controller.getStudents("#GetStudents");
+        controller.getStudents("#GetData");
     }
 
     public void updateStudentsCB() {
