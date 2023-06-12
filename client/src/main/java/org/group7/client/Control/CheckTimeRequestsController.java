@@ -64,8 +64,11 @@ public class CheckTimeRequestsController extends Controller {
             boundary.getListAP().setDisable(true);
         } else {
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveExam() == null && boundary.getActiveReq() == null){
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             boundary.getRequestList().setItems(FXCollections.observableList(reqList));
             boundary.getRequestList().refresh();
