@@ -1,10 +1,12 @@
 package org.group7.client.Boundary;
 
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -43,7 +45,7 @@ public class TeacherApprovalBoundary extends Boundary {
     private Text titleText;
 
     @FXML
-    private ComboBox<String> teacherExamsComboBox;
+    private ComboBox<ExecutableExam> teacherExamsComboBox;
 
     @FXML
     private Button changeGradeButton;
@@ -75,11 +77,15 @@ public class TeacherApprovalBoundary extends Boundary {
 
     private boolean changeGradePressed = false; // Flag to track if "Change Grade" button was pressed
 
+    private ExecutableExam selectedExam;
+
 
     @FXML
     void backToList(ActionEvent event) {
 
         activeResult = null;
+
+        controller.GetResult("#getExecutableExam");
 
         nonApprovedListView.getSelectionModel().clearSelection();
         nonApprovedListView.refresh();
@@ -109,9 +115,67 @@ public class TeacherApprovalBoundary extends Boundary {
         super.setController(controller);
         controller.GetResult("#getExecutableExam");
 
-        for (ExecutableExam exam : ((Teacher) Client.getClient().getUser()).getExamList()) {
-            teacherExamsComboBox.getItems().add(exam.getExam().getExamName());
-        }
+        selectedExam = null;
+
+        teacherExamsComboBox.setCellFactory(param -> new ComboBoxListCell<ExecutableExam>() {
+            @Override
+            public void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+
+                if (empty || exam == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId());
+                }
+            }
+        });
+
+        teacherExamsComboBox.setButtonCell(new ListCell<ExecutableExam>() {
+            @Override
+            protected void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+                if (exam == null || empty) {
+                    setText(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId());
+                }
+            }
+        });
+
+        teacherExamsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+
+                nonApprovedListView.getItems().clear();
+
+                if (!newValue.getStudentList().isEmpty()) {
+
+                    listAP.setDisable(false);
+                    listAP.setVisible(true);
+
+                    for (Student student : newValue.getStudentList()) {
+                        if (!student.getResultList().isEmpty()) {
+                            for (Result res : student.getResultList()) {
+                                if ((res.getExam() == newValue) && (!res.isStatus())) {
+                                    if (!nonApprovedListView.getItems().contains(res)) {
+                                        nonApprovedListView.getItems().add(res);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+
+                    emptyAP.setDisable(false);
+                    emptyAP.setVisible(true);
+                }
+
+                selectedExam = newValue;
+
+                nonApprovedListView.refresh();
+            }
+        });
+
 
         nonApprovedListView.setCellFactory(param -> new ListCell<Result>() {
             @Override
@@ -186,43 +250,50 @@ public class TeacherApprovalBoundary extends Boundary {
 
     }
 
-    @FXML
-    void selectExam(ActionEvent event) {
+    public void updateExecutableExamsCombo() {
 
-        listAP.setDisable(false);
-        listAP.setVisible(true);
-
-        nonApprovedListView.getItems().clear();
+        teacherExamsComboBox.getItems().clear();
 
         if (!executableExams.isEmpty()) {
             for (ExecutableExam e : executableExams) {
-                if (e.getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
-                    if (!e.getStudentList().isEmpty()) {
-                        for (Student student : e.getStudentList()) {
-                            if (!student.getResultList().isEmpty()) {
-                                for (Result res : student.getResultList()) {
-                                    if ((res.getExam() == e) && (!res.isStatus())) {
-                                        if (!nonApprovedListView.getItems().contains(res)) {
-                                            nonApprovedListView.getItems().add(res);
-                                        }
-                                    }
+                if (e.getExam().getCreator().getUsername().equals(Client.getClient().getUser().getUsername())
+                || e.getTeacher().getUsername().equals(Client.getClient().getUser().getUsername())) {
+                    if (!(teacherExamsComboBox.getItems().contains(e))) {
+                        teacherExamsComboBox.getItems().add(e);
+                    }
+                }
+            }
+        }
+
+        if(selectedExam != null) {
+
+            for (ExecutableExam e : executableExams) {
+                if(selectedExam.getExamId().equals(e.getExamId()))
+                    selectedExam = e;
+            }
+
+            teacherExamsComboBox.getSelectionModel().select(selectedExam);
+
+            if (!selectedExam.getStudentList().isEmpty()) {
+
+                listAP.setDisable(false);
+                listAP.setVisible(true);
+
+                for (Student student : selectedExam.getStudentList()) {
+                    if (!student.getResultList().isEmpty()) {
+                        for (Result res : student.getResultList()) {
+                            if ((res.getExam() == selectedExam) && (!res.isStatus())) {
+                                if (!nonApprovedListView.getItems().contains(res)) {
+                                    nonApprovedListView.getItems().add(res);
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
-    }
+            } else {
 
-    public void updateExecutableExamsCombo() {
-        if (!executableExams.isEmpty()) {
-            for (ExecutableExam e : executableExams) {
-                if (e.getExam().getCreator().getFirstName().equals(Client.getClient().getUser().getFirstName())) {
-                    if (!(teacherExamsComboBox.getItems().contains(e.getExam().getExamName()))) {
-                        teacherExamsComboBox.getItems().add(e.getExam().getExamName());
-                    }
-                }
+                emptyAP.setDisable(false);
+                emptyAP.setVisible(true);
             }
         }
     }
@@ -286,7 +357,7 @@ public class TeacherApprovalBoundary extends Boundary {
                 for (Student s : examstudents) {
                     if (!s.getResultList().isEmpty()) {
                         for (Result r : s.getResultList()) {
-                            if (r.getExam().getExam().getExamName().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
+                            if (r.getExam().equals(teacherExamsComboBox.getSelectionModel().getSelectedItem())) {
                                 grades.add(r.getGrade());
                             }
                         }
@@ -350,29 +421,12 @@ public class TeacherApprovalBoundary extends Boundary {
         optionalNoteVbox.setDisable(true);
     }
 
-    @FXML
-    void setNewGrade(ActionEvent event) {
-
-    }
-
-    @FXML
-    void newGradeNote(ActionEvent event) {
-
-    }
-
-    @FXML
-    void optinalNote(ActionEvent event) {
-
-    }
-
     @Override
     public TeacherApprovalController getController() {
         return controller;
     }
 
     public VBox questionCard(int questionNum, Question question, int correctIndex, int toggleIndex) {
-
-        System.out.println(toggleIndex);
 
         VBox card = new VBox();
         card.setPrefWidth(scrollPane.getPrefWidth() / 2);

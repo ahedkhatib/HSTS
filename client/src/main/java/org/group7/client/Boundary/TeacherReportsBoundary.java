@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.group7.client.Client;
 import org.group7.client.Control.Controller;
@@ -18,9 +19,10 @@ import javafx.scene.chart.XYChart;
 import javafx.beans.value.ObservableValue;
 import javafx.util.Callback;
 import javafx.beans.property.SimpleStringProperty;
+
 import java.util.List;
 
-public class TeacherReportsBoundary extends Boundary{
+public class TeacherReportsBoundary extends Boundary {
 
     TeacherReportsController controller;
 
@@ -36,10 +38,7 @@ public class TeacherReportsBoundary extends Boundary{
     private NumberAxis countAxis;
 
     @FXML
-    private ComboBox<String> executableExamsComboBox;
-
-    @FXML
-    private ComboBox<String> executalbeExamTeacherComboBox;
+    private ComboBox<ExecutableExam> executableExamsComboBox;
 
     @FXML
     private TableView<Result> statisticInfoTable;
@@ -79,24 +78,7 @@ public class TeacherReportsBoundary extends Boundary{
         return controller;
     }
 
-    @FXML
-    void selectExam(ActionEvent event) {
-        executalbeExamTeacherComboBox.getItems().clear();
-        statisticInfoTable.getItems().clear();
-        updateGradeChart(new int[10]); // reInitialize to 0's
-        averageLabel.setText("Average: ");
-        medianLabel.setText("Median: ");
-        passedLabel.setText("Passed percentage: ");
-        failedLabel.setText("Failed percentage: ");
-        inTimeLabel.setText("finished in time percentage: ");
-
-
-        for(ExecutableExam exam: executableExams){
-            if(executableExamsComboBox.getSelectionModel().getSelectedItem().equals(exam.getExam().getExamName())){
-                executalbeExamTeacherComboBox.getItems().add(exam.getExamId() + " - " + exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
-            }
-        }
-    }
+    private ExecutableExam selectedExam;
 
     private void updateGradeChart(int[] distribution) {
         XYChart.Series<String, Integer> series = new XYChart.Series<>();
@@ -125,7 +107,7 @@ public class TeacherReportsBoundary extends Boundary{
     }
 
     @FXML
-    void selectExecutableExamTeacher(ActionEvent event) {
+    void selectExam() {
 
         statisticInfoTable.getItems().clear();
         averageLabel.setText("Average: ");
@@ -134,15 +116,10 @@ public class TeacherReportsBoundary extends Boundary{
         failedLabel.setText("Failed percentage: ");
         inTimeLabel.setText("finished in time percentage: ");
 
-        String selectedExamName = executableExamsComboBox.getSelectionModel().getSelectedItem();
-        String selectedTeacherName = executalbeExamTeacherComboBox.getSelectionModel().getSelectedItem();
-
-
-        if (selectedExamName != null && selectedTeacherName != null) {
+        if (selectedExam != null) {
             resultList = FXCollections.observableArrayList();
             for (ExecutableExam exam : executableExams) {
-                if (selectedExamName.equals(exam.getExam().getExamName()) &&
-                        selectedTeacherName.equals(exam.getExamId() + " - " + exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName())) {
+                if (selectedExam.equals(exam)) {
 
                     updateGradeChart(exam.getDistribution());
 
@@ -153,10 +130,10 @@ public class TeacherReportsBoundary extends Boundary{
                         Result studentResult = findStudentResult(s);
                         if (studentResult != null) {
                             resultList.add(studentResult);
-                            if(studentResult.getGrade() >= 51){
+                            if (studentResult.getGrade() >= 51) {
                                 passedStudents++;
                             }
-                            if(!studentResult.isTimeUp()){
+                            if (!studentResult.isTimeUp()) {
                                 numOfFinishedInTime++;
                             }
 
@@ -168,7 +145,7 @@ public class TeacherReportsBoundary extends Boundary{
                     medianLabel.setText("Median: " + String.format("%.2f", exam.getMedian()));
                     passedLabel.setText("Passed percentage: " + String.format("%.2f", passed) + "%");
                     failedLabel.setText("Failed percentage: " + String.format("%.2f", (100 - passed)) + "%");
-                    inTimeLabel.setText("finished in time percentage: " + String.format("%.2f", (((double) numOfFinishedInTime / exam.getStudentList().size()) * 100))  + "%");
+                    inTimeLabel.setText("finished in time percentage: " + String.format("%.2f", (((double) numOfFinishedInTime / exam.getStudentList().size()) * 100)) + "%");
 
                 }
             }
@@ -179,8 +156,8 @@ public class TeacherReportsBoundary extends Boundary{
     // Helper method to find the corresponding Result object for a student and exam
     private Result findStudentResult(Student student) {
         for (Result result : student.getResultList()) {
-            if (result.getExam().getExam().getExamName().equals(executableExamsComboBox.getSelectionModel().getSelectedItem())
-            && !resultList.contains(result)) {
+            if (result.getExam().equals(executableExamsComboBox.getSelectionModel().getSelectedItem())
+                    && !resultList.contains(result)) {
                 return result;
             }
         }
@@ -194,12 +171,50 @@ public class TeacherReportsBoundary extends Boundary{
         super.setController(controller);
         controller.GetResult("#getExecutableExam");
 
+        selectedExam = null;
+
+        executableExamsComboBox.setCellFactory(param -> new ComboBoxListCell<ExecutableExam>() {
+            @Override
+            public void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+
+                if (empty || exam == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId() + " - " +
+                            exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
+                }
+            }
+        });
+
+        executableExamsComboBox.setButtonCell(new ListCell<ExecutableExam>() {
+            @Override
+            protected void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+                if (exam == null || empty) {
+                    setText(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId());
+                }
+            }
+        });
+
+        executableExamsComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedExam = newValue;
+                selectExam();
+            }
+        });
+
+
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         gradeColumn.setCellValueFactory(new PropertyValueFactory<>("grade"));
         teacherNoteColumn.setCellValueFactory(new PropertyValueFactory<>("teacherNote"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("elapsed"));
         timeUpColumn.setCellValueFactory(new PropertyValueFactory<>("timeUp"));
+
 
         timeUpColumn.setCellFactory(column -> new TableCell<Result, Boolean>() {
             @Override
@@ -251,15 +266,32 @@ public class TeacherReportsBoundary extends Boundary{
     }
 
     public void updateExecutableExamsCombo() {
-        if(!executableExams.isEmpty()) {
+
+        executableExamsComboBox.getItems().clear();
+
+        if (!executableExams.isEmpty()) {
             for (ExecutableExam e : executableExams) {
-                if(e.getExam().getCreator().getFirstName().equals(Client.getClient().getUser().getFirstName())) {
-                    if(!(executableExamsComboBox.getItems().contains(e.getExam().getExamName()))) {
-                        executableExamsComboBox.getItems().add(e.getExam().getExamName());
+                if (e.getExam().getCreator().getUsername().equals(Client.getClient().getUser().getUsername())
+                        || e.getTeacher().getUsername().equals(Client.getClient().getUser().getUsername())) {
+                    if (!(executableExamsComboBox.getItems().contains(e))) {
+                        executableExamsComboBox.getItems().add(e);
                     }
                 }
             }
         }
+
+        if (selectedExam != null) {
+
+            for (ExecutableExam e : executableExams) {
+                if (selectedExam.getExamId().equals(e.getExamId()))
+                    selectedExam = e;
+            }
+
+            executableExamsComboBox.getSelectionModel().select(selectedExam);
+
+            selectExam();
+        }
+
     }
 
 }
