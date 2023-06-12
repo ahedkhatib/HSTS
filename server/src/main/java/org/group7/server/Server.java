@@ -588,7 +588,7 @@ public class Server extends AbstractServer {
 
     }
 
-    public void updateData(ConnectionToClient client){
+    public void updateData(ConnectionToClient client) {
 
         sendToAllClients(new Message(null, "#GetTeacherCourses"), client);
         sendToAllClients(new Message(null, "#GetTeacherExams"), client);
