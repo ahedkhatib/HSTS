@@ -55,6 +55,8 @@ public class TeacherReportsBoundary extends Boundary {
     private TableColumn<Result, String> timeColumn;
     @FXML
     private TableColumn<Result, Boolean> timeUpColumn;
+    @FXML
+    private TableColumn<Result, Boolean> ApprovedColumn;
 
     @FXML
     private Label averageLabel;
@@ -214,9 +216,30 @@ public class TeacherReportsBoundary extends Boundary {
         teacherNoteColumn.setCellValueFactory(new PropertyValueFactory<>("teacherNote"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("elapsed"));
         timeUpColumn.setCellValueFactory(new PropertyValueFactory<>("timeUp"));
+        ApprovedColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+
 
 
         timeUpColumn.setCellFactory(column -> new TableCell<Result, Boolean>() {
+            @Override
+            protected void updateItem(Boolean item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText("");
+                    if (item) {
+                        setText("✓");
+                    } else {
+                        setText("x");
+                    }
+                    setAlignment(Pos.CENTER); // Set alignment to center
+                }
+            }
+        });
+
+        ApprovedColumn.setCellFactory(column -> new TableCell<Result, Boolean>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
