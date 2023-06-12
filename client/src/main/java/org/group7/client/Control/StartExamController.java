@@ -148,6 +148,8 @@ public class StartExamController extends Controller {
 
         AnchorPane pane = null;
 
+        out.println(event.isExists());
+
         if (!event.isExists()) {
             Alert alert = new Alert(Alert.AlertType.ERROR,
                     "Exam Doesn't Exist!"
@@ -210,6 +212,7 @@ public class StartExamController extends Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        startTimer();
     }
 
     public void finishExam(boolean flag) {
@@ -299,11 +302,6 @@ public class StartExamController extends Controller {
             boundary.getManualAp().setDisable(true);
             boundary.getManualAp().setDisable(true);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Exam Finished!"
-            );
-
-            alert.show();
-
             ManualResult result = new ManualResult(boundary.getManualSolution(), exam, (Student) Client.getClient().getUser());
 
             try {
@@ -316,6 +314,9 @@ public class StartExamController extends Controller {
 
     @Subscribe
     public void examEndedMessage(String message) {
+
+        if(!message.startsWith("Exam"))
+            return;
 
         boundary.getAutoAp().setDisable(true);
 

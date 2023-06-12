@@ -66,13 +66,15 @@ public class Server extends AbstractServer {
 
     public void sendToAllClients(Message message, ConnectionToClient client) {
         try {
-            for (SubscribedClient SubscribedClient : SubscribersList) {
+            for (SubscribedClient subscribedClient : SubscribersList) {
 
-                if (SubscribedClient.getClient() == client && message.getMessage().equals("#TimeRequestApproved"))
+                if (subscribedClient.getClient() == client) {
+                    System.out.println("skipped");
                     continue;
+                }
 
-                SubscribedClient.getClient().sendToClient(message);
-                System.out.println(SubscribedClient.getClient().getId());
+                subscribedClient.getClient().sendToClient(message);
+                System.out.println(subscribedClient.getClient().getId());
             }
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -113,30 +115,6 @@ public class Server extends AbstractServer {
                 case "#GetGrades" -> {
                     client.sendToClient(new Message(message.getObject(), "#GotGrades"));
                 }
-                case "#UpdateGrade" -> {
-
-                    Object[] obj = (Object[]) message.getObject();
-
-                    try {
-                        session.beginTransaction();
-
-                        Result grade = (Result) obj[0];
-                        int newValue = Integer.parseInt((String) obj[1]);
-
-                        grade.setGrade(newValue);
-
-                        session.merge(grade);
-
-                        session.flush();
-
-                        session.getTransaction().commit();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    client.sendToClient(new Message(obj[2], "#GradeUpdated"));
-                }
-
                 case "#Logout" -> {
 
                     String id = ((User) message.getObject()).getUsername();
@@ -222,7 +200,10 @@ public class Server extends AbstractServer {
                             }
 
                             client.sendToClient(new Message(null, "#ExtraTime_Success"));
+
+                            sendToAllClients(new Message(null, "#GetAllTimeRequests"));
                         }
+
                         session.getTransaction().commit();
 
                     } catch (Exception e) {
@@ -347,6 +328,10 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#getExecutableExam"));
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -414,6 +399,9 @@ public class Server extends AbstractServer {
 
                         client.sendToClient(new Message(null, "#ExamSaved"));
 
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#GetData"));
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -421,7 +409,6 @@ public class Server extends AbstractServer {
                 }
 
                 case "#SaveQuestion" -> {
-
                     try {
 
                         session.beginTransaction();
@@ -452,7 +439,13 @@ public class Server extends AbstractServer {
 
                         session.flush();
                         session.getTransaction().commit();
+
                         client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
+
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -491,6 +484,11 @@ public class Server extends AbstractServer {
                         session.getTransaction().commit();
 
                         client.sendToClient(new Message(null, "#ExamFinished"));
+
+                        sendToAllClients(new Message(null, "#GetStudentResults"));
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -541,7 +539,8 @@ public class Server extends AbstractServer {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } case "#getExecutableExam" -> {
+                }
+                case "#getExecutableExam" -> {
                     List<ExecutableExam> executable = getAll(ExecutableExam.class);
                     client.sendToClient(new Message(executable, "#GotExecutableExam"));
                 }
@@ -585,6 +584,12 @@ public class Server extends AbstractServer {
 
                         session.flush();
                         session.getTransaction().commit();
+
+                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
+                        sendToAllClients(new Message(null, "#GetTeacherExams"));
+                        sendToAllClients(new Message(null, "#GetStudentResults"));
+                        sendToAllClients(new Message(null, "#GetData"));
+
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -777,7 +782,7 @@ public class Server extends AbstractServer {
         session.save(algebraExam);
         session.save(or);
         session.save(algebra);
-        for(Question q : algebraQuestions){
+        for (Question q : algebraQuestions) {
             q.getExamList().add(algebraExam);
             session.save(q);
         }
@@ -789,7 +794,7 @@ public class Server extends AbstractServer {
         session.save(algebraExamB);
         session.save(or);
         session.save(algebra);
-        for(Question q : algebraQuestions){
+        for (Question q : algebraQuestions) {
             q.getExamList().add(algebraExamB);
             session.save(q);
         }
@@ -822,7 +827,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result2 = new Result(84, alaa, "", executableAlgebra,50, false, answers);
+        Result result2 = new Result(84, alaa, "", executableAlgebra, 50, false, answers);
         alaa.getExamList().add(executableAlgebra);
         alaa.getResultList().add(result2);
         executableAlgebra.getStudentList().add(alaa);
@@ -831,7 +836,7 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result3 = new Result(81, ahed, "", executableAlgebra,60, true, answers);
+        Result result3 = new Result(81, ahed, "", executableAlgebra, 60, true, answers);
         ahed.getExamList().add(executableAlgebra);
         ahed.getResultList().add(result3);
         executableAlgebra.getStudentList().add(ahed);

@@ -22,13 +22,22 @@ public class PrinStudentReportsController extends Controller {
 
         EventBus.getDefault().register(this);
 
+
+    }
+
+    @Subscribe
+    public void getStudents(String req){
+
+        if(!req.equals("#GetData"))
+            return;
+
         try {
             Client.getClient().sendToServer(new Message(null, "#GetStudents"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     @Override
     public void unregisterController() {
         EventBus.getDefault().unregister(this);

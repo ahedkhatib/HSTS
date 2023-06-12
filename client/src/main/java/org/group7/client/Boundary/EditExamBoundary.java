@@ -72,13 +72,19 @@ public class EditExamBoundary extends Boundary {
 
     @FXML
     public void backToList(ActionEvent event) {
-        controller.getExams();
+        controller.getExams("#GetTeacherCourses");
 
         examAP.setDisable(true);
         examAP.setVisible(false);
 
         listAP.setDisable(false);
         listAP.setVisible(true);
+
+        activeExam = null;
+    }
+
+    public Exam getActiveExam() {
+        return activeExam;
     }
 
     public ListView<Exam> getExamListView() {
@@ -275,7 +281,7 @@ public class EditExamBoundary extends Boundary {
             }
         });
 
-        controller.getExams();
+        controller.getExams("#GetTeacherCourses");
     }
 
 }

@@ -84,7 +84,6 @@ public class Exam implements Serializable {
     }
 
     public int getExamId() {
-        int id = course.getSubject().getSubjectId() * 10000 + course.getCourseId() * 100 + examId;
         return examId;
     }
 

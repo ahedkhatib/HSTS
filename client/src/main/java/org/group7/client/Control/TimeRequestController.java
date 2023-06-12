@@ -51,19 +51,25 @@ public class TimeRequestController extends Controller {
 
     @Subscribe
     public void checkData(String message){
+
         Alert alert;
+
+        if(!message.startsWith("Ex") && !message.startsWith("Request")){
+            return;
+        }
 
         if(message.startsWith("Exam")){
             alert = new Alert(Alert.AlertType.ERROR,
                     message
             );
+            alert.show();
         } else {
             alert = new Alert(Alert.AlertType.INFORMATION,
                     message
             );
+            alert.show();
         }
 
-        alert.show();
     }
 
     @Override

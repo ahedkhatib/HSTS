@@ -107,7 +107,7 @@ public class TeacherApprovalBoundary extends Boundary {
     public void initialize() {
         controller = new TeacherApprovalController(this);
         super.setController(controller);
-        controller.GetResult();
+        controller.GetResult("#getExecutableExam");
 
         for (ExecutableExam exam : ((Teacher) Client.getClient().getUser()).getExamList()) {
             teacherExamsComboBox.getItems().add(exam.getExam().getExamName());

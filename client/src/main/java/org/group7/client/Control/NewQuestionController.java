@@ -25,10 +25,17 @@ public class NewQuestionController extends Controller{
         this.boundary = boundary;
 
         EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void getQuestions(String req){
+
+        if(!req.equals("#GetTeacherCourses"))
+            return;
 
         try {
-            Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTeacherCourses"));
-        }catch (Exception e){
+            Client.getClient().sendToServer(new Message(Client.getClient().getUser(),"#GetTeacherCourses"));
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -62,7 +69,7 @@ public class NewQuestionController extends Controller{
     }
 
     @Subscribe
-    public void examSaved(QuestionEvent event){
+    public void questionSaved(QuestionEvent event){
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                 "Question Saved!"
         );

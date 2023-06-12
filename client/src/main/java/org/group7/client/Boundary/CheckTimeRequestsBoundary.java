@@ -70,11 +70,21 @@ public class CheckTimeRequestsBoundary extends Boundary {
         return this.listAP;
     }
 
+    public ExtraTime getActiveReq() {
+        return activeReq;
+    }
+
+    public ExecutableExam getActiveExam() {
+        return activeExam;
+    }
 
     @FXML
     public void backToList(ActionEvent event) {
 
-        controller.getAllRequests();
+        controller.getAllRequests("#GetAllTimeRequests");
+
+        activeReq = null;
+        activeExam = null;
 
         requestAP.setDisable(true);
         requestAP.setVisible(false);
@@ -174,7 +184,7 @@ public class CheckTimeRequestsBoundary extends Boundary {
             }
         });
 
-        controller.getAllRequests();
+        controller.getAllRequests("#GetAllTimeRequests");
     }
 
     public void setExam(ExecutableExam exam) {

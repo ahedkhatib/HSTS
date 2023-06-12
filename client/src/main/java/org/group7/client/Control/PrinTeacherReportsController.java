@@ -17,24 +17,32 @@ import java.util.List;
 
 public class PrinTeacherReportsController extends Controller{
     PrinTeacherReportsBoundary boundary;
+
     public PrinTeacherReportsController(PrinTeacherReportsBoundary boundary) {
         this.boundary = boundary;
         EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void getTeachers(String req){
+
+        if(!req.equals("#GetData"))
+            return;
 
         try {
             Client.getClient().sendToServer(new Message(null, "#GetTeachers"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     @Override
     public void unregisterController() {
         EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
-    public void getTeachers(TeachersListEvent event){
+    public void setTeachers(TeachersListEvent event){
 
         List<Teacher> teachers = event.getTeachers();
         List<String> names = new ArrayList<>();

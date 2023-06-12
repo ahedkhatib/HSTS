@@ -82,13 +82,19 @@ public class StudentReportsBoundary extends Boundary {
     @FXML
     public void backToList(ActionEvent event) {
 
-        controller.getResults();
+        controller.getResults("#GetStudentResults");
 
         examAP.setDisable(true);
         examAP.setVisible(false);
 
         listAP.setDisable(false);
         listAP.setVisible(true);
+
+        activeResult = null;
+    }
+
+    public Result getActiveResult() {
+        return activeResult;
     }
 
     @Override
@@ -170,7 +176,7 @@ public class StudentReportsBoundary extends Boundary {
             }
         });
 
-        controller.getResults();
+        controller.getResults("#GetStudentResults");
     }
 
     public VBox questionCard(int questionNum, Question question, int correctIndex, int toggleIndex) {

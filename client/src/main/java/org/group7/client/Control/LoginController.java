@@ -18,18 +18,14 @@ public class LoginController extends Controller{
 
     public void login(String username, String password) {
         Object[] obj = {username, password};
+
         Message message = new Message(obj, "#Login");
         try {
             Client.getClient().sendToServer(message);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        message = new Message(obj, "#NewClient");
-        try {
-            Client.getClient().sendToServer(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     public LoginController(LoginBoundary boundary) {
@@ -43,6 +39,11 @@ public class LoginController extends Controller{
             User user = event.getUser();
 
             if (Objects.equals(event.getMessage(), "Success")) {
+                try {
+                    Client.getClient().sendToServer(new Message(null, "#NewClient"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 unregisterController();
                 App.switchScreen("homepage");
             } else {

@@ -192,7 +192,7 @@ public class TeacherReportsBoundary extends Boundary{
     public void initialize() {
         controller = new TeacherReportsController(this);
         super.setController(controller);
-        controller.GetResult();
+        controller.GetResult("#getExecutableExam");
 
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));

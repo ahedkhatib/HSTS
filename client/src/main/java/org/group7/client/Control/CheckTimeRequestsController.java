@@ -27,11 +27,14 @@ public class CheckTimeRequestsController extends Controller {
     public void unregisterController() {EventBus.getDefault().unregister(this);
     }
 
-    public void getAllRequests() {
-        try {
-            Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTimeRequests"));
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Subscribe
+    public void getAllRequests(String req) {
+        if(req.equals("#GetAllTimeRequests")) {
+            try {
+                Client.getClient().sendToServer(new Message(Client.getClient().getUser(), "#GetTimeRequests"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -61,8 +64,11 @@ public class CheckTimeRequestsController extends Controller {
             boundary.getListAP().setDisable(true);
         } else {
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveExam() == null && boundary.getActiveReq() == null){
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             boundary.getRequestList().setItems(FXCollections.observableList(reqList));
             boundary.getRequestList().refresh();

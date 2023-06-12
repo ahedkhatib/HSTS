@@ -24,7 +24,12 @@ public class StudentReportsController extends Controller {
     public void unregisterController() {EventBus.getDefault().unregister(this);
     }
 
-    public void getResults() {
+    @Subscribe
+    public void getResults(String req) {
+
+        if(!req.equals("#GetStudentResults"))
+            return;
+
         Message message = new Message(Client.getClient().getUser(), "#GetStudentResults");
         try {
             Client.getClient().sendToServer(message);
@@ -55,8 +60,11 @@ public class StudentReportsController extends Controller {
             boundary.setResultList(results);
 
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveResult() == null){
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             boundary.getResultListView().setItems(FXCollections.observableList(results));
             boundary.getResultListView().refresh();

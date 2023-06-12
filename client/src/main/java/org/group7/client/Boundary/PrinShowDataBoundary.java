@@ -45,6 +45,8 @@ public class PrinShowDataBoundary extends Boundary{
         super.setController(controller);
         examTF.setVisible(false);
         examTF.setEditable(false);
+
+        controller.getData("#GetData");
     }
 
     @FXML

@@ -12,30 +12,39 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrinCourseReportsController extends Controller{
+public class PrinCourseReportsController extends Controller {
     PrinCourseReportsBoundary boundary;
+
     public PrinCourseReportsController(PrinCourseReportsBoundary boundary) {
         this.boundary = boundary;
         EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void getCourses(String req){
+
+        if(!req.equals("#GetData"))
+            return;
 
         try {
             Client.getClient().sendToServer(new Message(null, "#GetCourses"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
     @Override
     public void unregisterController() {
         EventBus.getDefault().unregister(this);
     }
+
     @Subscribe
-    public void getCourses(CoursesListEvent event){
+    public void setCourses(CoursesListEvent event) {
 
         List<Course> courses = event.getCourses();
         List<String> names = new ArrayList<>();
         String courseName;
-        for(Course c : courses){
+        for (Course c : courses) {
             courseName = c.getCourseName();
             names.add(courseName);
         }

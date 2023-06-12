@@ -22,7 +22,12 @@ public class EditExamController extends Controller{
         EventBus.getDefault().register(this);
     }
 
-    public void getExams(){
+    @Subscribe
+    public void getExams(String req){
+
+        if(!req.equals("#GetTeacherCourses"))
+            return;
+
         try {
             Client.getClient().sendToServer(new Message(Client.getClient().getUser(),"#GetTeacherCourses"));
         } catch (Exception e){
@@ -65,8 +70,11 @@ public class EditExamController extends Controller{
         } else {
 
             boundary.getEmptyAP().setVisible(false);
-            boundary.getListAP().setVisible(true);
-            boundary.getListAP().setDisable(false);
+
+            if(boundary.getActiveExam() == null) {
+                boundary.getListAP().setVisible(true);
+                boundary.getListAP().setDisable(false);
+            }
 
             this.boundary.getExamListView().setItems(FXCollections.observableArrayList(exams));
             this.boundary.getExamListView().refresh();
