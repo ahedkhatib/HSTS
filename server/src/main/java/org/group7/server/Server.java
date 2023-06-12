@@ -201,7 +201,7 @@ public class Server extends AbstractServer {
 
                             client.sendToClient(new Message(null, "#ExtraTime_Success"));
 
-                            sendToAllClients(new Message(null, "#GetAllTimeRequests"));
+                            sendToAllClients(new Message(null, "#GetAllTimeRequests"), client);
                         }
 
                         session.getTransaction().commit();
@@ -328,9 +328,7 @@ public class Server extends AbstractServer {
 
                         session.getTransaction().commit();
 
-                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
-                        sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#getExecutableExam"));
+                        updateData(client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -399,9 +397,7 @@ public class Server extends AbstractServer {
 
                         client.sendToClient(new Message(null, "#ExamSaved"));
 
-                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
-                        sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#GetData"));
+                        updateData(client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -442,10 +438,7 @@ public class Server extends AbstractServer {
 
                         client.sendToClient(new Message(question, "#PrepareQuestion_Success"));
 
-                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
-                        sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#GetData"));
-
+                        updateData(client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -485,10 +478,7 @@ public class Server extends AbstractServer {
 
                         client.sendToClient(new Message(null, "#ExamFinished"));
 
-                        sendToAllClients(new Message(null, "#GetStudentResults"));
-                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
-                        sendToAllClients(new Message(null, "#GetData"));
-
+                        updateData(client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -585,11 +575,7 @@ public class Server extends AbstractServer {
                         session.flush();
                         session.getTransaction().commit();
 
-                        sendToAllClients(new Message(null, "#GetTeacherCourses"));
-                        sendToAllClients(new Message(null, "#GetTeacherExams"));
-                        sendToAllClients(new Message(null, "#GetStudentResults"));
-                        sendToAllClients(new Message(null, "#GetData"));
-
+                        updateData(client);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -599,6 +585,16 @@ public class Server extends AbstractServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void updateData(ConnectionToClient client){
+
+        sendToAllClients(new Message(null, "#GetTeacherCourses"), client);
+        sendToAllClients(new Message(null, "#GetTeacherExams"), client);
+        sendToAllClients(new Message(null, "#GetStudentResults"), client);
+        sendToAllClients(new Message(null, "#GetData"), client);
+        sendToAllClients(new Message(null, "#getExecutableExam"), client);
 
     }
 

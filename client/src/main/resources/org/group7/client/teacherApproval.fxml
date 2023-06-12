@@ -42,7 +42,7 @@
                                         <Font size="20.0"/>
                                     </font>
                                 </Text>
-                                <TextField fx:id="newGradeText" onAction="#setNewGrade" prefHeight="44.0"
+                                <TextField fx:id="newGradeText" prefHeight="44.0"
                                            prefWidth="122.0">
                                     <font>
                                         <Font size="20.0"/>
@@ -58,7 +58,7 @@
                                         <Font size="20.0"/>
                                     </font>
                                 </Text>
-                                <TextField fx:id="newGradeNoteText" onAction="#newGradeNote" prefHeight="25.0"
+                                <TextField fx:id="newGradeNoteText" prefHeight="25.0"
                                            prefWidth="360.0">
                                     <font>
                                         <Font size="20.0"/>
@@ -110,13 +110,13 @@
                                 <Font size="20.0"/>
                             </font>
                         </Text>
-                        <TextField fx:id="optinalNoteForStudentsText" onAction="#optinalNote" prefHeight="33.0"
+                        <TextField fx:id="optinalNoteForStudentsText" prefHeight="33.0"
                                    prefWidth="354.0"/>
                     </children>
                 </VBox>
             </children>
         </AnchorPane>
-        <ComboBox fx:id="teacherExamsComboBox" layoutX="150.0" layoutY="43.0" onAction="#selectExam" prefHeight="42.0"
+        <ComboBox fx:id="teacherExamsComboBox" layoutX="150.0" layoutY="43.0" prefHeight="42.0"
                   prefWidth="354.0" promptText="Select Exam"/>
     </children>
 </AnchorPane>
