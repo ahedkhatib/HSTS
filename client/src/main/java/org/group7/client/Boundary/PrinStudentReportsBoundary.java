@@ -1,5 +1,8 @@
 package org.group7.client.Boundary;
+
 import java.lang.String;
+
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
@@ -8,15 +11,16 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxListCell;
 import org.group7.client.Control.PrinStudentReportsController;
 import org.group7.entities.*;
 
 import java.util.List;
+import java.util.Objects;
 
 public class PrinStudentReportsBoundary extends Boundary {
     PrinStudentReportsController controller;
-    public List<Student> students;
-    public List<String> studentsNames;
+
     @FXML
     private Label averageLabel;
 
@@ -36,7 +40,9 @@ public class PrinStudentReportsBoundary extends Boundary {
     private Label reportTA;
 
     @FXML
-    private ComboBox<String> studentsCB;
+    private ComboBox<Student> studentsCB;
+
+    private Student selectedStudent;
 
     @Override
     public PrinStudentReportsController getController() {
@@ -49,41 +55,76 @@ public class PrinStudentReportsBoundary extends Boundary {
         super.setController(controller);
         reportTA.setVisible(false);
 
+        studentsCB.setCellFactory(param -> new ComboBoxListCell<Student>() {
+            @Override
+            public void updateItem(Student student, boolean empty) {
+                super.updateItem(student, empty);
+
+                if (empty || student == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(student.getFirstName() + " " + student.getLastName());
+                }
+            }
+        });
+
+        studentsCB.setButtonCell(new ListCell<Student>() {
+            @Override
+            protected void updateItem(Student student, boolean empty) {
+                super.updateItem(student, empty);
+                if (student == null || empty) {
+                    setText(null);
+                } else {
+                    setText(student.getFirstName() + " " + student.getLastName());
+                }
+            }
+        });
+
+        studentsCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedStudent = newValue;
+                selectStudent();
+            }
+        });
+
         controller.getStudents("#GetData");
     }
 
-    public void updateStudentsCB() {
-        if (!studentsNames.isEmpty()) {
-            for (String s : studentsNames) {
-                studentsCB.getItems().add(s);
+    public void updateStudentsCB(List<Student> students) {
+
+        studentsCB.setItems(FXCollections.observableList(students));
+
+        if(selectedStudent != null){
+            for(Student student : students){
+                if(Objects.equals(selectedStudent.getUsername(), student.getUsername())){
+                    selectedStudent = student;
+                    break;
+                }
             }
+
+            selectStudent();
+
+            studentsCB.getSelectionModel().select(selectedStudent);
         }
     }
 
     @FXML
-    void selectStudent(ActionEvent event) {
-        String selected = studentsCB.getSelectionModel().getSelectedItem();
-        String studentName;
-        Student selectedStudent = new Student();
+    void selectStudent() {
         averageLabel.setText("Average: ");
         medianLabel.setText("Median: ");
         updateGradeChart(new int[10]); // reInitialize to 0's
-        for (Student s : students) {
-            studentName = s.getFirstName() + " " + s.getLastName();
-            if (selected.equals(studentName)) {
-                selectedStudent = s;
-            }
-        }
 
-            if (selectedStudent.getResultList() == null || selectedStudent.getResultList().isEmpty()) {
-                reportTA.setVisible(true);
-                reportTA.setText("Sorry,it seems that this"+ "\n" +"student doesn't have any results");
-            } else {
-                updateGradeChart(controller.getDistribution(selectedStudent));
-                averageLabel.setText("Average: " + controller.getAvg(selectedStudent));
-                medianLabel.setText("Median: " + controller.getMedian(selectedStudent));
-            }
+        if (selectedStudent.getResultList() == null || selectedStudent.getResultList().isEmpty()) {
+            reportTA.setVisible(true);
+            reportTA.setText("Sorry,it seems that this" + "\n" + "student doesn't have any results");
+        } else {
+            reportTA.setVisible(false);
+            updateGradeChart(controller.getDistribution(selectedStudent));
+            averageLabel.setText("Average: " + controller.getAvg(selectedStudent));
+            medianLabel.setText("Median: " + controller.getMedian(selectedStudent));
         }
+    }
 
 
     private void updateGradeChart(int[] distribution) {
@@ -111,14 +152,5 @@ public class PrinStudentReportsBoundary extends Boundary {
             }
         });
     }
-
-
-
-
-
-
-
-
-
 
 }

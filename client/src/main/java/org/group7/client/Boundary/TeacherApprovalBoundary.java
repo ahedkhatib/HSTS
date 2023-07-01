@@ -240,7 +240,8 @@ public class TeacherApprovalBoundary extends Boundary {
                     }
 
                     titleText.setText(activeResult.getExam().getExam().getExamName() + "\nGrade: "
-                            + activeResult.getGrade() + ", Time: " + decimalPart);
+                            + activeResult.getGrade() + ", Time: " + decimalPart + " / "
+                            + activeResult.getExam().getExam().getDuration());
 
                     setQuestions(activeResult);
                 }

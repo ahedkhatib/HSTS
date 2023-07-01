@@ -25,9 +25,9 @@ public class PrinShowDataController extends Controller {
     }
 
     @Subscribe
-    public void getData(String req){
+    public void getData(String req) {
 
-        if(!req.equals("#GetData"))
+        if (!req.equals("#GetData"))
             return;
 
         try {
@@ -56,11 +56,11 @@ public class PrinShowDataController extends Controller {
     }
 
     @Subscribe
-    public void GotSubjects(SubjectsListEvent event){
+    public void GotSubjects(SubjectsListEvent event) {
 
         List<Subject> subjects = event.getSubjects();
         List<String> names = new ArrayList<>();
-        for(Subject s : subjects){
+        for (Subject s : subjects) {
             names.add(s.getSubjectName());
         }
         boundary.subjects = subjects;
@@ -82,13 +82,15 @@ public class PrinShowDataController extends Controller {
     }
 
     @Subscribe
-    public void GotStudents(StudentListEvent event){
+    public void GotStudents(StudentListEvent event) {
 
         List<Student> students = event.getStudents();
         List<String> names = new ArrayList<>();
-        for(Student s : students){
-            names.add(s.getFirstName() + " "+ s.getLastName());
+
+        for (Student s : students) {
+            names.add(s.getFirstName() + " " + s.getLastName());
         }
+
         boundary.students = students;
         boundary.studentsNames = names;
         boundary.updateStudentsCB();
@@ -97,33 +99,49 @@ public class PrinShowDataController extends Controller {
 
     public String getStringExam(Exam selectedExam) {
         StringBuilder questionDetails = new StringBuilder(" ");
-        for (Question q : selectedExam.getQuestionList()) {
-            questionDetails.append(getStringQues(q));
 
+        int count = 0;
+
+        for (Question q : selectedExam.getQuestionList()) {
+            questionDetails.append(getStringQues(q, selectedExam, count));
+            count++;
         }
-        String examDetails = "Exam Id: " + selectedExam.getExamId() + "\n" +
-                "Exam name: " + selectedExam.getExamName() + "\n" +
-                "This exam builded by: " + selectedExam.getCreator().getFirstName() + " " + selectedExam.getCreator().getLastName() + "\n" +
-                "It is belong to the course: " + selectedExam.getCourse().getCourseName() + "\n" +
-                "Duration: " + selectedExam.getDuration() + " h" + "\n" +
+
+        String examDetails = "Exam Id: " + (selectedExam.getCourse().getSubject().getSubjectId() * 10000 +
+                selectedExam.getCourse().getCourseId() * 100 + selectedExam.getExamId()) + "\n\n" +
+                "Exam name: " + selectedExam.getExamName() + "\n\n" +
+                "This exam builded by: " + selectedExam.getCreator().getFirstName() + " " + selectedExam.getCreator().getLastName() + "\n\n" +
+                "It is belong to the course: " + selectedExam.getCourse().getCourseName() + "\n\n" +
+                "Duration: " + selectedExam.getDuration() + " m" + "\n\n" +
                 "Questions: " + "\n" + questionDetails + "\n";
+
         return examDetails;
     }
-    public String getStringQues(Question ques) {
-        StringBuilder questionDetails = new StringBuilder(" ");
-        questionDetails.append(ques.getInstructions() + " ");
+
+    public String getStringQues(Question ques, Exam exam, int quesitonIndex) {
+
+        StringBuilder questionDetails = new StringBuilder();
+        questionDetails.append("Question id: ").append(ques.getSubject().getSubjectId() * 1000 + ques.getQuestionId()).append("\n");
+        questionDetails.append(ques.getInstructions()).append(" ");
+
         for (String s : ques.getAnswerList()) {
-            questionDetails.append("\n" + "    " + s);
+            questionDetails.append("\n" + "  -  ").append(s).append("\n");
         }
-        questionDetails.append("\n");
-        questionDetails.append("The correct answer is: " + ques.getCorrectAnswer() + "\n");
+
+        if(exam != null) {
+            questionDetails.append("Question points = ").append(exam.getQuestionPoints().get(quesitonIndex)).append("\n");
+        }
+
+        questionDetails.append("The correct answer is: ").append(ques.getCorrectAnswer()).append("\n______________________________________\n");
+
         return questionDetails.toString();
     }
-    public String getStringResult(Result res){
-        String s="Result id: "+res.getResultId()+"\n"
-                +"Exam: "+res.getExam().getExam().getExamName()+"\n"+
-                "Grade: "+res.getGrade() +"\n"+
-                "Teacher's notes: "+res.getTeacherNote();
+
+    public String getStringResult(Result res) {
+        String s = "Result id: " + res.getResultId() + "\n"
+                + "Exam: " + res.getExam().getExam().getExamName() + "\n" +
+                "Grade: " + res.getGrade() + "\n" +
+                "Teacher's notes: " + res.getTeacherNote();
         return s;
 
     }

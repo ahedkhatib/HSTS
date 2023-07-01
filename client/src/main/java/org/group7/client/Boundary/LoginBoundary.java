@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import org.group7.client.Client;
 import org.group7.client.Control.LoginController;
 
 public class LoginBoundary extends Boundary {
@@ -33,6 +34,7 @@ public class LoginBoundary extends Boundary {
 
     @FXML
     public void initialize(){
+
         controller = new LoginController(this);
         super.setController(controller);
 

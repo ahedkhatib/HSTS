@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Control.ServerConnectionController">
+   <children>
+      <Text layoutX="217.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Server IP:">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <TextField fx:id="serverIp" layoutX="124.0" layoutY="181.0" prefHeight="39.0" prefWidth="352.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </TextField>
+      <Button fx:id="connectBtn" layoutX="235.0" layoutY="273.0" mnemonicParsing="false" onAction="#connectToServer" prefHeight="60.0" prefWidth="129.0" styleClass="app-button" stylesheets="@../../../stylesheet.css" text="Connect">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

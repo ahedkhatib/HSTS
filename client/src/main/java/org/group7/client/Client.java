@@ -140,9 +140,9 @@ public class Client extends AbstractClient {
 
     public static Client getClient() {
         if (client == null) {
-            client = new Client("localhost", 3000);
+            client = new Client("", 3000);
         }
+
         return client;
     }
-
 }

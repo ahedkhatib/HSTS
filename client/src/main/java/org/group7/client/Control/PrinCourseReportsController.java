@@ -42,14 +42,7 @@ public class PrinCourseReportsController extends Controller {
     public void setCourses(CoursesListEvent event) {
 
         List<Course> courses = event.getCourses();
-        List<String> names = new ArrayList<>();
-        String courseName;
-        for (Course c : courses) {
-            courseName = c.getCourseName();
-            names.add(courseName);
-        }
-        boundary.courses = courses;
-        boundary.coursesNames = names;
-        boundary.updateCoursesComboBox();
+
+        boundary.updateCoursesComboBox(courses);
     }
 }

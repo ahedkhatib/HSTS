@@ -9,32 +9,36 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinStudentReportsBoundary">
-   <children>
-      <ComboBox fx:id="studentsCB" layoutX="515.0" layoutY="79.0" onAction="#selectStudent" prefHeight="29.0" prefWidth="241.0" promptText="Select student:" />
-      <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="99.0" layoutX="150.0" layoutY="54.0" stroke="BLACK" strokeType="INSIDE" width="313.0" />
-      <Label fx:id="averageLabel" layoutX="160.0" layoutY="64.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
-         <font>
-            <Font name="System Bold Italic" size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="medianLabel" layoutX="160.0" layoutY="107.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
-         <font>
-            <Font name="System Bold Italic" size="14.0" />
-         </font>
-      </Label>
-      <BarChart fx:id="gradeChart" layoutX="265.0" layoutY="201.0" prefHeight="425.0" prefWidth="685.0">
-         <xAxis>
-            <CategoryAxis fx:id="gradeAxis" prefHeight="0.0" prefWidth="579.0" side="BOTTOM" />
-         </xAxis>
-         <yAxis>
-            <NumberAxis fx:id="countAxis" side="LEFT" />
-         </yAxis>
-      </BarChart>
-      <Label fx:id="reportTA" alignment="TOP_LEFT" layoutX="828.0" layoutY="58.0" prefHeight="99.0" prefWidth="232.0" text="Label">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-   </children>
+<AnchorPane prefHeight="693.0" prefWidth="1215.0" xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.group7.client.Boundary.PrinStudentReportsBoundary">
+    <children>
+        <ComboBox fx:id="studentsCB" layoutX="515.0" layoutY="79.0" prefHeight="29.0"
+                  prefWidth="241.0" promptText="Select student:"/>
+        <Rectangle fx:id="staticsRec" arcHeight="5.0" arcWidth="5.0" fill="#add690" height="99.0" layoutX="150.0"
+                   layoutY="54.0" stroke="BLACK" strokeType="INSIDE" width="313.0"/>
+        <Label fx:id="averageLabel" layoutX="160.0" layoutY="64.0" prefHeight="29.0" prefWidth="194.0" text="Average: ">
+            <font>
+                <Font name="System Bold Italic" size="14.0"/>
+            </font>
+        </Label>
+        <Label fx:id="medianLabel" layoutX="160.0" layoutY="107.0" prefHeight="29.0" prefWidth="194.0" text="Median:">
+            <font>
+                <Font name="System Bold Italic" size="14.0"/>
+            </font>
+        </Label>
+        <BarChart fx:id="gradeChart" layoutX="265.0" layoutY="201.0" prefHeight="425.0" prefWidth="685.0">
+            <xAxis>
+                <CategoryAxis fx:id="gradeAxis" prefHeight="0.0" prefWidth="579.0" side="BOTTOM"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="countAxis" side="LEFT"/>
+            </yAxis>
+        </BarChart>
+        <Label fx:id="reportTA" alignment="TOP_LEFT" layoutX="828.0" layoutY="58.0" prefHeight="99.0" prefWidth="232.0"
+               text="Label">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+    </children>
 </AnchorPane>

@@ -45,14 +45,7 @@ public class PrinTeacherReportsController extends Controller{
     public void setTeachers(TeachersListEvent event){
 
         List<Teacher> teachers = event.getTeachers();
-        List<String> names = new ArrayList<>();
-        String teacherName;
-        for(Teacher t : teachers){
-            teacherName = t.getFirstName() + " " + t.getLastName();
-            names.add(teacherName);
-        }
-        boundary.teachers = teachers;
-        boundary.teacherNames = names;
-        boundary.updateTeachersComboBox();
+
+        boundary.updateTeachersComboBox(teachers);
     }
 }

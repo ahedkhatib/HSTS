@@ -29,7 +29,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         client = Client.getClient();
         client.openConnection();
-        scene = new Scene(loadFXML("login"));
+        scene = new Scene(loadFXML("serverConnection"));
         stage.setScene(scene);
         stage.setTitle("HSTS");
         stage.setResizable(false);

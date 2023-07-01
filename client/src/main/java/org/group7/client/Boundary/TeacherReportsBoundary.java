@@ -218,8 +218,6 @@ public class TeacherReportsBoundary extends Boundary {
         timeUpColumn.setCellValueFactory(new PropertyValueFactory<>("timeUp"));
         ApprovedColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-
-
         timeUpColumn.setCellFactory(column -> new TableCell<Result, Boolean>() {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
