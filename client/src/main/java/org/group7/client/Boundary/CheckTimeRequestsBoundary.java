@@ -176,7 +176,8 @@ public class CheckTimeRequestsBoundary extends Boundary {
                         listAP.setVisible(false);
 
                         titleText.setText("Request for exam: " + activeExam.getExam().getExamName() + "\nId: "
-                                + activeExam.getExamId() + ", Time: " + activeReq.getExtra());
+                                + activeExam.getExamId() + ", Time: " + activeReq.getExtra()
+                                + " / " + activeExam.getExam().getDuration());
 
                         commentText.setText(activeReq.getTeacherMessage());
                     });

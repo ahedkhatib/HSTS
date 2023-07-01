@@ -86,7 +86,7 @@ public class PrinShowDataBoundary extends Boundary{
 
         StringBuilder questionDetails = new StringBuilder("The questions belong to this subjects: "+"\n");
         for (Question q : selectedSubject.getQuestionList()) {
-            questionDetails.append(controller.getStringQues(q));
+            questionDetails.append(controller.getStringQues(q, null,-1));
         }
         examTF.setText(questionDetails.toString());
 

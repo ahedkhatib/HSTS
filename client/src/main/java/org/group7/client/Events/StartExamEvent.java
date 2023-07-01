@@ -10,10 +10,16 @@ public class StartExamEvent  {
 
     private int type;
 
-    public StartExamEvent(ExecutableExam exam, String msg){
-        this.exam = exam;
-        this.type = exam.getExam().getType();
-        this.exists = !msg.equals("Incorrect");
+    public StartExamEvent(Object exam, String msg){
+        if(exam instanceof String){
+            this.exam = null;
+            this.type = -1;
+        } else {
+            this.exam = (ExecutableExam) exam;
+            this.type = ((ExecutableExam) exam).getExam().getType();
+        }
+
+        this.exists = !msg.substring(11).equals("Incorrect");
     }
 
     public boolean isExists() {

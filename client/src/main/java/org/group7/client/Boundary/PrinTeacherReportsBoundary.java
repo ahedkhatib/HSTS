@@ -1,6 +1,6 @@
 package org.group7.client.Boundary;
 
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -8,44 +8,65 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import org.group7.client.Control.LoginController;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.cell.ComboBoxListCell;
 import org.group7.client.Control.PrinTeacherReportsController;
+import org.group7.entities.Course;
+import org.group7.entities.Exam;
 import org.group7.entities.ExecutableExam;
 import org.group7.entities.Teacher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PrinTeacherReportsBoundary extends Boundary {
+
     PrinTeacherReportsController controller;
-    public List<Teacher> teachers;
+
     public List<ExecutableExam> exams;
 
-    public List<String> teacherNames;
-    public List<String> examsNames;
+    private Teacher selectedTeacher;
+
+    private ExecutableExam selectedExam;
+
+    private ExecutableExam selectedExam2;
+
+    @FXML
+    private ComboBox<Teacher> teachersCB;
+
     @FXML
     private Label averageLabel;
-
-    @FXML
-    private NumberAxis countAxis;
-
-    @FXML
-    private ComboBox<String> examsCB;
-
-    @FXML
-    private Label examsInfo;
-
-    @FXML
-    private CategoryAxis gradeAxis;
-
-    @FXML
-    private BarChart<String, Integer> gradeChart;
 
     @FXML
     private Label medianLabel;
 
     @FXML
-    private ComboBox<String> teachersComboBox;
+    private NumberAxis countAxis1;
+
+    @FXML
+    private NumberAxis countAxis2;
+
+    @FXML
+    private ComboBox<ExecutableExam> examsCB1;
+
+    @FXML
+    private ComboBox<ExecutableExam> examsCB2;
+
+    @FXML
+    private Label examsInfo;
+
+    @FXML
+    private CategoryAxis gradeAxis1;
+
+    @FXML
+    private CategoryAxis gradeAxis2;
+
+    @FXML
+    private BarChart<String, Integer> gradeChart1;
+
+    @FXML
+    private BarChart<String, Integer> gradeChart2;
 
     @Override
     public PrinTeacherReportsController getController() {
@@ -56,87 +77,259 @@ public class PrinTeacherReportsBoundary extends Boundary {
     void initialize() {
         controller = new PrinTeacherReportsController(this);
         super.setController(controller);
+        exams = new ArrayList<>();
+
+        averageLabel.setText("Average: 0 - 0");
+        medianLabel.setText("Median: 0 - 0");
+
         examsInfo.setVisible(false);
-        examsCB.setVisible(false);
+        examsInfo.setDisable(true);
+
+        examsCB2.setVisible(false);
+        examsCB2.setDisable(true);
+
+        examsCB1.setVisible(false);
+        examsCB1.setDisable(true);
+
+        gradeChart1.setVisible(false);
+        gradeChart1.setDisable(true);
+
+        gradeChart2.setVisible(false);
+        gradeChart2.setDisable(true);
+
+        selectedTeacher = null;
+        selectedExam = null;
+        selectedExam2 = null;
+
+        teachersCB.setCellFactory(param -> new ComboBoxListCell<Teacher>() {
+            @Override
+            public void updateItem(Teacher teacher, boolean empty) {
+                super.updateItem(teacher, empty);
+                if (teacher == null || empty) {
+                    setText(null);
+                } else {
+                    setText(teacher.getFirstName() + " " + teacher.getLastName());
+                }
+            }
+        });
+
+        teachersCB.setButtonCell(new ListCell<Teacher>() {
+            @Override
+            protected void updateItem(Teacher teacher, boolean empty) {
+                super.updateItem(teacher, empty);
+                if (teacher == null || empty) {
+                    setText(null);
+                } else {
+                    setText(teacher.getFirstName() + " " + teacher.getLastName());
+                }
+            }
+        });
+
+        teachersCB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedTeacher = newValue;
+                selectTeacher();
+            }
+        });
+
+        examsCB2.setCellFactory(param -> new ComboBoxListCell<ExecutableExam>() {
+            @Override
+            public void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+
+                if (empty || exam == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId() + " - " +
+                            exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
+                }
+            }
+        });
+
+        examsCB2.setButtonCell(new ListCell<ExecutableExam>() {
+            @Override
+            protected void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+                if (exam == null || empty) {
+                    setText(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId());
+                }
+            }
+        });
+
+        examsCB2.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedExam = newValue;
+                selectExam(selectedExam, 1);
+            }
+        });
+
+        examsCB1.setCellFactory(param -> new ComboBoxListCell<ExecutableExam>() {
+            @Override
+            public void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+
+                if (empty || exam == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId() + " - " +
+                            exam.getTeacher().getFirstName() + " " + exam.getTeacher().getLastName());
+                }
+            }
+        });
+
+        examsCB1.setButtonCell(new ListCell<ExecutableExam>() {
+            @Override
+            protected void updateItem(ExecutableExam exam, boolean empty) {
+                super.updateItem(exam, empty);
+                if (exam == null || empty) {
+                    setText(null);
+                } else {
+                    setText(exam.getExam().getExamName() + " - " + exam.getExamId());
+                }
+            }
+        });
+
+        examsCB1.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                selectedExam2 = newValue;
+                selectExam(selectedExam2, 2);
+            }
+        });
 
         controller.getTeachers("#GetData");
 
     }
 
     @FXML
-    void selectTeacher(ActionEvent event) {
-        Teacher selectedTeacher = new Teacher();
-        examsCB.setVisible(false);
+    void selectTeacher() {
+        averageLabel.setText("Average: 0 - 0");
+        medianLabel.setText("Median: 0 - 0");
         examsInfo.setText("");
-        updateGradeChart(new int[10]); // reInitialize to 0's
-        averageLabel.setText("Average: ");
-        medianLabel.setText("Median: ");
-        for (Teacher t : teachers) {
-            if (teachersComboBox.getSelectionModel().getSelectedItem() != null) {
-                if (teachersComboBox.getSelectionModel().getSelectedItem().equals(t.getFirstName() + " " + t.getLastName())) {
-                    selectedTeacher = t;
-                }
-            }
-        }
-        List<ExecutableExam> exams = new ArrayList<>();
-        if (selectedTeacher != null && selectedTeacher.getExamList() != null) {
-            if (selectedTeacher.getExamList().isEmpty()) {
-                examsInfo.setVisible(true);
-                examsInfo.setText("There is no exams belong" + "\n" + teachersComboBox.getSelectionModel().getSelectedItem() + " teacher");
-                examsCB.setVisible(false);
-            } else {
-                examsCB.getItems().clear();
-                examsCB.setVisible(true);
-                exams = selectedTeacher.getExamList();
-                List<String> names = new ArrayList<>();
-                for (ExecutableExam e : exams) {
-                    names.add(e.getExamId() + " " + e.getExam().getExamName());
-                }
-                this.exams = exams;
-                this.examsNames = names;
-                updateExamsComboBox();
-            }
+        updateGradeChart(gradeChart1, countAxis1, new int[10]); // reInitialize to 0's
+        updateGradeChart(gradeChart2, countAxis2, new int[10]); // reInitialize to 0's
+
+        exams.clear();
+        exams.addAll(selectedTeacher.getExamList());
+
+
+        if (!exams.isEmpty()) {
+
+            examsCB1.setItems(FXCollections.observableList(exams));
+            examsCB1.setVisible(true);
+            examsCB1.setDisable(false);
+
+            examsCB2.setItems(FXCollections.observableList(exams));
+            examsCB2.setVisible(true);
+            examsCB2.setDisable(false);
+
+        } else {
+
+            selectedExam = null;
+            selectedExam2 = null;
+
+            examsInfo.setVisible(true);
+            examsInfo.setDisable(false);
+            examsInfo.setText("Teacher has no exams!");
+            examsCB1.setVisible(false);
+            examsCB1.setDisable(true);
+
+            examsCB2.setVisible(false);
+            examsCB2.setDisable(true);
         }
     }
 
     @FXML
-    void selectExam(ActionEvent event) {
-        ExecutableExam selectedExam = new ExecutableExam();
-        averageLabel.setText("Average: ");
-        medianLabel.setText("Median: ");
-        updateGradeChart(new int[10]); // reInitialize to 0's
-        for (ExecutableExam e : exams) {
-            if (examsCB.getSelectionModel().getSelectedItem() != null) {
-                if (examsCB.getSelectionModel().getSelectedItem().equals(e.getExamId() + " " + e.getExam().getExamName())) {
-                    selectedExam = e;
+    void selectExam(ExecutableExam exam, int flag) {
+        NumberAxis axis;
+        BarChart<String, Integer> barChart;
+
+        if (flag == 1) {
+            barChart = gradeChart1;
+            axis = countAxis1;
+
+            gradeChart1.setVisible(true);
+            gradeChart1.setDisable(false);
+
+        } else {
+            barChart = gradeChart2;
+            axis = countAxis2;
+
+            gradeChart2.setVisible(true);
+            gradeChart2.setDisable(false);
+        }
+
+        updateGradeChart(barChart, axis, new int[10]); // reInitialize to 0's
+
+        if (exam.getDistribution() != null) {
+            updateGradeChart(barChart, axis, exam.getDistribution());
+
+            String[] med = medianLabel.getText().split(" ");
+            String[] avg = averageLabel.getText().split(" ");
+
+            if (flag == 1) {
+                med[1] = Double.toString(exam.getMedian());
+                avg[1] = Double.toString(exam.getAverage());
+            } else {
+                med[3] = Double.toString(exam.getMedian());
+                avg[3] = Double.toString(exam.getAverage());
+            }
+
+            medianLabel.setText(String.join(" ", med));
+            averageLabel.setText(String.join(" ", avg));
+        }
+    }
+
+    public void updateTeachersComboBox(List<Teacher> teachers) {
+        teachersCB.setItems(FXCollections.observableList(teachers));
+
+        if (selectedTeacher != null) {
+
+            for (Teacher teacher : teachers) {
+                if (Objects.equals(selectedTeacher.getUsername(), teacher.getUsername())) {
+                    selectedTeacher = teacher;
+                    break;
                 }
             }
-        }
-        if (selectedExam != null && selectedExam.getDistribution() != null) {
-            updateGradeChart(selectedExam.getDistribution());
-            averageLabel.setText("Average: " + selectedExam.getAverage());
-            medianLabel.setText("Median: " + selectedExam.getMedian());
-        }
 
-    }
+            selectTeacher();
 
-    public void updateTeachersComboBox() {
-        if (!teacherNames.isEmpty()) {
-            for (String s : teacherNames) {
-                teachersComboBox.getItems().add(s);
+            teachersCB.getSelectionModel().select(selectedTeacher);
+
+            if (selectedExam != null) {
+
+                for (ExecutableExam exam : exams) {
+                    if (Objects.equals(exam.getExamId(), selectedExam.getExamId())) {
+                        selectedExam = exam;
+                        break;
+                    }
+                }
+
+                selectExam(selectedExam, 1);
+
+                examsCB1.getSelectionModel().select(selectedExam);
+            }
+
+            if (selectedExam2 != null) {
+
+                for (ExecutableExam exam : exams) {
+                    if (Objects.equals(exam.getExamId(), selectedExam2.getExamId())) {
+                        selectedExam2 = exam;
+                        break;
+                    }
+                }
+
+                selectExam(selectedExam2, 2);
+
+                examsCB2.getSelectionModel().select(selectedExam2);
             }
         }
     }
 
-    public void updateExamsComboBox() {
-        if (!examsNames.isEmpty()) {
-            for (String s : examsNames) {
-                examsCB.getItems().add(s);
-            }
-        }
-    }
-
-    private void updateGradeChart(int[] distribution) {
+    private void updateGradeChart(BarChart<String, Integer> gradeChart, NumberAxis countAxis, int[] distribution) {
         XYChart.Series<String, Integer> series = new XYChart.Series<>();
         series.setName("Grade Range");
 

@@ -21,8 +21,6 @@ public class PrinStudentReportsController extends Controller {
         this.boundary = boundary;
 
         EventBus.getDefault().register(this);
-
-
     }
 
     @Subscribe
@@ -47,14 +45,10 @@ public class PrinStudentReportsController extends Controller {
     public void gotStudents(StudentListEvent event){
 
         List<Student> students = event.getStudents();
-        List<String> names = new ArrayList<>();
-        for(Student s : students){
-            names.add(s.getFirstName() + " "+ s.getLastName());
-        }
-        boundary.students = students;
-        boundary.studentsNames = names;
-        boundary.updateStudentsCB();
+
+        boundary.updateStudentsCB(students);
     }
+
     public double getAvg(Student selectedStudent){
         int examNum=0,gradesSum=0;
         if(selectedStudent.getResultList() != null)
