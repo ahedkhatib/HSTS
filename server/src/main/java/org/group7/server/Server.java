@@ -621,12 +621,20 @@ public class Server extends AbstractServer {
         Student ebraheem = new Student("ebraheem", "321", "Ebraheem", "Ebraheem", "987564321");
         Student zinab = new Student("zinabdahle", "123", "Zinab", "Dahle", "123456321");
         Student adan = new Student("adanhammoud", "321", "Adan", "Hammoud", "456123789");
+        Student diab = new Student("diabdabbah", "123", "Diab", "Dabbah", "123456789");
+        Student yosef = new Student("yosefsafih", "123", "Yosef", "Safih", "123456789");
+        Student mona = new Student("monaasadi", "123", "Mona", "Asadi", "123456789");
+        Student fadi = new Student("fadiahmad", "123", "Fadi", "Ahmad", "123456789");
         session.save(alaa);
         session.save(ahed);
         session.save(lana);
         session.save(ebraheem);
         session.save(zinab);
         session.save(adan);
+        session.save(diab);
+        session.save(yosef);
+        session.save(mona);
+        session.save(fadi);
         session.flush();
 
         // Add teachers
@@ -664,13 +672,17 @@ public class Server extends AbstractServer {
         Course algo = new Course("Algorithms", cs);
         Course graphics = new Course("Computer Graphics", cs);
         Course cv = new Course("Computer Vision", cs);
+        Course os = new Course("Operating Systems", cs);
+        Course ca = new Course("Computer Architecture", cs);
         session.save(intro);
         session.save(algo);
         session.save(graphics);
         session.save(cv);
+        session.save(os);
+        session.save(ca);
         session.flush();
 
-        cs.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, graphics, cv})));
+        cs.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, graphics, cv, os, ca})));
         session.save(cs);
         session.flush();
 
@@ -679,10 +691,14 @@ public class Server extends AbstractServer {
         algo.setTeacherList(new ArrayList<>(List.of(new Teacher[]{malki, dan})));
         graphics.setTeacherList(new ArrayList<>(List.of(new Teacher[]{shir})));
         cv.setTeacherList(new ArrayList<>(List.of(new Teacher[]{hagit, or, malki})));
+        os.setTeacherList(new ArrayList<>(List.of(new Teacher[]{dan, or})));
+        ca.setTeacherList(new ArrayList<>(List.of(new Teacher[]{shir, malki})));
         session.save(intro);
         session.save(algo);
         session.save(graphics);
         session.save(cv);
+        session.save(os);
+        session.save(ca);
         session.flush();
 
         algebra.setTeacherList(new ArrayList<>(List.of(new Teacher[]{or, dan})));
@@ -691,10 +707,10 @@ public class Server extends AbstractServer {
         session.save(calculus);
         session.flush();
 
-        shir.setCourseList(new ArrayList<>(List.of(new Course[]{intro, graphics})));
-        malki.setCourseList(new ArrayList<>(List.of(new Course[]{algo, cv})));
-        dan.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, algebra})));
-        or.setCourseList(new ArrayList<>(List.of(new Course[]{algebra, calculus, cv})));
+        shir.setCourseList(new ArrayList<>(List.of(new Course[]{intro, graphics, ca})));
+        malki.setCourseList(new ArrayList<>(List.of(new Course[]{algo, cv, ca})));
+        dan.setCourseList(new ArrayList<>(List.of(new Course[]{intro, algo, algebra, os})));
+        or.setCourseList(new ArrayList<>(List.of(new Course[]{algebra, calculus, cv, os})));
         hagit.setCourseList(new ArrayList<>(List.of(new Course[]{intro, cv})));
         session.save(shir);
         session.save(malki);
@@ -744,6 +760,25 @@ public class Server extends AbstractServer {
         session.save(csQ6);
         session.flush();
 
+        Question osQ1 = new Question("Which of the following scheduling algorithms is \nbased on the priority assigned to each process?", new ArrayList<>(List.of(new Course[]{os})),
+                cs, 3, (new String[]{"First-Come, First-Served (FCFS)", "Round Robin (RR)", "Shortest Job Next (SJN)", "Priority Scheduling"}));
+
+        Question osQ2 = new Question("The purpose of the \"page replacement\" \nalgorithm: ?", new ArrayList<>(List.of(new Course[]{os})),
+                cs, 1, (new String[]{"To allocate memory to new processes", "To manage virtual memory", "To schedule processes for execution", "To handle input/output operations"}));
+
+        session.save(osQ1);
+        session.save(osQ2);
+        session.flush();
+
+        Question caQ1 = new Question("Which component is responsible for \nfetching instructions from memory?", new ArrayList<>(List.of(new Course[]{ca})),
+                cs, 1, (new String[]{"Arithmetic Logic Unit (ALU)", "Control Unit (CU)", "Memory Unit", "Input/Output Unit (I/O Unit)"}));
+
+        Question caQ2 = new Question("The purpose of the cache memory in \na computer system: ?", new ArrayList<>(List.of(new Course[]{ca})),
+                cs, 2, (new String[]{"To store data permanently", "To increase the capacity of the main memory", "To provide faster access to frequently used data", "To control the flow of data between different components"}));
+
+        Question caQ3 = new Question("Which of the following is a \ncharacteristic of RISC architecture?", new ArrayList<>(List.of(new Course[]{ca})),
+                cs, 2, (new String[]{"Large instruction set", "Emphasis on complex instructions", "Fewer instructions with simpler operations", "Higher clock speeds"}));
+
         // Connect questions with subjects and courses
         math.setQuestionList(new ArrayList<>(List.of(new Question[]{mathQ1, mathQ2, mathQ3})));
         session.save(math);
@@ -768,6 +803,12 @@ public class Server extends AbstractServer {
         session.save(graphics);
         session.save(cv);
         session.flush();
+
+        os.setQuestionList(new ArrayList<>(List.of(new Question[]{osQ1, osQ2})));
+        session.save(os);
+        session.flush();
+
+        ca.setQuestionList(new ArrayList<>(List.of(new Question[]{caQ1, caQ2, caQ3})));
 
         // Add exams
         List<Question> algebraQuestions = algebra.getQuestionList();
@@ -796,6 +837,34 @@ public class Server extends AbstractServer {
         }
         session.flush();
 
+        List<Question> osQuestions = os.getQuestionList();
+        List<Integer> osPoints = new ArrayList<>(List.of(new Integer[]{51, 49}));
+        Exam osExam = new Exam("Operating Systems moed a", 1, 35, dan, "No comment!", "No    !", os, osQuestions, osPoints);
+        dan.getCreatedExams().add(osExam);
+        os.getExamList().add(osExam);
+        session.save(osExam);
+        session.save(dan);
+        session.save(os);
+        for (Question q : osQuestions) {
+            q.getExamList().add(osExam);
+            session.save(q);
+        }
+        session.flush();
+
+        List<Question> caQuestions = ca.getQuestionList();
+        List<Integer> caPoints = new ArrayList<>(List.of(new Integer[]{25, 30, 45}));
+        Exam caExam = new Exam("Computer Architecture moed a", 1, 45, malki, "No comment!", "No    !", ca, caQuestions, caPoints);
+        malki.getCreatedExams().add(caExam);
+        ca.getExamList().add(caExam);
+        session.save(caExam);
+        session.save(malki);
+        session.save(ca);
+        for (Question q : caQuestions) {
+            q.getExamList().add(caExam);
+            session.save(q);
+        }
+        session.flush();
+
         // Add executables
         ExecutableExam executableAlgebra = new ExecutableExam("1000", algebraExam, or);
         or.getExamList().add(executableAlgebra);
@@ -809,12 +878,24 @@ public class Server extends AbstractServer {
         session.save(dan);
         session.flush();
 
-        // Add results
-        HashMap<Question, Integer> answers = new HashMap<>();
-        answers.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
-        answers.put(executableAlgebra.getExam().getQuestionList().get(1), 1);
+        ExecutableExam executableOS = new ExecutableExam("1002", osExam, dan);
+        dan.getExamList().add(executableOS);
+        session.save(executableOS);
+        session.save(dan);
+        session.flush();
 
-        Result result1 = new Result(96, lana, "", executableAlgebra, 45, false, answers);
+        ExecutableExam executableCA = new ExecutableExam("1003", caExam, malki);
+        malki.getExamList().add(executableCA);
+        session.save(executableCA);
+        session.save(malki);
+        session.flush();
+
+        // Add results
+        HashMap<Question, Integer> algebraanswers1 = new HashMap<>();
+        algebraanswers1.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
+        algebraanswers1.put(executableAlgebra.getExam().getQuestionList().get(1), 2);
+
+        Result result1 = new Result(100, lana, "", executableAlgebra, 45, false, algebraanswers1);
         lana.getExamList().add(executableAlgebra);
         lana.getResultList().add(result1);
         executableAlgebra.getStudentList().add(lana);
@@ -823,16 +904,55 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        Result result2 = new Result(84, alaa, "", executableAlgebra, 50, false, answers);
+        HashMap<Question, Integer> algebraanswers2 = new HashMap<>();
+        algebraanswers2.put(executableAlgebra.getExam().getQuestionList().get(0), 0);
+        algebraanswers2.put(executableAlgebra.getExam().getQuestionList().get(1), 0);
+
+        Result result18 = new Result(70, fadi, "", executableAlgebra, 45, false, algebraanswers2);
+        fadi.getExamList().add(executableAlgebra);
+        fadi.getResultList().add(result18);
+        executableAlgebra.getStudentList().add(fadi);
+        session.save(result18);
+        session.save(fadi);
+        session.save(executableAlgebra);
+        session.flush();
+
+        HashMap<Question, Integer> algebraanswers3 = new HashMap<>();
+        algebraanswers3.put(executableAlgebra.getExam().getQuestionList().get(0), 3);
+        algebraanswers3.put(executableAlgebra.getExam().getQuestionList().get(1), 2);
+
+        Result result19 = new Result(30, diab, "", executableAlgebra, 45, false, algebraanswers3);
+        diab.getExamList().add(executableAlgebra);
+        diab.getResultList().add(result19);
+        executableAlgebra.getStudentList().add(diab);
+        session.save(result19);
+        session.save(diab);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result20 = new Result(30, yosef, "", executableAlgebra, 45, false, algebraanswers3);
+        yosef.getExamList().add(executableAlgebra);
+        yosef.getResultList().add(result20);
+        executableAlgebra.getStudentList().add(yosef);
+        session.save(result20);
+        session.save(yosef);
+        session.save(executableAlgebra);
+        session.flush();
+
+        Result result2 = new Result(100, alaa, "", executableAlgebra, 50, false, algebraanswers1);
         alaa.getExamList().add(executableAlgebra);
         alaa.getResultList().add(result2);
         executableAlgebra.getStudentList().add(alaa);
         session.save(result2);
         session.save(alaa);
         session.save(executableAlgebra);
+        result2.setStatus(true);
+        result2.setTeacherNote("Well Done!");
+        session.save(result2);
         session.flush();
 
-        Result result3 = new Result(81, ahed, "", executableAlgebra, 60, true, answers);
+
+        Result result3 = new Result(100, ahed, "", executableAlgebra, 60, true, algebraanswers1);
         ahed.getExamList().add(executableAlgebra);
         ahed.getResultList().add(result3);
         executableAlgebra.getStudentList().add(ahed);
@@ -841,28 +961,230 @@ public class Server extends AbstractServer {
         session.save(executableAlgebra);
         session.flush();
 
-        int[] distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 2, 1};
+        int[] distribution = new int[]{0, 0, 2, 0, 0, 0, 1, 0, 0, 3};
         executableAlgebra.setDistribution(distribution);
+        executableAlgebra.setAverage(71.66);
+        executableAlgebra.setMedian(85);
+        session.save(executableAlgebra);
+        session.flush();
 
-        double avg = (96 + 84 + 81) / 3;
-        executableAlgebra.setAverage(avg);
-
-        executableAlgebra.setMedian(84);
-
-        Result result4 = new Result(91, ebraheem, "", executableAlgebraB, 45, false, answers);
+        Result result4 = new Result(100, ebraheem, "", executableAlgebraB, 45, false, algebraanswers1);
         ebraheem.getExamList().add(executableAlgebraB);
         ebraheem.getResultList().add(result4);
         executableAlgebraB.getStudentList().add(ebraheem);
         session.save(result4);
         session.save(ebraheem);
         session.save(executableAlgebraB);
+        result4.setStatus(true);
+        result4.setTeacherNote("Well Done!");
+        session.save(result4);
         session.flush();
 
-        distribution = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-        executableAlgebraB.setDistribution(distribution);
-        executableAlgebraB.setMedian(91);
-        executableAlgebraB.setAverage(91);
+        Result result21 = new Result(100, adan, "", executableAlgebraB, 45, false, algebraanswers1);
+        adan.getExamList().add(executableAlgebraB);
+        adan.getResultList().add(result21);
+        executableAlgebraB.getStudentList().add(adan);
+        session.save(result21);
+        session.save(adan);
         session.save(executableAlgebraB);
+        result21.setStatus(true);
+        result21.setTeacherNote("Amazing");
+        session.save(result21);
+        session.flush();
+
+        Result result22 = new Result(30, mona, "", executableAlgebraB, 45, false, algebraanswers3);
+        mona.getExamList().add(executableAlgebraB);
+        mona.getResultList().add(result22);
+        executableAlgebraB.getStudentList().add(mona);
+        session.save(result22);
+        session.save(mona);
+        session.save(executableAlgebraB);
+        result22.setStatus(true);
+        result22.setTeacherNote("You can do better");
+        session.save(result22);
+        session.flush();
+
+        Result result23 = new Result(70, diab, "", executableAlgebraB, 45, false, algebraanswers2);
+        diab.getExamList().add(executableAlgebraB);
+        diab.getResultList().add(result23);
+        executableAlgebraB.getStudentList().add(diab);
+        session.save(result23);
+        session.save(diab);
+        session.save(executableAlgebraB);
+        result23.setStatus(true);
+        result23.setTeacherNote("Good job");
+        session.save(result23);
+        session.flush();
+
+        distribution = new int[]{0, 0, 1, 0, 0, 0, 1, 0, 0, 2};
+        executableAlgebraB.setDistribution(distribution);
+        executableAlgebraB.setMedian(85);
+        executableAlgebraB.setAverage(75);
+        session.save(executableAlgebraB);
+        session.flush();
+
+        //os results:
+        HashMap<Question, Integer> osAnswers = new HashMap<>();
+        osAnswers.put(executableOS.getExam().getQuestionList().get(0), 0);
+        osAnswers.put(executableOS.getExam().getQuestionList().get(1), 0);
+
+        Result result5 = new Result(0, mona, "", executableOS, 13, false, osAnswers);
+        mona.getExamList().add(executableOS);
+        mona.getResultList().add(result5);
+        executableOS.getStudentList().add(mona);
+        session.save(result5);
+        session.save(mona);
+        session.save(executableOS);
+        session.flush();
+
+        osAnswers.put(executableOS.getExam().getQuestionList().get(0), 3);
+
+        Result result6 = new Result(51, zinab, "", executableOS, 36, true, osAnswers);
+        zinab.getExamList().add(executableOS);
+        zinab.getResultList().add(result6);
+        executableOS.getStudentList().add(zinab);
+        session.save(result6);
+        session.save(zinab);
+        session.save(executableOS);
+        session.flush();
+
+        Result result7 = new Result(51, yosef, "", executableOS, 15, false, osAnswers);
+        yosef.getExamList().add(executableOS);
+        yosef.getResultList().add(result7);
+        executableOS.getStudentList().add(yosef);
+        session.save(result7);
+        session.save(yosef);
+        session.save(executableOS);
+        session.flush();
+
+        osAnswers.put(executableOS.getExam().getQuestionList().get(1), 1);
+
+        Result result8 = new Result(100, ahed, "", executableOS, 30, false, osAnswers);
+        ahed.getExamList().add(executableOS);
+        ahed.getResultList().add(result8);
+        executableOS.getStudentList().add(ahed);
+        session.save(result8);
+        session.save(ahed);
+        session.save(executableOS);
+        session.flush();
+
+        Result result9 = new Result(100, lana, "", executableOS, 20, false, osAnswers);
+        lana.getExamList().add(executableOS);
+        lana.getResultList().add(result9);
+        executableOS.getStudentList().add(lana);
+        session.save(result9);
+        session.save(lana);
+        session.save(executableOS);
+        session.flush();
+
+        Result result10 = new Result(100, diab, "", executableOS, 20, false, osAnswers);
+        diab.getExamList().add(executableOS);
+        diab.getResultList().add(result10);
+        executableOS.getStudentList().add(diab);
+        session.save(result10);
+        session.save(diab);
+        session.save(executableOS);
+        session.flush();
+
+        distribution = new int[]{1, 0, 0, 0, 0, 2, 0, 0, 0, 3};
+        executableOS.setDistribution(distribution);
+        executableOS.setMedian(75.50);
+        executableOS.setAverage(67);
+        session.save(executableOS);
+        session.flush();
+
+        // CA results:
+        HashMap<Question, Integer> caAnswers1 = new HashMap<>();
+        caAnswers1.put(executableCA.getExam().getQuestionList().get(0), 0);
+        caAnswers1.put(executableCA.getExam().getQuestionList().get(1), 0);
+        caAnswers1.put(executableCA.getExam().getQuestionList().get(2), 0);
+
+        Result result11 = new Result(0, diab, "", executableCA, 20, false, caAnswers1);
+        diab.getExamList().add(executableCA);
+        diab.getResultList().add(result11);
+        executableCA.getStudentList().add(diab);
+        session.save(result11);
+        session.save(diab);
+        session.save(executableCA);
+        session.flush();
+
+        Result result12 = new Result(0, ebraheem, "", executableCA, 10, false, caAnswers1);
+        ebraheem.getExamList().add(executableCA);
+        ebraheem.getResultList().add(result12);
+        executableCA.getStudentList().add(ebraheem);
+        session.save(result12);
+        session.save(ebraheem);
+        session.save(executableCA);
+        session.flush();
+
+        HashMap<Question, Integer> caAnswers2 = new HashMap<>();
+        caAnswers2.put(executableCA.getExam().getQuestionList().get(0), 1);
+        caAnswers2.put(executableCA.getExam().getQuestionList().get(1), 2);
+        caAnswers2.put(executableCA.getExam().getQuestionList().get(2), 0);
+
+        Result result13 = new Result(55, lana, "", executableCA, 35, false, caAnswers2);
+        lana.getExamList().add(executableCA);
+        lana.getResultList().add(result13);
+        executableCA.getStudentList().add(lana);
+        session.save(result13);
+        session.save(lana);
+        session.save(executableCA);
+        session.flush();
+
+        Result result14 = new Result(55, fadi, "", executableCA, 35, false, caAnswers2);
+        fadi.getExamList().add(executableCA);
+        fadi.getResultList().add(result14);
+        executableCA.getStudentList().add(fadi);
+        session.save(result14);
+        session.save(fadi);
+        session.save(executableCA);
+        session.flush();
+
+        HashMap<Question, Integer> caAnswers3 = new HashMap<>();
+        caAnswers3.put(executableCA.getExam().getQuestionList().get(0), 1);
+        caAnswers3.put(executableCA.getExam().getQuestionList().get(1), 3);
+        caAnswers3.put(executableCA.getExam().getQuestionList().get(2), 2);
+
+        Result result15 = new Result(70, fadi, "", executableCA, 35, false, caAnswers3);
+        fadi.getExamList().add(executableCA);
+        fadi.getResultList().add(result15);
+        executableCA.getStudentList().add(fadi);
+        session.save(result15);
+        session.save(fadi);
+        session.save(executableCA);
+        session.flush();
+
+        Result result16 = new Result(70, adan, "", executableCA, 30, false, caAnswers3);
+        adan.getExamList().add(executableCA);
+        adan.getResultList().add(result16);
+        executableCA.getStudentList().add(adan);
+        session.save(result16);
+        session.save(adan);
+        session.save(executableCA);
+        session.flush();
+
+        HashMap<Question, Integer> caAnswers4 = new HashMap<>();
+        caAnswers4.put(executableCA.getExam().getQuestionList().get(0), 1);
+        caAnswers4.put(executableCA.getExam().getQuestionList().get(1), 2);
+        caAnswers4.put(executableCA.getExam().getQuestionList().get(2), 2);
+
+        Result result17 = new Result(100, alaa, "", executableCA, 40, false, caAnswers4);
+        alaa.getExamList().add(executableCA);
+        alaa.getResultList().add(result17);
+        executableCA.getStudentList().add(alaa);
+        session.save(result17);
+        session.save(alaa);
+        session.save(executableCA);
+        result17.setStatus(true);
+        result17.setTeacherNote("Amazing!");
+        session.save(result17);
+        session.flush();
+
+        distribution = new int[]{2, 0, 0, 0, 0, 2, 2, 0, 0, 1};
+        executableCA.setDistribution(distribution);
+        executableCA.setMedian(55);
+        executableCA.setAverage(50);
+        session.save(executableCA);
         session.flush();
 
         session.getTransaction().commit();
