@@ -631,6 +631,7 @@ public class Server extends AbstractServer {
         Student ava = new Student("avawilson", "123", "Ava", "Wilson", "123456789");
         Student lora = new Student("loraamon", "123", "Lora", "Amon", "123456789");
 
+
         session.save(alaa);
         session.save(ahed);
         session.save(lana);
@@ -654,6 +655,7 @@ public class Server extends AbstractServer {
         Teacher dan = new Teacher("dan", "danpass", "Dan", "Rosenbaum");
         Teacher or = new Teacher("or", "orpass", "Or", "Meir");
         Teacher hagit = new Teacher("hagit", "hagitpass", "Hagit", "Hel-Or");
+
         Teacher shuly = new Teacher("shuly", "shulypass", "Shuly", "Winter");
         Teacher oren = new Teacher("oren", "orenpass", "Oren", "Wymn");
         Teacher roi = new Teacher("roi", "roipass", "Roi", "Poranne");
@@ -674,6 +676,7 @@ public class Server extends AbstractServer {
         Subject math = new Subject("Mathematics");
         Subject cs = new Subject("Computer Science");
         Subject english = new Subject("English");
+
         session.save(math);
         session.save(cs);
         session.save(english);
@@ -682,11 +685,13 @@ public class Server extends AbstractServer {
         // Add courses
         Course algebra = new Course("Linear Algebra", math);
         Course calculus = new Course("Calculus", math);
+
         session.save(algebra);
         session.save(calculus);
         session.flush();
 
         math.setCourseList(new ArrayList<>(List.of(new Course[]{algebra, calculus})));
+
         session.save(math);
         session.flush();
 
@@ -696,6 +701,7 @@ public class Server extends AbstractServer {
         Course cv = new Course("Computer Vision", cs);
         Course os = new Course("Operating Systems", cs);
         Course ca = new Course("Computer Architecture", cs);
+
         session.save(intro);
         session.save(algo);
         session.save(graphics);

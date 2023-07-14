@@ -8,6 +8,7 @@ import org.group7.client.ocsf.AbstractClient;
 import org.group7.client.Events.ExecutableExamEvent;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class Client extends AbstractClient {
@@ -139,10 +140,18 @@ public class Client extends AbstractClient {
     }
 
     public static Client getClient() {
-        if (client == null) {
-            client = new Client("", 3000);
-        }
-
         return client;
     }
+
+    public static boolean newClient(String host) throws IOException {
+        client = new Client(host, 3000);
+        try {
+            client.openConnection();
+
+            return true;
+        }catch (IOException e){
+            return false;
+        }
+    }
+
 }
