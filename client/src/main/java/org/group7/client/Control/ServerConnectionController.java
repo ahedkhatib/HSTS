@@ -8,6 +8,7 @@ import org.group7.client.App;
 import org.group7.client.Client;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.Objects;
 
 public class ServerConnectionController {
@@ -19,7 +20,7 @@ public class ServerConnectionController {
     private TextField serverIp;
 
     @FXML
-    public void connectToServer(){
+    public void connectToServer() throws IOException {
 
         if(Objects.equals(serverIp.getText(), "")){
             Alert alert = new Alert(Alert.AlertType.ERROR, "Enter Valid IP Address!");
@@ -28,9 +29,13 @@ public class ServerConnectionController {
             return;
         }
 
-        Client.getClient().setHost(serverIp.getText());
+        boolean connection = Client.newClient(serverIp.getText());
 
-        App.switchScreen("login");
+        if(connection){
+            App.switchScreen("login");
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No Server Found!");
+            alert.show();
+        }
     }
-
 }

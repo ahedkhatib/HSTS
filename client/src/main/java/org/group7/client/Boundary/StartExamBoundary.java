@@ -252,7 +252,7 @@ public class StartExamBoundary extends Boundary {
     public VBox questionCard(int questionNum, Question question) {
 
         VBox card = new VBox();
-        card.setPrefWidth(600);
+        card.setPrefWidth(scrollPane.getPrefWidth() / 2);
         card.setSpacing(35);
         card.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-border-color: gray; -fx-border-width: 1px;");
 
