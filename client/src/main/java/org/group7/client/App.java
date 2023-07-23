@@ -27,8 +27,6 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-//        client = Client.getClient();
-//        client.openConnection();
         scene = new Scene(loadFXML("serverConnection"));
         stage.setScene(scene);
         stage.setTitle("HSTS");
@@ -57,9 +55,14 @@ public class App extends Application {
             case "homepage" -> Platform.runLater(() -> {
                 setWindowTitle("HSTS");
             });
-            case "login" -> Platform.runLater(() -> {
-                setWindowTitle("Login");
-            });
+            case "login" -> {
+
+                client = Client.getClient();
+
+                Platform.runLater(() -> {
+                    setWindowTitle("Login");
+                });
+            }
         }
 
         Platform.runLater(() -> {
