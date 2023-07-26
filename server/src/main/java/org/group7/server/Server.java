@@ -69,12 +69,10 @@ public class Server extends AbstractServer {
             for (SubscribedClient subscribedClient : SubscribersList) {
 
                 if (subscribedClient.getClient() == client) {
-                    System.out.println("skipped");
                     continue;
                 }
 
                 subscribedClient.getClient().sendToClient(message);
-                System.out.println(subscribedClient.getClient().getId());
             }
         } catch (IOException e1) {
             e1.printStackTrace();
@@ -944,7 +942,7 @@ public class Server extends AbstractServer {
         }
         session.flush();
 
-        Exam algebraExamB = new Exam("Algebra Exam moed b", 1, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
+        Exam algebraExamB = new Exam("Algebra Exam moed b", 2, 60, or, "No comment!", "No Comment!", algebra, algebraQuestions, points);
         or.getCreatedExams().add(algebraExamB);
         algebra.getExamList().add(algebraExamB);
         session.save(algebraExamB);
